@@ -1,7 +1,31 @@
 import unittest
-import sequtils
+import sequtils, strutils
 
 include nimjson/util
+
+suite "proc headUpper":
+  test "Normal":
+    check "hello".headUpper() == "Hello"
+    check "upperCamelCase".headUpper() == "UpperCamelCase"
+  test "1 characters":
+    check "h".headUpper() == "H"
+
+suite "proc getType":
+  setup:
+    var strs: seq[string]
+  test "Primitive type":
+    check getType("key", """1""".parseJson(), strs, 0) == "int64"
+    check getType("key", """"string"""".parseJson(), strs, 0) == "string"
+    check getType("key", """1.0""".parseJson(), strs, 0) == "float64"
+    check getType("key", """true""".parseJson(), strs, 0) == "bool"
+    check getType("key", """false""".parseJson(), strs, 0) == "bool"
+    check getType("key", """[1, 2, 3]""".parseJson(), strs, 0) == "seq[int64]"
+  test "Object type":
+    check getType("obj", """{"str":"str", "int":1}""".parseJson(), strs, 0) == "Obj"
+  test "Array object type":
+    strs.add("")
+    check getType("obj", """[{"str":"str", "int":1}]""".parseJson(), strs, 0) == "seq[Obj]"
+    check strs == @["", "  Obj = ref object\n    str: string\n    int: int64\n"]
 
 proc removeIndent(s: string): string =
   for line in s.split("\n").filterIt(0 < it.len()):
@@ -12,6 +36,31 @@ proc removeIndent(s: string): string =
 doAssert removeIndent("""
   |abc
   |  def""") == "abc\n  def\n"
+
+suite "proc objFormat":
+  setup:
+    var strs: seq[string]
+  test "Object type":
+    """{"str":"s", "int":1, "float":1.1, "boo":true, "array":[1, 2]}""".parseJson().objFormat("obj", strs)
+    check strs == @["""|  Obj = ref object
+                       |    str: string
+                       |    int: int64
+                       |    float: float64
+                       |    boo: bool
+                       |    array: seq[int64]""".removeIndent()]
+  test "Nest object type":
+    """{"object":{"o":{"s":"str", "i":1}, "array":[{"s":"str", "i":1}]}}""".parseJson().objFormat("obj", strs)
+    check strs.join() == @["""|  Obj = ref object
+                              |    object: Object
+                              |  Object = ref object
+                              |    o: O
+                              |    array: seq[Array]
+                              |  O = ref object
+                              |    s: string
+                              |    i: int64
+                              |  Array = ref object
+                              |    s: string
+                              |    i: int64""".removeIndent()].join()
 
 echo """
   {
