@@ -1,7 +1,7 @@
 import json, strformat, tables
 from strutils import toUpperAscii, join, split
 
-proc format2(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0)
+proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0)
 
 proc headUpper(str: string): string =
   $(str[0].toUpperAscii() & str[1..^1])
@@ -16,7 +16,7 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int): s
 
       case child.kind
       of JObject:
-        child.format2(iObj, strs, index+1)
+        child.objFormat(iObj, strs, index+1)
       else: discard
       break
     s.add("]")
@@ -28,7 +28,7 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int): s
   of JBool: "bool"
   of JNull: "JNull"
 
-proc format2(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0) =
+proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0) =
   ## self must be object.
   strs.add("")
   strs[index].add(&"  {objName.headUpper()} = ref object\n")
@@ -38,31 +38,14 @@ proc format2(self: JsonNode, objName: string, strs: var seq[string] = @[], index
 
     case v.kind
     of JObject:
-      v.format2(k, strs, index+1)
+      v.objFormat(k, strs, index+1)
     else: discard
 
-proc format*(self: JsonNode, objName = "Object"): string =
+proc toTypeString*(self: JsonNode, objName = "Object"): string =
   result.add(&"type\n")
   case self.kind
   of JObject:
     var ret: seq[string]
-    self.format2(objName, ret)
+    self.objFormat(objName, ret)
     result.add(ret.join())
-  else:
-    discard
-
-when isMainModule:
-  echo """
-    {
-      "int":1,
-      "str":"string",
-      "float":1.24,
-      "bool":true
-    }""".parseJson().format()
-
-  echo """{"str":"string1", "int":1, "float":1.15, "array":[1, 2, 3],
-           "testObject":{"int":1, "obj2":{"str":"s", "bool2":true, "bool3":false},
-           "str":"s", "float":1.12},
-           "array":[null, 1, 2, 3],
-           "objectArray":[{"int":1, "bool":true, "b":false}, {"int":2, "bool":false, "b":true}],
-          }""".parseJson().format()
+  else: discard
