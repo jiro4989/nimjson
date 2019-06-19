@@ -12,3 +12,12 @@ binDir        = "bin"
 # Dependencies
 
 requires "nim >= 0.20.0"
+
+task ci, "Run CI":
+  exec "nim -v"
+  exec "nimble -v"
+  exec "nimble install -Y"
+  exec "nimble test -Y"
+  exec "nimble build -d:release -Y"
+  exec "./bin/nimjson -h"
+  exec "./bin/nimjson -v"
