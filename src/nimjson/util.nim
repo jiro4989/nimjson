@@ -1,5 +1,5 @@
 import json, strformat, tables
-from strutils import toUpperAscii, join
+from strutils import toUpperAscii, join, split
 
 proc format2(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0)
 
@@ -52,6 +52,14 @@ proc format*(self: JsonNode, objName = "Object"): string =
     discard
 
 when isMainModule:
+  echo """
+    {
+      "int":1,
+      "str":"string",
+      "float":1.24,
+      "bool":true
+    }""".parseJson().format()
+
   echo """{"str":"string1", "int":1, "float":1.15, "array":[1, 2, 3],
            "testObject":{"int":1, "obj2":{"str":"s", "bool2":true, "bool3":false},
            "str":"s", "float":1.12},
