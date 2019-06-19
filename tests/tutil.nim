@@ -9,9 +9,9 @@ proc removeIndent(s: string): string =
     result.add(line[pos+1..^1].join())
     result.add("\n")
 
-doAssert(removeIndent("""
+doAssert removeIndent("""
   |abc
-  |  def""") == "abc\n  def\n")
+  |  def""") == "abc\n  def\n"
 
 echo """
   {
@@ -28,8 +28,8 @@ echo """{"str":"string1", "int":1, "float":1.15, "array":[1, 2, 3],
           "objectArray":[{"int":1, "bool":true, "b":false}, {"int":2, "bool":false, "b":true}],
         }""".parseJson().toTypeString()
 
-suite "toTypeString":
-  test "primitive types":
+suite "proc toTypeString":
+  test "Primitive types":
     check """
       {
         "int":1,
@@ -43,7 +43,7 @@ suite "toTypeString":
       |    str: string
       |    float: float64
       |    bool: bool""".removeIndent()
-  test "array value":
+  test "Array value":
     check """
       {
         "int":[1, 2, 3],
@@ -59,7 +59,7 @@ suite "toTypeString":
       |    float: seq[float64]
       |    trueBool: seq[bool]
       |    falseBool: seq[bool]""".removeIndent()
-  test "object value":
+  test "Object value":
     check """
       {
         "obj1":{"int":1, "str":"strval"},
@@ -75,3 +75,27 @@ suite "toTypeString":
       |  Obj2 = ref object
       |    fal: bool
       |    str: JNull""".removeIndent()
+  test "Array object":
+    check """
+      {
+        "obj1":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}],
+        "obj2":{"fal":false, "str":null, "obj":[{"fal":false}, {"fal":false}]},
+        "obj3":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}]
+      }""".parseJson().toTypeString() == """
+      |type
+      |  Object = ref object
+      |    obj1: seq[Object0]
+      |    obj2: Obj2
+      |    obj3: seq[Object2]
+      |  Object0 = ref object
+      |    int: int64
+      |    str: string
+      |  Obj2 = ref object
+      |    fal: bool
+      |    str: JNull
+      |    obj: seq[Object1]
+      |  Object1 = ref object
+      |    fal: bool
+      |  Object2 = ref object
+      |    int: int64
+      |    str: string""".removeIndent()
