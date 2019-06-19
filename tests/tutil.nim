@@ -19,7 +19,12 @@ suite "proc getType":
     check getType("key", """1.0""".parseJson(), strs, 0) == "float64"
     check getType("key", """true""".parseJson(), strs, 0) == "bool"
     check getType("key", """false""".parseJson(), strs, 0) == "bool"
+    check getType("key", """null""".parseJson(), strs, 0) == "JNull"
     check getType("key", """[1, 2, 3]""".parseJson(), strs, 0) == "seq[int64]"
+    check getType("key", """[]""".parseJson(), strs, 0) == "seq[JNull]"
+    check getType("key", """["x", null]""".parseJson(), strs, 0) == "seq[string]"
+    check getType("key", """[null, null]""".parseJson(), strs, 0) == "seq[JNull]"
+    check getType("key", """[null, "x"]""".parseJson(), strs, 0) == "seq[JNull]"
   test "Object type":
     check getType("obj", """{"str":"str", "int":1}""".parseJson(), strs, 0) == "Obj"
   test "Array object type":
