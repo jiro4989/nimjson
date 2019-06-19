@@ -6,7 +6,7 @@ description   = "Command to convert JSON string to Nim types."
 license       = "MIT"
 srcDir        = "src"
 bin           = @["nimjson"]
-
+binDir        = "bin"
 
 
 # Dependencies

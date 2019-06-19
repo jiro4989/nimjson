@@ -11,14 +11,17 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int): s
   of JArray:
     let uKey = key.headUpper()
     var s = "seq["
-    for child in value.elems:
-      s.add(getType(uKey, child, strs, index))
+    if 0 < value.elems.len():
+      for child in value.elems:
+        s.add(getType(uKey, child, strs, index))
 
-      case child.kind
-      of JObject:
-        child.objFormat(uKey, strs, index+1)
-      else: discard
-      break
+        case child.kind
+        of JObject:
+          child.objFormat(uKey, strs, index+1)
+        else: discard
+        break
+    else:
+      s.add("JNull")
     s.add("]")
     s
   of JObject: key.headUpper()

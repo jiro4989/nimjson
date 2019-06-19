@@ -1,5 +1,6 @@
-# This is just an example to get you started. A typical binary package
-# uses this file as the main entry point of the application.
+import nimjson/util
+import json, os
 
 when isMainModule:
-  echo("Hello, World!")
+  let args = os.commandLineParams()
+  echo args[0].parseFile().toTypeString()
