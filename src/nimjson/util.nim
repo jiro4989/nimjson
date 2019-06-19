@@ -1,15 +1,23 @@
 import json, strformat, tables
 from strutils import toUpperAscii, join
 
+proc format2(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0)
+
 proc headUpper(str: string): string =
   $(str[0].toUpperAscii() & str[1..^1])
 
-proc getType(key: string, value: JsonNode): string =
+proc getType(key: string, value: JsonNode, strs: var seq[string], index: int): string =
   case value.kind
   of JArray:
+    let iObj = "Object" & $index
     var s = "seq["
     for child in value.elems:
-      s.add(getType("Not use key", child))
+      s.add(getType(iObj, child, strs, index))
+
+      case child.kind
+      of JObject:
+        child.format2(iObj, strs, index+1)
+      else: discard
       break
     s.add("]")
     s
@@ -25,7 +33,7 @@ proc format2(self: JsonNode, objName: string, strs: var seq[string] = @[], index
   strs.add("")
   strs[index].add(&"  {objName.headUpper()} = ref object\n")
   for k, v in self.fields:
-    let t = getType(k, v)
+    let t = getType(k, v, strs, index)
     strs[index].add(&"    {k}: {t}\n")
 
     case v.kind
