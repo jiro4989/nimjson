@@ -51,4 +51,11 @@ proc toTypeString*(self: JsonNode, objName = "Object"): string =
     var ret: seq[string]
     self.objFormat(objName, ret)
     result.add(ret.join())
+  of JArray:
+    # TODO
+    for child in self.elems:
+      var ret: seq[string]
+      child.objFormat(objName, ret)
+      result.add(ret.join())
+      break
   else: discard
