@@ -84,18 +84,18 @@ suite "proc toTypeString":
       }""".parseJson().toTypeString() == """
       |type
       |  Object = ref object
-      |    obj1: seq[Object0]
+      |    obj1: seq[Obj1]
       |    obj2: Obj2
-      |    obj3: seq[Object2]
-      |  Object0 = ref object
+      |    obj3: seq[Obj3]
+      |  Obj1 = ref object
       |    int: int64
       |    str: string
       |  Obj2 = ref object
       |    fal: bool
       |    str: JNull
-      |    obj: seq[Object1]
-      |  Object1 = ref object
+      |    obj: seq[Obj]
+      |  Obj = ref object
       |    fal: bool
-      |  Object2 = ref object
+      |  Obj3 = ref object
       |    int: int64
       |    str: string""".removeIndent()

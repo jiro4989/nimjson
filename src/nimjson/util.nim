@@ -9,14 +9,14 @@ proc headUpper(str: string): string =
 proc getType(key: string, value: JsonNode, strs: var seq[string], index: int): string =
   case value.kind
   of JArray:
-    let iObj = "Object" & $index
+    let uKey = key.headUpper()
     var s = "seq["
     for child in value.elems:
-      s.add(getType(iObj, child, strs, index))
+      s.add(getType(uKey, child, strs, index))
 
       case child.kind
       of JObject:
-        child.objFormat(iObj, strs, index+1)
+        child.objFormat(uKey, strs, index+1)
       else: discard
       break
     s.add("]")
