@@ -52,10 +52,17 @@ proc toTypeString*(self: JsonNode, objName = "Object"): string =
     self.objFormat(objName, ret)
     result.add(ret.join())
   of JArray:
-    # TODO
+    let objs = &"{objName}s"
     for child in self.elems:
-      var ret: seq[string]
-      child.objFormat(objName, ret)
-      result.add(ret.join())
+      case child.kind
+      of JObject:
+        result.add(&"  {objs} = seq[{objName}]\n")
+        var ret: seq[string]
+        child.objFormat(objName, ret)
+        result.add(ret.join())
+      else:
+        var strs: seq[string]
+        let t = getType(objName, child, strs, 0)
+        result.add(&"  {objName} = seq[{t}]\n")
       break
   else: discard

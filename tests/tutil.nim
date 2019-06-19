@@ -29,6 +29,8 @@ echo """
     "bool":true
   }]""".parseJson().toTypeString()
 
+echo """[1, 2, 3]""".parseJson().toTypeString()
+
 echo """{"str":"string1", "int":1, "float":1.15, "array":[1, 2, 3],
           "testObject":{"int":1, "obj2":{"str":"s", "bool2":true, "bool3":false},
           "str":"s", "float":1.12},
