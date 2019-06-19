@@ -31,7 +31,7 @@ build_script:
   - nimble ci
   - mkdir %APP_NAME%_windows
   - xcopy bin %APP_NAME%_windows\bin\
-  - copy README.adoc %APP_NAME%_windows\
+  - copy README.md %APP_NAME%_windows\
   - copy LICENSE %APP_NAME%_windows\
   - 7z a %APP_NAME%_windows.zip %APP_NAME%_windows
 
