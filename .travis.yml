@@ -21,6 +21,7 @@ addons:
 before_install:
   - curl https://nim-lang.org/choosenim/init.sh -sSf -o init.sh
   - bash init.sh -y
+  - choosenim "#v0.20.0"
 
 before_script:
   - set -e
