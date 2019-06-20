@@ -1,3 +1,5 @@
+## nimjson is the module to generate nim object definitions from json documents.
+##
 ## nimjsonはJSON文字列をNimのObject定義の文字列に変換するためのモジュールです。
 ##
 ## Usage / 使い方
@@ -23,6 +25,7 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int): s
   ## `value`の型文字列を返す。
   ## Object型や配列内の要素がObject型の場合は、`key`の文字列の先頭を大文字にした
   ## ものを型名として返す。
+  ## 型がObject型だった場合は ``strs`` にObject型定義を追加する。
   case value.kind
   of JArray:
     let uKey = key.headUpper()
@@ -58,6 +61,10 @@ proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], ind
       v.objFormat(k, strs, index+1)
 
 proc toTypeString*(self: JsonNode, objName = "Object"): string =
+  ## Converts to nim object definitions string from ``JsonNode``.
+  ##
+  ## **Japanese:**
+  ##
   ## ``JsonNode`` をNimのObject定義の文字列に変換して返却する。
   ## ``objName`` が定義するObjectの名前になる。
   ##
