@@ -6,9 +6,17 @@
 ## --------------
 ##
 ## .. code-block:: nim
+##    import nimjson
 ##    import json
 ##    
 ##    echo """{"keyStr":"str", "keyInt":1}""".parseJson().toTypeString()
+##
+##    # Output:
+##    # type
+##    #   Object = ref object
+##    #     keyStr: string
+##    #     keyInt: int64
+##
 ##    echo "examples/primitive.json".parseFile().toTypeString("testObject")
 
 import json, strformat, tables
