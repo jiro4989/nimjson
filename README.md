@@ -184,3 +184,7 @@ See `nimjson -h`.
 ## License
 
 MIT
+
+## Document
+
+* https://jiro4989.github.io/nimjson/nimjson.html
