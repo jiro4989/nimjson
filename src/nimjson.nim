@@ -1,5 +1,5 @@
-import nimjson/util
-import json, os, strformat, parseopt, logging
+include nimjson/util
+import os, parseopt, logging
 
 type
   Options = ref object
@@ -30,7 +30,9 @@ Options:
     -O, --object-name:OBJECT_NAME    Set object type name
 """
 
-proc getCmdOpts*(params: seq[string]): Options =
+proc getCmdOpts(params: seq[string]): Options =
+  ## コマンドライン引数を解析して返す。
+  ## helpとversionが見つかったらテキストを標準出力して早期リターンする。
   var optParser = initOptParser(params)
   new result
   result.objectName = "Object"
@@ -59,7 +61,8 @@ proc getCmdOpts*(params: seq[string]): Options =
       assert false # cannot happen
     
 proc setLogger(opts: Options) =
-  ## デバッグログ出力フラグがtrueのときだけログ出力ハンドラをセット
+  ## デバッグログ出力フラグ(useDebug)がtrueのときだけログ出力ハンドラをセットす
+  ## る。
   if opts.useDebug:
     newConsoleLogger(lvlAll, verboseFmtStr).addHandler()
 
@@ -99,5 +102,6 @@ when isMainModule:
       str.add(line)
     outFile.write(str.parseJson().toTypeString(opts.objectName))
     debug "END: Process stdin"
+
   debug "Success: nimjson"
   outFile.close()
