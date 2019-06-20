@@ -61,7 +61,7 @@ proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], ind
       v.objFormat(k, strs, index+1)
 
 proc toTypeString*(self: JsonNode, objName = "Object"): string =
-  ## Converts to nim object definitions string from ``JsonNode``.
+  ## Generates nim object definitions string from ``JsonNode``.
   ##
   ## **Japanese:**
   ##
