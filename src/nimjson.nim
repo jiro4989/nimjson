@@ -10,7 +10,10 @@ type
 
 const
   appName = "nimjson"
-  version = "v1.0.0"
+  version = &"""{appName} command version 1.0.0
+Copyright (c) 2019 jiro4989
+Released under the MIT License.
+https://github.com/jiro4989/nimjson"""
   doc = &"""
 {appName} prints a converted Nim object type string from JSON file or string.
 
@@ -22,7 +25,7 @@ Usage:
 Options:
     -h, --help                       Print this help
     -v, --version                    Print version
-    -o, --outfile:FILEPATH           Write file path
+    -o, --out-file:FILE_PATH         Write file path
     -O, --object-name:OBJECT_NAME    Set object type name
 """
 
@@ -45,8 +48,10 @@ proc getCmdOpts*(params: seq[string]): Options =
         echo version
         result.useVersion = true
         return
-      of "outfile", "o":
+      of "out-file", "o":
         result.outFile = val
+      of "object-name", "O":
+        result.objectName = val
     of cmdEnd:
       assert false # cannot happen
 
