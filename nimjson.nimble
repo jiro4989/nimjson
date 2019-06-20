@@ -2,7 +2,7 @@
 
 version       = "1.0.0"
 author        = "jiro4989"
-description   = "Command to convert JSON string to Nim types."
+description   = "nimjson generates nim object definitions from json documents."
 license       = "MIT"
 srcDir        = "src"
 bin           = @["nimjson"]
