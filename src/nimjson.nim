@@ -17,7 +17,7 @@ Copyright (c) 2019 jiro4989
 Released under the MIT License.
 https://github.com/jiro4989/nimjson"""
     doc = &"""
-{appName} prints a converted Nim object type string from JSON file or string.
+{appName} generates nim object definitions from json documents.
 
 Usage:
     {appName} [options] [files...]
