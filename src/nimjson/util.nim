@@ -1,7 +1,7 @@
 ## nimjsonはJSON文字列をNimのObject定義の文字列に変換するためのモジュールです。
 ##
-## 使い方
-## ------
+## Usage / 使い方
+## --------------
 ##
 ## .. code-block:: nim
 ##    import json
@@ -28,6 +28,7 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int): s
     let uKey = key.headUpper()
     var s = "seq["
     if 0 < value.elems.len():
+      # 配列の最初の要素の方を取得
       let child = value.elems[0]
       s.add(getType(uKey, child, strs, index))
       if child.kind == JObject:
@@ -52,6 +53,7 @@ proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], ind
     let t = getType(k, v, strs, index)
     strs[index].add(&"    {k}: {t}\n")
 
+    # Object型を処理したときは、Object型の定義が別途必要になるので追加
     if v.kind == JObject:
       v.objFormat(k, strs, index+1)
 
@@ -86,7 +88,8 @@ proc toTypeString*(self: JsonNode, objName = "Object"): string =
     result.add(ret.join())
   of JArray:
     let seqObjName = &"Seq{objName.headUpper()}"
-    for child in self.elems:
+    if 0 < self.elems.len():
+      let child = self.elems[0]
       case child.kind
       of JObject:
         result.add(&"  {seqObjName} = seq[{objName}]\n")
@@ -97,5 +100,4 @@ proc toTypeString*(self: JsonNode, objName = "Object"): string =
         var strs: seq[string]
         let t = getType(objName, child, strs, 0)
         result.add(&"  {objName} = seq[{t}]\n")
-      break
   else: discard
