@@ -52,11 +52,11 @@ proc toTypeString*(self: JsonNode, objName = "Object"): string =
     self.objFormat(objName, ret)
     result.add(ret.join())
   of JArray:
-    let objs = &"{objName}s"
+    let seqObjName = &"Seq{objName.headUpper()}"
     for child in self.elems:
       case child.kind
       of JObject:
-        result.add(&"  {objs} = seq[{objName}]\n")
+        result.add(&"  {seqObjName} = seq[{objName}]\n")
         var ret: seq[string]
         child.objFormat(objName, ret)
         result.add(ret.join())
