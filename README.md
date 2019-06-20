@@ -4,7 +4,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/fljtevgiqopth9sq?svg=true)](https://ci.appveyor.com/project/jiro4989/nimjson)
 
 nimjson generates nim object definitions from json documents.
-this was inspired by [gojson](https://github.com/ChimeraCoder/gojson).
+This was inspired by [gojson](https://github.com/ChimeraCoder/gojson).
 
 ## Development
 
@@ -21,6 +21,9 @@ this was inspired by [gojson](https://github.com/ChimeraCoder/gojson).
     git hash: couldn't determine git hash
 
 ## Usage examples
+
+`nimjson` writes `JNull` type if a value or a first value of an array is null.
+Please fix `JNull` type yourself.
 
 ### Large JSON example
 
