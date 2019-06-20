@@ -38,7 +38,7 @@ type
     private: bool
     owner: Owner
     html_url: string
-    description: JNull
+    description: string
     fork: bool
     url: string
     forks_url: string
