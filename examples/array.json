@@ -1,0 +1,8 @@
+{
+    "strArray":["str1", "str2", "str3"],
+    "intArray":[10],
+    "floatArray":[1.1],
+    "boolArray":[true, false],
+    "nullArray":[null, null],
+    "emptyArray":[]
+}
