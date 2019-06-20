@@ -45,7 +45,7 @@ proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], ind
     else: discard
 
 proc toTypeString*(self: JsonNode, objName = "Object"): string =
-  result.add(&"type\n")
+  result.add("type\n")
   case self.kind
   of JObject:
     var ret: seq[string]
