@@ -196,7 +196,21 @@ nimble install nimjson
 
 ## Help
 
-See `nimjson -h`.
+`nimjson -h`
+
+    nimjson prints a converted Nim object type string from JSON file or string.
+
+    Usage:
+        nimjson [options] [files...]
+        nimjson (-h | --help)
+        nimjson (-v | --version)
+
+    Options:
+        -h, --help                       Print this help
+        -v, --version                    Print version
+        -X, --debug                      Debug on
+        -o, --out-file:FILE_PATH         Write file path
+        -O, --object-name:OBJECT_NAME    Set object type name
 
 ## License
 
