@@ -42,7 +42,7 @@ artifacts:
 deploy:
 - provider: GitHub
   auth_token:
-    secure: esSlDbpH2rczLbaAJm5b1tG1KfwaQ6POEICFbpY7oJkW++IrNwJFpz6O5oyoAe/7
+    secure: R1YERHJ+cphhUqBHZ2bLpA0eEbbE1z5xOBqJPbmYdcdA3bABVqTTrWpvfdehOrIF
   artifacts: zip
   on:
     branch: master
