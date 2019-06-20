@@ -16,6 +16,11 @@ requires "nim >= 0.20.0"
 task docs, "Generate documents":
   exec "nimble doc src/nimjson.nim -o:docs/nimjson.html"
 
+task examples, "Run examples":
+  withDir "examples/readfile":
+    exec "nim c -d:release main.nim"
+    exec "./main"
+
 task ci, "Run CI":
   exec "nim -v"
   exec "nimble -v"
@@ -23,5 +28,6 @@ task ci, "Run CI":
   exec "nimble test -Y"
   exec "nimble docs -Y"
   exec "nimble build -d:release -Y"
+  exec "nimble examples"
   exec "./bin/nimjson -h"
   exec "./bin/nimjson -v"
