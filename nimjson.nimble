@@ -17,9 +17,10 @@ task docs, "Generate documents":
   exec "nimble doc src/nimjson.nim -o:docs/nimjson.html"
 
 task examples, "Run examples":
-  withDir "examples/readfile":
-    exec "nim c -d:release main.nim"
-    exec "./main"
+  for dir in ["readfile", "mapping"]:
+    withDir "examples/" & dir:
+      exec "nim c -d:release main.nim"
+      exec "./main"
 
 task buildjs, "Generate JS lib":
   exec "nimble js src/nimjson_js.nim -o:docs/js/nimjson.js"
