@@ -198,7 +198,7 @@ nimble install nimjson
 
 `nimjson -h`
 
-    nimjson prints a converted Nim object type string from JSON file or string.
+    nimjson generates nim object definitions from json documents.
 
     Usage:
         nimjson [options] [files...]
