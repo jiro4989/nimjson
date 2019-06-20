@@ -61,7 +61,7 @@ proc getCmdOpts*(params: seq[string]): Options =
 proc setLogger(opts: Options) =
   ## デバッグログ出力フラグがtrueのときだけログ出力ハンドラをセット
   if opts.useDebug:
-    newConsoleLogger(lvlAll).addHandler()
+    newConsoleLogger(lvlAll, verboseFmtStr).addHandler()
 
 when isMainModule:
   let opts = commandLineParams().getCmdOpts()
@@ -99,6 +99,5 @@ when isMainModule:
       str.add(line)
     outFile.write(str.parseJson().toTypeString(opts.objectName))
     debug "END: Process stdin"
-  outFile.close()
-
   debug "Success: nimjson"
+  outFile.close()
