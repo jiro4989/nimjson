@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>nimjson - Generates Nim object definitions from json documents.</title>
+    <script src="js/nimjson.js"></script>
+    <script>
+        function execute() {
+            const text = document.getElementById("jsonInputTextArea").value;
+            const nimDef = generateNimDefinitions(text);
+            document.getElementById("nimDefOutputTextArea").value = nimDef;
+        }
+    </script>
+</head>
+
+<body>
+    <textarea id="jsonInputTextArea" name="" id="" cols="100" rows="30"></textarea>
+    <input id="executeButton" type="button" value="Execute" onclick="execute();">
+    <textarea id="nimDefOutputTextArea" name="" id="" cols="100" rows="30"></textarea>
+</body>
+
+</html>
