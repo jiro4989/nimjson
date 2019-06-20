@@ -35,7 +35,6 @@ proc getCmdOpts*(params: seq[string]): Options =
   new result
   result.objectName = "Object"
 
-  # コマンドラインオプションを取得
   for kind, key, val in optParser.getopt():
     case kind
     of cmdArgument:
@@ -60,6 +59,7 @@ proc getCmdOpts*(params: seq[string]): Options =
       assert false # cannot happen
     
 proc setLogger(opts: Options) =
+  ## デバッグログ出力フラグがtrueのときだけログ出力ハンドラをセット
   if opts.useDebug:
     newConsoleLogger(lvlAll).addHandler()
 
@@ -69,6 +69,8 @@ when isMainModule:
   setLogger(opts)
   debug &"Command line options = {opts[]}"
 
+  # 出力ファイルパスを指定していたらファイルを出力先に指定
+  # 未指定の場合は標準出力が出力先になる
   var outFile =
     if opts.outFile != "":
       debug &"Open file: {opts.outFile}"
@@ -77,8 +79,15 @@ when isMainModule:
       debug "Open stdout"
       stdout
 
+  # 引数（ファイルパス）が存在したらファイルを読み込んで
+  # NimのObject文字列に変換する。
+  # 引数未指定の場合は標準入力待ちになる。
   if 0 < opts.args.len():
     debug &"START: Process arguments: args = {opts.args}"
+
+    # 入力ファイルが複数あっても出力先は1つである。
+    # もともと入力ファイルは1つの想定であり、
+    # 2つ処理できるようにしてるのはオマケ機能である。
     for inFile in opts.args:
       outFile.write(inFile.parseFile().toTypeString(opts.objectName))
     debug "END: Process arguments"
