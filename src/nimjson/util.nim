@@ -28,14 +28,10 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int): s
     let uKey = key.headUpper()
     var s = "seq["
     if 0 < value.elems.len():
-      for child in value.elems:
-        s.add(getType(uKey, child, strs, index))
-
-        case child.kind
-        of JObject:
-          child.objFormat(uKey, strs, index+1)
-        else: discard
-        break
+      let child = value.elems[0]
+      s.add(getType(uKey, child, strs, index))
+      if child.kind == JObject:
+        child.objFormat(uKey, strs, index+1)
     else:
       s.add("JNull")
     s.add("]")
@@ -56,10 +52,8 @@ proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], ind
     let t = getType(k, v, strs, index)
     strs[index].add(&"    {k}: {t}\n")
 
-    case v.kind
-    of JObject:
+    if v.kind == JObject:
       v.objFormat(k, strs, index+1)
-    else: discard
 
 proc toTypeString*(self: JsonNode, objName = "Object"): string =
   ## ``JsonNode`` をNimのObject定義の文字列に変換して返却する。
