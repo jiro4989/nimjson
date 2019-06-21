@@ -1,7 +1,7 @@
 import unittest
 import sequtils, strutils
 
-include nimjson/util
+include nimjsonpkg/util
 
 suite "proc headUpper":
   test "Normal":
