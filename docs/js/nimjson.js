@@ -1227,7 +1227,7 @@ function nsuToUpperAsciiChar(c_147862) {
 function head_upper_204022(str_204024) {
 	var result_204025 = null;
 
-	var F={procname:"nimjson.headUpper",prev:framePtr,filename:"/home/jiro4989/src/github.com/jiro4989/nimjson/src/nimjson/util.nim",line:0};
+	var F={procname:"nimjson.headUpper",prev:framePtr,filename:"/home/jiro4989/src/github.com/jiro4989/nimjson/src/nimjsonpkg/util.nim",line:0};
 	framePtr = F;
 		F.line = 28;
 		result_204025 = nimCopy(null, [nsuToUpperAsciiChar(str_204024[chckIndx(0, 0, str_204024.length+0-1)-0])].concat(HEX5BHEX5D_100704(str_204024, HEX2EHEX2E_100639(1, 1)) || []), NTI138);
@@ -1272,7 +1272,7 @@ function get_type_204074(key_204076, value_204077, strs_204080, strs_204080_Idx,
 
 	var result_204082 = null;
 
-	var F={procname:"nimjson.getType",prev:framePtr,filename:"/home/jiro4989/src/github.com/jiro4989/nimjson/src/nimjson/util.nim",line:0};
+	var F={procname:"nimjson.getType",prev:framePtr,filename:"/home/jiro4989/src/github.com/jiro4989/nimjson/src/nimjsonpkg/util.nim",line:0};
 	framePtr = F;
 		F.line = 33;
 		F.line = 37;
@@ -1371,7 +1371,7 @@ function failed_assert_impl_14255(msg_14257) {
 function obj_format_204001(self_204003, obj_name_204004, strs_204019, strs_204019_Idx, index_204020) {
 			var Tmp2;
 
-	var F={procname:"nimjson.objFormat",prev:framePtr,filename:"/home/jiro4989/src/github.com/jiro4989/nimjson/src/nimjson/util.nim",line:0};
+	var F={procname:"nimjson.objFormat",prev:framePtr,filename:"/home/jiro4989/src/github.com/jiro4989/nimjson/src/nimjsonpkg/util.nim",line:0};
 	framePtr = F;
 		F.line = 61;
 		if (strs_204019[strs_204019_Idx] != null) { strs_204019[strs_204019_Idx].push([]); } else { strs_204019[strs_204019_Idx] = [[]]; };
@@ -1527,7 +1527,7 @@ function to_type_string_204185(self_204187, obj_name_204188) {
 
 	var result_204189 = null;
 
-	var F={procname:"nimjson.toTypeString",prev:framePtr,filename:"/home/jiro4989/src/github.com/jiro4989/nimjson/src/nimjson/util.nim",line:0};
+	var F={procname:"nimjson.toTypeString",prev:framePtr,filename:"/home/jiro4989/src/github.com/jiro4989/nimjson/src/nimjsonpkg/util.nim",line:0};
 	framePtr = F;
 		F.line = 98;
 		if (result_204189 != null) { result_204189 = (result_204189).concat(makeNimstrLit("type\x0A")); } else { result_204189 = makeNimstrLit("type\x0A"); };

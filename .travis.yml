@@ -10,6 +10,11 @@ env:
   - PATH=$HOME/.nimble/bin:$PATH
     APP_NAME=nimjson
 
+cache:
+  directories:
+    - $HOME/.nimble
+    - $HOME/.choosenim
+
 addons:
   apt:
     packages:
@@ -19,9 +24,7 @@ addons:
       - libsfml-dev
 
 before_install:
-  - curl https://nim-lang.org/choosenim/init.sh -sSf -o init.sh
-  - bash init.sh -y
-  - choosenim "#v0.20.0"
+  - if [ ! -e $HOME/.nimble/bin/nim ]; then curl https://nim-lang.org/choosenim/init.sh -sSf -o init.sh && bash init.sh -y && choosenim "#v0.20.0"; fi
 
 before_script:
   - set -e

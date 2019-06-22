@@ -1,13 +1,13 @@
 # Package
 
-version       = "1.0.1"
+version       = "1.0.2"
 author        = "jiro4989"
 description   = "nimjson generates nim object definitions from json documents."
 license       = "MIT"
 srcDir        = "src"
 bin           = @["nimjson"]
 binDir        = "bin"
-
+installExt    = @["nim"]
 
 # Dependencies
 
