@@ -23,7 +23,7 @@ task examples, "Run examples":
       exec "./main"
 
 task buildjs, "Generate JS lib":
-  exec "nimble js src/nimjson_js.nim -o:docs/js/nimjson.js"
+  exec "nimble js js/nimjson_js.nim -o:docs/js/nimjson.js"
 
 task ci, "Run CI":
   exec "nim -v"
