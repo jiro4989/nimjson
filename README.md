@@ -135,6 +135,8 @@ type
 
 ### Simple JSON example
 
+See examples JSON and examples programs.
+
 ```bash
 % nimjson examples/primitive.json 
 type
