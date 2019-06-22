@@ -13,6 +13,7 @@ env:
 cache:
   directories:
     - $HOME/.nimble
+    - $HOME/.choosenim
 
 addons:
   apt:
@@ -23,7 +24,8 @@ addons:
       - libsfml-dev
 
 before_install:
-  - if [ ! -e $HOME/.nimble/bin/nim ]; then curl https://nim-lang.org/choosenim/init.sh -sSf -o init.sh && bash init.sh -y && choosenim "#v0.20.0"; fi
+  - curl https://nim-lang.org/choosenim/init.sh -sSf -o init.sh && bash init.sh -y && choosenim "#v0.20.0"
+    #- if [ ! -e $HOME/.nimble/bin/nim ]; then curl https://nim-lang.org/choosenim/init.sh -sSf -o init.sh && bash init.sh -y && choosenim "#v0.20.0"; fi
 
 before_script:
   - set -e
