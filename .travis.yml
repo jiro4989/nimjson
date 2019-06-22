@@ -12,7 +12,7 @@ env:
 
 cache:
   directories:
-    - $HOME/.nimble/bin
+    - $HOME/.nimble
 
 addons:
   apt:
