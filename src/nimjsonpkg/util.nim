@@ -92,11 +92,12 @@ proc toTypeString*(self: JsonNode, objName = "Object"): string =
                       "keyBool":true}""".parseJson().toTypeString()
     let typeLines = typeStr.split("\n")
     doAssert typeLines[0] == "type"
-    doAssert typeLines[1] == "  Object = ref object"
-    doAssert typeLines[2] == "    keyStr: string"
-    doAssert typeLines[3] == "    keyInt: int64"
-    doAssert typeLines[4] == "    keyFloat: float64"
-    doAssert typeLines[5] == "    keyBool: bool"
+    doAssert typeLines[1] == "  " & nilType & " = ref object"
+    doAssert typeLines[2] == "  Object = ref object"
+    doAssert typeLines[3] == "    keyStr: string"
+    doAssert typeLines[4] == "    keyInt: int64"
+    doAssert typeLines[5] == "    keyFloat: float64"
+    doAssert typeLines[6] == "    keyBool: bool"
 
   result.add("type\n")
   result.add(&"  {nilType} = ref object\n")
