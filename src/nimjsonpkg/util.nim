@@ -22,6 +22,9 @@
 import json, strformat, tables
 from strutils import toUpperAscii, join, split
 
+const
+  nilType* = "NilType"
+
 proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0)
 
 proc headUpper(str: string): string =
@@ -45,7 +48,7 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int): s
       if child.kind == JObject:
         child.objFormat(uKey, strs, index+1)
     else:
-      s.add("JNull")
+      s.add(nilType)
     s.add("]")
     s
   of JObject: key.headUpper()
@@ -53,7 +56,7 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int): s
   of JInt: "int64"
   of JFloat: "float64"
   of JBool: "bool"
-  of JNull: "JNull"
+  of JNull: nilType
 
 proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0) =
   ## Object型のJsonNodeをObject定義の文字列に変換して`strs[index]`に追加する。
@@ -78,7 +81,7 @@ proc toTypeString*(self: JsonNode, objName = "Object"): string =
   ##
   ## **Note:**
   ## * 値が ``null`` あるいは配列の最初の要素が ``null`` や値が空配列の場合は、
-  ##   型が ``JNull`` になる。
+  ##   型が `nilType <#nilType>`_ になる。
   runnableExamples:
     import json
     from strutils import split
@@ -96,6 +99,7 @@ proc toTypeString*(self: JsonNode, objName = "Object"): string =
     doAssert typeLines[5] == "    keyBool: bool"
 
   result.add("type\n")
+  result.add(&"  {nilType} = ref object\n")
   case self.kind
   of JObject:
     var ret: seq[string]
