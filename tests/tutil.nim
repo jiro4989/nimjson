@@ -11,6 +11,7 @@ suite "proc headUpper":
     check "h".headUpper() == "H"
 
 suite "proc getType":
+  const nilSeq = "seq[" & nilType & "]"
   setup:
     var strs: seq[string]
   test "Primitive type":
@@ -19,12 +20,12 @@ suite "proc getType":
     check getType("key", """1.0""".parseJson(), strs, 0) == "float64"
     check getType("key", """true""".parseJson(), strs, 0) == "bool"
     check getType("key", """false""".parseJson(), strs, 0) == "bool"
-    check getType("key", """null""".parseJson(), strs, 0) == "JNull"
+    check getType("key", """null""".parseJson(), strs, 0) == nilType
     check getType("key", """[1, 2, 3]""".parseJson(), strs, 0) == "seq[int64]"
-    check getType("key", """[]""".parseJson(), strs, 0) == "seq[JNull]"
+    check getType("key", """[]""".parseJson(), strs, 0) == nilSeq
     check getType("key", """["x", null]""".parseJson(), strs, 0) == "seq[string]"
-    check getType("key", """[null, null]""".parseJson(), strs, 0) == "seq[JNull]"
-    check getType("key", """[null, "x"]""".parseJson(), strs, 0) == "seq[JNull]"
+    check getType("key", """[null, null]""".parseJson(), strs, 0) == nilSeq
+    check getType("key", """[null, "x"]""".parseJson(), strs, 0) == nilSeq
   test "Object type":
     check getType("obj", """{"str":"str", "int":1}""".parseJson(), strs, 0) == "Obj"
   test "Array object type":
@@ -100,13 +101,14 @@ suite "proc toTypeString":
         "str":"string",
         "float":1.24,
         "bool":true
-      }""".parseJson().toTypeString() == """
+      }""".parseJson().toTypeString() == ("""
       |type
+      |  """ & nilType & """ = ref object
       |  Object = ref object
       |    int: int64
       |    str: string
       |    float: float64
-      |    bool: bool""".removeIndent()
+      |    bool: bool""").removeIndent()
   test "Array value":
     check """
       {
@@ -115,21 +117,23 @@ suite "proc toTypeString":
         "float":[1.1, 1.2, 1.3],
         "trueBool":[true, false],
         "falseBool":[false, true]
-      }""".parseJson().toTypeString() == """
+      }""".parseJson().toTypeString() == ("""
       |type
+      |  """ & nilType & """ = ref object
       |  Object = ref object
       |    int: seq[int64]
       |    str: seq[string]
       |    float: seq[float64]
       |    trueBool: seq[bool]
-      |    falseBool: seq[bool]""".removeIndent()
+      |    falseBool: seq[bool]""").removeIndent()
   test "Object value":
     check """
       {
         "obj1":{"int":1, "str":"strval"},
         "obj2":{"fal":false, "str":null}
-      }""".parseJson().toTypeString() == """
+      }""".parseJson().toTypeString() == ("""
       |type
+      |  """ & nilType & """ = ref object
       |  Object = ref object
       |    obj1: Obj1
       |    obj2: Obj2
@@ -138,7 +142,7 @@ suite "proc toTypeString":
       |    str: string
       |  Obj2 = ref object
       |    fal: bool
-      |    str: JNull""".removeIndent()
+      |    str: """ & nilType).removeIndent()
   test "Array object":
     check """
       {
@@ -146,8 +150,9 @@ suite "proc toTypeString":
         "obj2":{"fal":false, "str":null, "obj":[{"fal":false}, {"fal":false}], "v":1, "v2":2, "objobj":{"i":1}},
         "obj3":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}],
         "obj4":{"objX":{"i":12}}
-      }""".parseJson().toTypeString() == """
+      }""".parseJson().toTypeString() == ("""
       |type
+      |  """ & nilType & """ = ref object
       |  Object = ref object
       |    obj1: seq[Obj1]
       |    obj2: Obj2
@@ -158,7 +163,7 @@ suite "proc toTypeString":
       |    str: string
       |  Obj2 = ref object
       |    fal: bool
-      |    str: JNull
+      |    str: """ & nilType & "\n" & """
       |    obj: seq[Obj]
       |    v: int64
       |    v2: int64
@@ -173,4 +178,4 @@ suite "proc toTypeString":
       |  Objobj = ref object
       |    i: int64
       |  ObjX = ref object
-      |    i: int64""".removeIndent()
+      |    i: int64""").removeIndent()

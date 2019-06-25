@@ -22,14 +22,15 @@ This was inspired by [gojson](https://github.com/ChimeraCoder/gojson).
 
 ## Usage examples
 
-`nimjson` writes `JNull` type if a value or a first value of an array is null.
-Please fix `JNull` type yourself.
+`nimjson` writes `NilType` type if a value or a first value of an array is null.
+Please fix `NilType` type yourself.
 
 ### Large JSON example
 
 ```bash
 % curl -s https://api.github.com/repos/jiro4989/nimjson | nimjson -O:Repository
 type
+  NilType = ref object
   Repository = ref object
     id: int64
     node_id: string
@@ -95,7 +96,7 @@ type
     has_wiki: bool
     has_pages: bool
     forks_count: int64
-    mirror_url: JNull
+    mirror_url: NilType
     archived: bool
     disabled: bool
     open_issues_count: int64
@@ -136,27 +137,30 @@ type
 ### Simple JSON example
 
 ```bash
-% nimjson examples/primitive.json 
+% nimjson examples/primitive.json
 type
+  NilType = ref object
   Object = ref object
     stringField: string
     intField: int64
     floatField: float64
     boolField: bool
-    nullField: JNull
+    nullField: NilType
 
-% nimjson examples/array.json    
+% nimjson examples/array.json
 type
+  NilType = ref object
   Object = ref object
     strArray: seq[string]
     intArray: seq[int64]
     floatArray: seq[float64]
     boolArray: seq[bool]
-    nullArray: seq[JNull]
-    emptyArray: seq[JNull]
+    nullArray: seq[NilType]
+    emptyArray: seq[NilType]
 
-% nimjson examples/object.json 
+% nimjson examples/object.json
 type
+  NilType = ref object
   Object = ref object
     point: Point
     length: int64
@@ -181,11 +185,22 @@ echo """{"keyStr":"str", "keyInt":1}""".parseJson().toTypeString()
 
 # Output:
 # type
+#   NilType = ref object
 #   Object = ref object
 #     keyStr: string
 #     keyInt: int64
 
 echo "examples/primitive.json".parseFile().toTypeString("testObject")
+
+# Output:
+# type
+#   NilType = ref object
+#   TestObject = ref object
+#     stringField: string
+#     intField: int64
+#     floatField: float64
+#     boolField: bool
+#     nullField: NilType
 ```
 
 ## Install
