@@ -13,7 +13,7 @@ when not defined(js):
 
   const
     appName = "nimjson"
-    version = &"""{appName} command version 1.2.0
+    version = &"""{appName} command version 1.2.1
 Copyright (c) 2019 jiro4989
 Released under the MIT License.
 https://github.com/jiro4989/nimjson"""
@@ -31,7 +31,7 @@ Options:
     -X, --debug                      Debug on
     -o, --out-file:FILE_PATH         Write file path
     -O, --object-name:OBJECT_NAME    Set object type name
-    -p, --public-filed               Public fields
+    -p, --public-field               Public fields
 """
 
   proc getCmdOpts(params: seq[string]): Options =
