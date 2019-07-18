@@ -73,11 +73,13 @@ proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], ind
 
 proc toTypeString*(self: JsonNode, objName = "Object", publicField = false): string =
   ## Generates nim object definitions string from ``JsonNode``.
+  ## Returns a public field string if ``publicField`` was true.
   ##
   ## **Japanese:**
   ##
   ## ``JsonNode`` をNimのObject定義の文字列に変換して返却する。
   ## ``objName`` が定義するObjectの名前になる。
+  ## ``publicField`` を指定すると、公開フィールドとして文字列を返却する。
   ##
   ## **Note:**
   ## * 値が ``null`` あるいは配列の最初の要素が ``null`` や値が空配列の場合は、
