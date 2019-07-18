@@ -179,3 +179,39 @@ suite "proc toTypeString":
       |    i: int64
       |  ObjX = ref object
       |    i: int64""").removeIndent()
+  test "Public fields":
+    check """
+      {
+        "obj1":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}],
+        "obj2":{"fal":false, "str":null, "obj":[{"fal":false}, {"fal":false}], "v":1, "v2":2, "objobj":{"i":1}},
+        "obj3":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}],
+        "obj4":{"objX":{"i":12}}
+      }""".parseJson().toTypeString(publicField = true) == ("""
+      |type
+      |  """ & nilType & """* = ref object
+      |  Object* = ref object
+      |    obj1*: seq[Obj1]
+      |    obj2*: Obj2
+      |    obj3*: seq[Obj3]
+      |    obj4*: Obj4
+      |  Obj1* = ref object
+      |    int*: int64
+      |    str*: string
+      |  Obj2* = ref object
+      |    fal*: bool
+      |    str*: """ & nilType & "\n" & """
+      |    obj*: seq[Obj]
+      |    v*: int64
+      |    v2*: int64
+      |    objobj*: Objobj
+      |  Obj3* = ref object
+      |    int*: int64
+      |    str*: string
+      |  Obj4* = ref object
+      |    objX*: ObjX
+      |  Obj* = ref object
+      |    fal*: bool
+      |  Objobj* = ref object
+      |    i*: int64
+      |  ObjX* = ref object
+      |    i*: int64""").removeIndent()

@@ -32,7 +32,7 @@ proc headUpper(str: string): string =
   ## 先頭の文字だけを大文字にするので、**別にUpperCamelCeseにするわけではない**。
   $(str[0].toUpperAscii() & str[1..^1])
 
-proc getType(key: string, value: JsonNode, strs: var seq[string], index: int): string =
+proc getType(key: string, value: JsonNode, strs: var seq[string], index: int, publicStr = ""): string =
   ## `value`の型文字列を返す。
   ## Object型や配列内の要素がObject型の場合は、`key`の文字列の先頭を大文字にした
   ## ものを型名として返す。
@@ -44,9 +44,9 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int): s
     if 0 < value.elems.len():
       # 配列の最初の要素の方を取得
       let child = value.elems[0]
-      s.add(getType(uKey, child, strs, index))
+      s.add(getType(uKey, child, strs, index, publicStr))
       if child.kind == JObject:
-        child.objFormat(uKey, strs, index+1)
+        child.objFormat(uKey, strs, index+1, publicStr)
     else:
       s.add(nilType)
     s.add("]")
@@ -64,7 +64,7 @@ proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], ind
   strs.add("")
   strs[index].add(&"  {objName.headUpper()}{publicStr} = ref object\n")
   for k, v in self.fields:
-    let t = getType(k, v, strs, index)
+    let t = getType(k, v, strs, index, publicStr)
     strs[index].add(&"    {k}{publicStr}: {t}\n")
 
     # Object型を処理したときは、Object型の定義が別途必要になるので追加
@@ -99,12 +99,13 @@ proc toTypeString*(self: JsonNode, objName = "Object", publicField = false): str
     doAssert typeLines[5] == "    keyFloat: float64"
     doAssert typeLines[6] == "    keyBool: bool"
   
-  result.add("type\n")
-  result.add(&"  {nilType} = ref object\n")
-  # フィールドを公開する
+  # フィールドを公開するときに指定する文字列
   let publicStr =
     if publicField: "*"
     else: ""
+
+  result.add("type\n")
+  result.add(&"  {nilType}{publicStr} = ref object\n")
   case self.kind
   of JObject:
     var ret: seq[string]
@@ -122,6 +123,6 @@ proc toTypeString*(self: JsonNode, objName = "Object", publicField = false): str
         result.add(ret.join())
       else:
         var strs: seq[string]
-        let t = getType(objName, child, strs, 0)
+        let t = getType(objName, child, strs, 0, publicStr)
         result.add(&"  {objName} = seq[{t}]\n")
   else: discard
