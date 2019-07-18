@@ -10,7 +10,8 @@
     <script>
         function execute() {
             const text = document.getElementById("jsonInputTextArea").value;
-            const nimDef = generateNimDefinitions(text);
+            const publicField = document.getElementById("publicFieldCheckbox").checked;
+            const nimDef = generateNimDefinitions(text, publicField);
             document.getElementById("nimDefOutputTextArea").value = nimDef;
         }
     </script>
@@ -80,6 +81,14 @@
             <p>Enter json string here. And press execute button.</p>
             <div>
                 <textarea id="jsonInputTextArea" name="" id="" rows="20"></textarea>
+            </div>
+            <div style="padding: 10px 0px;">
+                <span>
+                    <label for="publicFieldCheckbox">
+                        <input id="publicFieldCheckbox" type="checkbox" name="public-field" value="true" />
+                        Public field
+                    </label>
+                </span>
             </div>
             <input class="button" type="button" value="Execute" onclick="execute();">
         </div>
