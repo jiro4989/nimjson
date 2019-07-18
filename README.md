@@ -214,18 +214,19 @@ nimble install nimjson
 `nimjson -h`
 
     nimjson generates nim object definitions from json documents.
-
+    
     Usage:
         nimjson [options] [files...]
         nimjson (-h | --help)
         nimjson (-v | --version)
-
+    
     Options:
         -h, --help                       Print this help
         -v, --version                    Print version
         -X, --debug                      Debug on
         -o, --out-file:FILE_PATH         Write file path
         -O, --object-name:OBJECT_NAME    Set object type name
+        -p, --public-filed               Public fields
 
 ## License
 
