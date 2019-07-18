@@ -25,7 +25,7 @@ from strutils import toUpperAscii, join, split
 const
   nilType* = "NilType"
 
-proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0)
+proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0, publicStr = "")
 
 proc headUpper(str: string): string =
   ## 先頭の文字を大文字にして返す。
@@ -58,20 +58,20 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int): s
   of JBool: "bool"
   of JNull: nilType
 
-proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0) =
+proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0, publicStr = "") =
   ## Object型のJsonNodeをObject定義の文字列に変換して`strs[index]`に追加する。
   ## このとき`type`は追加しない。
   strs.add("")
-  strs[index].add(&"  {objName.headUpper()} = ref object\n")
+  strs[index].add(&"  {objName.headUpper()}{publicStr} = ref object\n")
   for k, v in self.fields:
     let t = getType(k, v, strs, index)
-    strs[index].add(&"    {k}: {t}\n")
+    strs[index].add(&"    {k}{publicStr}: {t}\n")
 
     # Object型を処理したときは、Object型の定義が別途必要になるので追加
     if v.kind == JObject:
-      v.objFormat(k, strs, index+1)
+      v.objFormat(k, strs, index+1, publicStr)
 
-proc toTypeString*(self: JsonNode, objName = "Object"): string =
+proc toTypeString*(self: JsonNode, objName = "Object", publicField = false): string =
   ## Generates nim object definitions string from ``JsonNode``.
   ##
   ## **Japanese:**
@@ -98,13 +98,17 @@ proc toTypeString*(self: JsonNode, objName = "Object"): string =
     doAssert typeLines[4] == "    keyInt: int64"
     doAssert typeLines[5] == "    keyFloat: float64"
     doAssert typeLines[6] == "    keyBool: bool"
-
+  
   result.add("type\n")
   result.add(&"  {nilType} = ref object\n")
+  # フィールドを公開する
+  let publicStr =
+    if publicField: "*"
+    else: ""
   case self.kind
   of JObject:
     var ret: seq[string]
-    self.objFormat(objName, ret)
+    self.objFormat(objName, ret, publicStr = publicStr)
     result.add(ret.join())
   of JArray:
     let seqObjName = &"Seq{objName.headUpper()}"
@@ -114,7 +118,7 @@ proc toTypeString*(self: JsonNode, objName = "Object"): string =
       of JObject:
         result.add(&"  {seqObjName} = seq[{objName}]\n")
         var ret: seq[string]
-        child.objFormat(objName, ret)
+        child.objFormat(objName, ret, publicStr = publicStr)
         result.add(ret.join())
       else:
         var strs: seq[string]
