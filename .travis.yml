@@ -43,10 +43,18 @@ before_deploy:
   - tar -C dist -czf ${APP_NAME}_${TRAVIS_OS_NAME}{.tar.gz,}
 
 deploy:
-  provider: releases
-  api_key: "$GITHUB_OAUTH_TOKEN"
-  keep-history: false
-  skip_cleanup: true
-  file: ${APP_NAME}_${TRAVIS_OS_NAME}.tar.gz
-  on:
-    tags: true
+  - provider: releases
+    api_key: "$GITHUB_OAUTH_TOKEN"
+    keep-history: false
+    skip_cleanup: true
+    file: ${APP_NAME}_${TRAVIS_OS_NAME}.tar.gz
+    on:
+      tags: true
+  - provider: pages
+    skip-cleanup: true
+    github-token: "$GITHUB_OAUTH_TOKEN"
+    keep-history: true
+    local-dir: docs
+    target-branch: gh-pages
+    on:
+      branch: master
