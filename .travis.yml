@@ -44,7 +44,8 @@ before_deploy:
 
 deploy:
   - provider: releases
-    api_key: "$GITHUB_OAUTH_TOKEN"
+    api_key:
+      secure: HDK/3GPsOzpKcdXXHQwHof13WHoSPYPk1nBz68JjYXE1hhYevXnEzMhjNLYNHG/1k5e3iPBK1BGaXNL9wzXLB+7dsUu33A6dPEXxq1ynZUV2j7LlOt1+/XUhcZn9gyh6hPYyaKMpZnLLvAiABLT5wCr08ITXu/B8J7mdmFF2OZR8kfXPe4Bs58MbZlfE1TNYRFRc2ZsWV7Ly9ZgqvyIDnRt4hVqVE+XGRlymL8S8NpDGKnTRy+8ony+dwFsaQ5Fo4Ci0wM1P+eR134mv6pXY2HRmjXS0D85pkyYdpFpjFNDTN/ZecgaotR4mcryG9oBwkwGM0APg2jTNHty2uT2/66X0vJwP4vHlbhv/eHJtRvtDHcGvpmCe2PAV8yPVJxiC51U5P91NW07C6hV3g+PiBY48yv/862VwzFVyeRANQkplcG+BosWxyIp245Fc82gRQSsE9f4f7HyVxKtaVsuQdA2be3jKrJlYoPFCv3V7DPtF5ZsOAqwHpJhtojgfzzJKSq6c918ePoeM4cHCJizbC4kEtP93DHbEq9TxQoxVoa9i47t+HpdNO6hyf+oUDEvC47xYaGVhaRFeIhrwHl56sgMOlh1t7zNWzdl0sGJgXH/k4ZGlanr5Hu6MI5PA0kH2FF3FgX0H/n8X9GWMaPcSXaD4MHPLy7BwEMJdB1rPnEU=
     keep-history: false
     skip_cleanup: true
     file: ${APP_NAME}_${TRAVIS_OS_NAME}.tar.gz
@@ -52,7 +53,8 @@ deploy:
       tags: true
   - provider: pages
     skip-cleanup: true
-    github-token: "$GITHUB_OAUTH_TOKEN"
+    github-token:
+      secure: HDK/3GPsOzpKcdXXHQwHof13WHoSPYPk1nBz68JjYXE1hhYevXnEzMhjNLYNHG/1k5e3iPBK1BGaXNL9wzXLB+7dsUu33A6dPEXxq1ynZUV2j7LlOt1+/XUhcZn9gyh6hPYyaKMpZnLLvAiABLT5wCr08ITXu/B8J7mdmFF2OZR8kfXPe4Bs58MbZlfE1TNYRFRc2ZsWV7Ly9ZgqvyIDnRt4hVqVE+XGRlymL8S8NpDGKnTRy+8ony+dwFsaQ5Fo4Ci0wM1P+eR134mv6pXY2HRmjXS0D85pkyYdpFpjFNDTN/ZecgaotR4mcryG9oBwkwGM0APg2jTNHty2uT2/66X0vJwP4vHlbhv/eHJtRvtDHcGvpmCe2PAV8yPVJxiC51U5P91NW07C6hV3g+PiBY48yv/862VwzFVyeRANQkplcG+BosWxyIp245Fc82gRQSsE9f4f7HyVxKtaVsuQdA2be3jKrJlYoPFCv3V7DPtF5ZsOAqwHpJhtojgfzzJKSq6c918ePoeM4cHCJizbC4kEtP93DHbEq9TxQoxVoa9i47t+HpdNO6hyf+oUDEvC47xYaGVhaRFeIhrwHl56sgMOlh1t7zNWzdl0sGJgXH/k4ZGlanr5Hu6MI5PA0kH2FF3FgX0H/n8X9GWMaPcSXaD4MHPLy7BwEMJdB1rPnEU=
     keep-history: true
     local-dir: docs
     target-branch: gh-pages
