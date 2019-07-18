@@ -9,10 +9,11 @@ when not defined(js):
       useHelp, useVersion, useDebug: bool
       outFile: string
       objectName: string
+      usePublicField: bool
 
   const
     appName = "nimjson"
-    version = &"""{appName} command version 1.1.0
+    version = &"""{appName} command version 1.2.0
 Copyright (c) 2019 jiro4989
 Released under the MIT License.
 https://github.com/jiro4989/nimjson"""
@@ -30,6 +31,7 @@ Options:
     -X, --debug                      Debug on
     -o, --out-file:FILE_PATH         Write file path
     -O, --object-name:OBJECT_NAME    Set object type name
+    -p, --public-filed               Public fields
 """
 
   proc getCmdOpts(params: seq[string]): Options =
@@ -59,6 +61,8 @@ Options:
           result.outFile = val
         of "object-name", "O":
           result.objectName = val
+        of "public-field", "p":
+          result.usePublicField = true
       of cmdEnd:
         assert false # cannot happen
       
@@ -94,7 +98,7 @@ Options:
       # もともと入力ファイルは1つの想定であり、
       # 2つ処理できるようにしてるのはオマケ機能である。
       for inFile in opts.args:
-        outFile.write(inFile.parseFile().toTypeString(opts.objectName))
+        outFile.write(inFile.parseFile().toTypeString(opts.objectName, opts.usePublicField))
       debug "END: Process arguments"
     else:
       debug "START: Process stdin"
@@ -102,7 +106,7 @@ Options:
       var line: string
       while stdin.readLine(line):
         str.add(line)
-      outFile.write(str.parseJson().toTypeString(opts.objectName))
+      outFile.write(str.parseJson().toTypeString(opts.objectName, opts.usePublicField))
       debug "END: Process stdin"
 
     debug "Success: nimjson"
