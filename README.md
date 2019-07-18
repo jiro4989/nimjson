@@ -226,7 +226,7 @@ nimble install nimjson
         -X, --debug                      Debug on
         -o, --out-file:FILE_PATH         Write file path
         -O, --object-name:OBJECT_NAME    Set object type name
-        -p, --public-filed               Public fields
+        -p, --public-field               Public fields
 
 ## License
 
