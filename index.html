@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>nimjson - Generates nim object definitions from json documents.</title>
+    <script src="js/nimjson.js"></script>
+    <script>
+        function execute() {
+            const text = document.getElementById("jsonInputTextArea").value;
+            const publicField = document.getElementById("publicFieldCheckbox").checked;
+            const nimDef = generateNimDefinitions(text, publicField);
+            document.getElementById("nimDefOutputTextArea").value = nimDef;
+        }
+    </script>
+    <style>
+        body {
+            width: 100%;
+        }
+
+        .main-div {
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        textarea {
+            padding: 0.8em;
+            outline: none;
+            border: 1px solid #DDD;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .button {
+            background-color: #333;
+            border: 2px solid #333;
+            color: #fff;
+            line-height: 50px;
+            transition: all 300ms 0s ease;
+        }
+
+        .button:hover,
+        .button:focus,
+        textarea:hover,
+        textarea:focus {
+            background-color: #fff;
+            border-color: #59b1eb;
+            color: #59b1eb;
+            transition: all 300ms 0s ease;
+        }
+
+        h1 {
+            padding: .75em 0;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+
+        h2 {
+            padding: .25em 0 .5em .75em;
+            border-left: 6px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-div">
+        <div>
+            <h1>nimjson</h1>
+            <p>Generates nim object definitions from json documents.</p>
+            <hr>
+        </div>
+        <div class="input-div">
+            <h2>Input</h2>
+            <p>Enter json string here. And press execute button.</p>
+            <div>
+                <textarea id="jsonInputTextArea" name="" id="" rows="20"></textarea>
+            </div>
+            <div style="padding: 10px 0px;">
+                <span>
+                    <label for="publicFieldCheckbox">
+                        <input id="publicFieldCheckbox" type="checkbox" name="public-field" value="true" />
+                        Public field
+                    </label>
+                </span>
+            </div>
+            <input class="button" type="button" value="Execute" onclick="execute();">
+        </div>
+        <div class="output-div">
+            <h2>Output</h2>
+            <textarea id="nimDefOutputTextArea" name="" id="" rows="20"></textarea>
+        </div>
+    </div>
+</body>
+
+</html>
