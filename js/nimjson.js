@@ -1238,7 +1238,7 @@ function head_upper_249024(str_249026) {
 
 	var F={procname:"nimjson.headUpper",prev:framePtr,filename:"util.nim",line:0};
 	framePtr = F;
-		F.line = 31;
+		F.line = 32;
 		result_249027 = nimCopy(null, [nsuToUpperAsciiChar(str_249026[chckIndx(0, 0, str_249026.length+0-1)-0])].concat(HEX5BHEX5D_144704(str_249026, HEX2EHEX2E_144639(1, 1)) || []), NTI44040);
 	framePtr = F.prev;
 
@@ -1283,35 +1283,35 @@ function get_type_249076(key_249078, value_249079, strs_249082, strs_249082_Idx,
 
 	var F={procname:"nimjson.getType",prev:framePtr,filename:"util.nim",line:0};
 	framePtr = F;
-		F.line = 36;
-		F.line = 40;
+		F.line = 38;
+		F.line = 42;
 		switch (value_249079.kind) {
 		case 6:
-			F.line = 42;
+			F.line = 44;
 			var u_key_249086 = head_upper_249024(key_249078);
-			F.line = 43;
+			F.line = 45;
 			var s_249087 = makeNimstrLit("seq[");
 				var Tmp2 = value_249079;
 				if (ConstSet11[Tmp2.kind]===undefined) { raiseFieldError(makeNimstrLit("elems")); }
 			if ((0 < ((Tmp3 = Tmp2.elems, Tmp3) != null ? Tmp3.length : 0))) {
-			F.line = 46;
+			F.line = 48;
 			var Tmp4 = value_249079;
 			if (ConstSet12[Tmp4.kind]===undefined) { raiseFieldError(makeNimstrLit("elems")); }
 			var child_249097 = (Tmp5 = Tmp4.elems, Tmp5)[chckIndx(0, 0, Tmp5.length+0-1)-0];
-			F.line = 47;
+			F.line = 49;
 			if (s_249087 != null) { s_249087 = (s_249087).concat(get_type_249076(u_key_249086, child_249097, strs_249082, strs_249082_Idx, index_249083, public_str_249084)); } else { s_249087 = get_type_249076(u_key_249086, child_249097, strs_249082, strs_249082_Idx, index_249083, public_str_249084).slice(); };
 			if ((child_249097.kind == 5)) {
-			F.line = 49;
+			F.line = 51;
 			obj_format_249002(child_249097, u_key_249086, strs_249082, strs_249082_Idx, addInt(index_249083, 1), public_str_249084);
 			}
 			
 			}
 			else {
-				F.line = 51;
+				F.line = 53;
 			if (s_249087 != null) { s_249087 = (s_249087).concat(makeNimstrLit("NilType")); } else { s_249087 = makeNimstrLit("NilType"); };
 			}
 			
-			F.line = 52;
+			F.line = 54;
 			if (s_249087 != null) { s_249087 = (s_249087).concat(makeNimstrLit("]")); } else { s_249087 = makeNimstrLit("]"); };
 			Tmp1 = s_249087;
 			break;
@@ -1382,28 +1382,28 @@ function obj_format_249002(self_249004, obj_name_249005, strs_249020, strs_24902
 
 	var F={procname:"nimjson.objFormat",prev:framePtr,filename:"util.nim",line:0};
 	framePtr = F;
-		F.line = 64;
+		F.line = 67;
 		if (strs_249020[strs_249020_Idx] != null) { strs_249020[strs_249020_Idx].push([]); } else { strs_249020[strs_249020_Idx] = [[]]; };
-		F.line = 65;
-		F.line = 65;
+		F.line = 68;
+		F.line = 68;
 		var fmt_res_249149 = [mnewString(0)];
-		F.line = 65;
+		F.line = 68;
 		if (fmt_res_249149[0] != null) { fmt_res_249149[0] = (fmt_res_249149[0]).concat(makeNimstrLit("  ")); } else { fmt_res_249149[0] = makeNimstrLit("  "); };
-		F.line = 65;
+		F.line = 68;
 		format_value_246687(fmt_res_249149, 0, head_upper_249024(obj_name_249005), []);
-		F.line = 65;
+		F.line = 68;
 		format_value_246687(fmt_res_249149, 0, public_str_249023, []);
-		F.line = 65;
+		F.line = 68;
 		if (fmt_res_249149[0] != null) { fmt_res_249149[0] = (fmt_res_249149[0]).concat(makeNimstrLit(" = ref object\x0A")); } else { fmt_res_249149[0] = makeNimstrLit(" = ref object\x0A"); };
 		if (strs_249020[strs_249020_Idx][chckIndx(index_249021, 0, strs_249020[strs_249020_Idx].length+0-1)-0] != null) { strs_249020[strs_249020_Idx][chckIndx(index_249021, 0, strs_249020[strs_249020_Idx].length+0-1)-0] = (strs_249020[strs_249020_Idx][chckIndx(index_249021, 0, strs_249020[strs_249020_Idx].length+0-1)-0]).concat(fmt_res_249149[0]); } else { strs_249020[strs_249020_Idx][chckIndx(index_249021, 0, strs_249020[strs_249020_Idx].length+0-1)-0] = fmt_res_249149[0].slice(); };
 		L1: do {
-			F.line = 66;
+			F.line = 69;
 			var k_249166 = null;
-			F.line = 66;
+			F.line = 69;
 			var v_249167 = null;
 			F.line = 1619;
 			var colontmp__250117 = {data: null, counter: 0, first: 0, last: 0};
-			F.line = 66;
+			F.line = 69;
 			var Tmp2 = self_249004;
 			if (ConstSet10[Tmp2.kind]===undefined) { raiseFieldError(makeNimstrLit("fields")); }
 			nimCopy(colontmp__250117, Tmp2.fields, NTI222228);
@@ -1419,30 +1419,30 @@ function obj_format_249002(self_249004, obj_name_249005, strs_249020, strs_24902
 						F.line = 1259;
 						var nxt_250122 = colontmp__250117.data[chckIndx(h_250120, 0, colontmp__250117.data.length+0-1)-0].Field1;
 						if (is_filled_206418(colontmp__250117.data[chckIndx(h_250120, 0, colontmp__250117.data.length+0-1)-0].Field0)) {
-						F.line = 66;
+						F.line = 69;
 						k_249166 = colontmp__250117.data[chckIndx(h_250120, 0, colontmp__250117.data.length+0-1)-0].Field2;
 						F.line = 1647;
 						v_249167 = colontmp__250117.data[chckIndx(h_250120, 0, colontmp__250117.data.length+0-1)-0].Field3;
-						F.line = 67;
+						F.line = 70;
 						var t_249168 = get_type_249076(k_249166, v_249167, strs_249020, strs_249020_Idx, index_249021, public_str_249023);
-						F.line = 68;
-						F.line = 68;
+						F.line = 71;
+						F.line = 71;
 						var fmt_res_249169 = [mnewString(0)];
-						F.line = 68;
+						F.line = 71;
 						if (fmt_res_249169[0] != null) { fmt_res_249169[0] = (fmt_res_249169[0]).concat(makeNimstrLit("    ")); } else { fmt_res_249169[0] = makeNimstrLit("    "); };
-						F.line = 68;
+						F.line = 71;
 						format_value_246687(fmt_res_249169, 0, k_249166, []);
-						F.line = 68;
+						F.line = 71;
 						format_value_246687(fmt_res_249169, 0, public_str_249023, []);
-						F.line = 68;
+						F.line = 71;
 						if (fmt_res_249169[0] != null) { fmt_res_249169[0] = (fmt_res_249169[0]).concat(makeNimstrLit(": ")); } else { fmt_res_249169[0] = makeNimstrLit(": "); };
-						F.line = 68;
+						F.line = 71;
 						format_value_246687(fmt_res_249169, 0, t_249168, []);
-						F.line = 68;
+						F.line = 71;
 						if (fmt_res_249169[0] != null) { fmt_res_249169[0] = (fmt_res_249169[0]).concat(makeNimstrLit("\x0A")); } else { fmt_res_249169[0] = makeNimstrLit("\x0A"); };
 						if (strs_249020[strs_249020_Idx][chckIndx(index_249021, 0, strs_249020[strs_249020_Idx].length+0-1)-0] != null) { strs_249020[strs_249020_Idx][chckIndx(index_249021, 0, strs_249020[strs_249020_Idx].length+0-1)-0] = (strs_249020[strs_249020_Idx][chckIndx(index_249021, 0, strs_249020[strs_249020_Idx].length+0-1)-0]).concat(fmt_res_249169[0]); } else { strs_249020[strs_249020_Idx][chckIndx(index_249021, 0, strs_249020[strs_249020_Idx].length+0-1)-0] = fmt_res_249169[0].slice(); };
 						if ((v_249167.kind == 5)) {
-						F.line = 72;
+						F.line = 75;
 						obj_format_249002(v_249167, k_249166, strs_249020, strs_249020_Idx, addInt(index_249021, 1), public_str_249023);
 						}
 						
@@ -1546,7 +1546,7 @@ function to_type_string_249192(self_249194, obj_name_249195, public_field_249196
 
 	var F={procname:"nimjson.toTypeString",prev:framePtr,filename:"util.nim",line:0};
 	framePtr = F;
-		F.line = 105;
+		F.line = 109;
 		if (public_field_249196) {
 		Tmp1 = makeNimstrLit("*");
 		}
@@ -1555,87 +1555,87 @@ function to_type_string_249192(self_249194, obj_name_249195, public_field_249196
 		}
 		
 		var public_str_249198 = nimCopy(null, Tmp1, NTI44040);
-		F.line = 109;
+		F.line = 113;
 		if (result_249197 != null) { result_249197 = (result_249197).concat(makeNimstrLit("type\x0A")); } else { result_249197 = makeNimstrLit("type\x0A"); };
-		F.line = 110;
-		F.line = 110;
+		F.line = 114;
+		F.line = 114;
 		var fmt_res_249199 = [mnewString(0)];
-		F.line = 110;
+		F.line = 114;
 		if (fmt_res_249199[0] != null) { fmt_res_249199[0] = (fmt_res_249199[0]).concat(makeNimstrLit("  ")); } else { fmt_res_249199[0] = makeNimstrLit("  "); };
-		F.line = 110;
+		F.line = 114;
 		format_value_246687(fmt_res_249199, 0, makeNimstrLit("NilType"), []);
-		F.line = 110;
+		F.line = 114;
 		format_value_246687(fmt_res_249199, 0, public_str_249198, []);
-		F.line = 110;
+		F.line = 114;
 		if (fmt_res_249199[0] != null) { fmt_res_249199[0] = (fmt_res_249199[0]).concat(makeNimstrLit(" = ref object\x0A")); } else { fmt_res_249199[0] = makeNimstrLit(" = ref object\x0A"); };
 		if (result_249197 != null) { result_249197 = (result_249197).concat(fmt_res_249199[0]); } else { result_249197 = fmt_res_249199[0].slice(); };
-		F.line = 111;
+		F.line = 115;
 		switch (self_249194.kind) {
 		case 5:
-			F.line = 113;
+			F.line = 117;
 			var ret_249203 = [null];
-			F.line = 114;
+			F.line = 118;
 			obj_format_249002(self_249194, obj_name_249195, ret_249203, 0, 0, public_str_249198);
-			F.line = 115;
+			F.line = 119;
 			if (result_249197 != null) { result_249197 = (result_249197).concat(nsuJoinSep(ret_249203[0], [])); } else { result_249197 = nsuJoinSep(ret_249203[0], []).slice(); };
 			break;
 		case 6:
-			F.line = 117;
-			F.line = 117;
+			F.line = 121;
+			F.line = 121;
 			var fmt_res_249206 = [mnewString(0)];
-			F.line = 117;
+			F.line = 121;
 			if (fmt_res_249206[0] != null) { fmt_res_249206[0] = (fmt_res_249206[0]).concat(makeNimstrLit("Seq")); } else { fmt_res_249206[0] = makeNimstrLit("Seq"); };
-			F.line = 117;
+			F.line = 121;
 			format_value_246687(fmt_res_249206, 0, head_upper_249024(obj_name_249195), []);
 			var seq_obj_name_249208 = nimCopy(null, fmt_res_249206[0], NTI44040);
 				var Tmp2 = self_249194;
 				if (ConstSet13[Tmp2.kind]===undefined) { raiseFieldError(makeNimstrLit("elems")); }
 			if ((0 < ((Tmp3 = Tmp2.elems, Tmp3) != null ? Tmp3.length : 0))) {
-			F.line = 119;
+			F.line = 123;
 			var Tmp4 = self_249194;
 			if (ConstSet14[Tmp4.kind]===undefined) { raiseFieldError(makeNimstrLit("elems")); }
 			var child_249218 = (Tmp5 = Tmp4.elems, Tmp5)[chckIndx(0, 0, Tmp5.length+0-1)-0];
-			F.line = 120;
+			F.line = 124;
 			switch (child_249218.kind) {
 			case 5:
-				F.line = 122;
-				F.line = 122;
+				F.line = 126;
+				F.line = 126;
 				var fmt_res_249219 = [mnewString(0)];
-				F.line = 122;
+				F.line = 126;
 				if (fmt_res_249219[0] != null) { fmt_res_249219[0] = (fmt_res_249219[0]).concat(makeNimstrLit("  ")); } else { fmt_res_249219[0] = makeNimstrLit("  "); };
-				F.line = 122;
+				F.line = 126;
 				format_value_246687(fmt_res_249219, 0, seq_obj_name_249208, []);
-				F.line = 122;
+				F.line = 126;
 				if (fmt_res_249219[0] != null) { fmt_res_249219[0] = (fmt_res_249219[0]).concat(makeNimstrLit(" = seq[")); } else { fmt_res_249219[0] = makeNimstrLit(" = seq["); };
-				F.line = 122;
+				F.line = 126;
 				format_value_246687(fmt_res_249219, 0, obj_name_249195, []);
-				F.line = 122;
+				F.line = 126;
 				if (fmt_res_249219[0] != null) { fmt_res_249219[0] = (fmt_res_249219[0]).concat(makeNimstrLit("]\x0A")); } else { fmt_res_249219[0] = makeNimstrLit("]\x0A"); };
 				if (result_249197 != null) { result_249197 = (result_249197).concat(fmt_res_249219[0]); } else { result_249197 = fmt_res_249219[0].slice(); };
-				F.line = 123;
+				F.line = 127;
 				var ret_249223 = [null];
-				F.line = 124;
+				F.line = 128;
 				obj_format_249002(child_249218, obj_name_249195, ret_249223, 0, 0, public_str_249198);
-				F.line = 125;
+				F.line = 129;
 				if (result_249197 != null) { result_249197 = (result_249197).concat(nsuJoinSep(ret_249223[0], [])); } else { result_249197 = nsuJoinSep(ret_249223[0], []).slice(); };
 				break;
 			default: 
-				F.line = 127;
+				F.line = 131;
 				var strs_249227 = [null];
-				F.line = 128;
+				F.line = 132;
 				var t_249229 = get_type_249076(obj_name_249195, child_249218, strs_249227, 0, 0, public_str_249198);
-				F.line = 129;
-				F.line = 129;
+				F.line = 133;
+				F.line = 133;
 				var fmt_res_249230 = [mnewString(0)];
-				F.line = 129;
+				F.line = 133;
 				if (fmt_res_249230[0] != null) { fmt_res_249230[0] = (fmt_res_249230[0]).concat(makeNimstrLit("  ")); } else { fmt_res_249230[0] = makeNimstrLit("  "); };
-				F.line = 129;
+				F.line = 133;
 				format_value_246687(fmt_res_249230, 0, obj_name_249195, []);
-				F.line = 129;
+				F.line = 133;
 				if (fmt_res_249230[0] != null) { fmt_res_249230[0] = (fmt_res_249230[0]).concat(makeNimstrLit(" = seq[")); } else { fmt_res_249230[0] = makeNimstrLit(" = seq["); };
-				F.line = 129;
+				F.line = 133;
 				format_value_246687(fmt_res_249230, 0, t_249229, []);
-				F.line = 129;
+				F.line = 133;
 				if (fmt_res_249230[0] != null) { fmt_res_249230[0] = (fmt_res_249230[0]).concat(makeNimstrLit("]\x0A")); } else { fmt_res_249230[0] = makeNimstrLit("]\x0A"); };
 				if (result_249197 != null) { result_249197 = (result_249197).concat(fmt_res_249230[0]); } else { result_249197 = fmt_res_249230[0].slice(); };
 				break;
