@@ -27,15 +27,11 @@ before_install:
   - if [ ! -e $HOME/.nimble/bin/nim ]; then curl https://nim-lang.org/choosenim/init.sh -sSf -o init.sh && bash init.sh -y; choosenim update stable; fi
 
 before_script:
-  - set -e
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then unset -f cd; fi
   - echo PATH:${PATH}
-  - set +e
 
 script:
-  - set -e
   - nimble ci
-  - set +e
 
 before_deploy:
   - mkdir -p dist/${APP_NAME}_${TRAVIS_OS_NAME}

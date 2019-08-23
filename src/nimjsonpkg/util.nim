@@ -25,14 +25,16 @@ from strutils import toUpperAscii, join, split
 const
   nilType* = "NilType"
 
-proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0, publicStr = "")
+proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[],
+    index = 0, publicStr = "")
 
 proc headUpper(str: string): string =
   ## 先頭の文字を大文字にして返す。
   ## 先頭の文字だけを大文字にするので、**別にUpperCamelCeseにするわけではない**。
   $(str[0].toUpperAscii() & str[1..^1])
 
-proc getType(key: string, value: JsonNode, strs: var seq[string], index: int, publicStr = ""): string =
+proc getType(key: string, value: JsonNode, strs: var seq[string], index: int,
+    publicStr = ""): string =
   ## `value`の型文字列を返す。
   ## Object型や配列内の要素がObject型の場合は、`key`の文字列の先頭を大文字にした
   ## ものを型名として返す。
@@ -58,7 +60,8 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int, pu
   of JBool: "bool"
   of JNull: nilType
 
-proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], index = 0, publicStr = "") =
+proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[],
+    index = 0, publicStr = "") =
   ## Object型のJsonNodeをObject定義の文字列に変換して`strs[index]`に追加する。
   ## このとき`type`は追加しない。
   strs.add("")
@@ -71,7 +74,8 @@ proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[], ind
     if v.kind == JObject:
       v.objFormat(k, strs, index+1, publicStr)
 
-proc toTypeString*(self: JsonNode, objName = "Object", publicField = false): string =
+proc toTypeString*(self: JsonNode, objName = "Object",
+    publicField = false): string =
   ## Generates nim object definitions string from ``JsonNode``.
   ## Returns a public field string if ``publicField`` was true.
   ##
@@ -100,7 +104,7 @@ proc toTypeString*(self: JsonNode, objName = "Object", publicField = false): str
     doAssert typeLines[4] == "    keyInt: int64"
     doAssert typeLines[5] == "    keyFloat: float64"
     doAssert typeLines[6] == "    keyBool: bool"
-  
+
   # フィールドを公開するときに指定する文字列
   let publicStr =
     if publicField: "*"
