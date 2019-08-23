@@ -5,9 +5,9 @@ environment:
   MINGW_DIR: mingw64
   MINGW_URL: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/4.9.2/threads-win32/seh/x86_64-4.9.2-release-win32-seh-rt_v4-rev4.7z/download
   MINGW_ARCHIVE: x86_64-4.9.2-release-win32-seh-rt_v4-rev4.7z
-  NIM_DIR: nim-0.20.0
-  NIM_URL: https://nim-lang.org/download/nim-0.20.0_x64.zip
-  NIM_ARCHIVE: nim-0.20.0_x64.zip
+  NIM_DIR: nim-0.20.2
+  NIM_URL: https://nim-lang.org/download/nim-0.20.2_x64.zip
+  NIM_ARCHIVE: nim-0.20.2_x64.zip
   platform: x64
 
 cache:
