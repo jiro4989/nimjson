@@ -12,6 +12,7 @@ installExt    = @["nim"]
 # Dependencies
 
 requires "nim >= 0.20.0"
+import strformat, os
 
 task docs, "Generate documents":
   exec "nimble doc src/nimjson.nim -o:docs/nimjson.html"
@@ -25,9 +26,34 @@ task examples, "Run examples":
 task buildjs, "Generate JS lib":
   exec "nimble js js/nimjson_js.nim -o:docs/js/nimjson.js"
 
+task format, "Format codes":
+  for f in listFiles("src"):
+    exec &"nimpretty {f}"
+  for f in listFiles("src" / "nimjsonpkg"):
+    exec &"nimpretty {f}"
+
+task checkFormat, "Checking that codes were formatted":
+  var errCount = 0
+  for f in listFiles("src"):
+    let tmpFile = f & ".tmp"
+    exec &"nimpretty --output:{tmpFile} {f}"
+    if readFile(f) != readFile(tmpFile):
+      inc errCount
+    rmFile tmpFile
+  for f in listFiles("src" / "nimjsonpkg"):
+    let tmpFile = f & ".tmp"
+    exec &"nimpretty --output:{tmpFile} {f}"
+    if readFile(f) != readFile(tmpFile):
+      inc errCount
+    rmFile tmpFile
+  exec &"exit {errCount}"
+
 task ci, "Run CI":
   exec "nim -v"
   exec "nimble -v"
+  exec "nimble check"
+  if buildOS == "linux":
+    exec "nimble checkFormat"
   exec "nimble install -Y"
   exec "nimble test -Y"
   exec "nimble docs -Y"
