@@ -65,7 +65,7 @@ Options:
           result.usePublicField = true
       of cmdEnd:
         assert false # cannot happen
-      
+
   proc setLogger(opts: Options) =
     ## デバッグログ出力フラグ(useDebug)がtrueのときだけログ出力ハンドラをセットす
     ## る。
@@ -98,7 +98,8 @@ Options:
       # もともと入力ファイルは1つの想定であり、
       # 2つ処理できるようにしてるのはオマケ機能である。
       for inFile in opts.args:
-        outFile.write(inFile.parseFile().toTypeString(opts.objectName, opts.usePublicField))
+        outFile.write(inFile.parseFile().toTypeString(opts.objectName,
+            opts.usePublicField))
       debug "END: Process arguments"
     else:
       debug "START: Process stdin"
@@ -106,7 +107,8 @@ Options:
       var line: string
       while stdin.readLine(line):
         str.add(line)
-      outFile.write(str.parseJson().toTypeString(opts.objectName, opts.usePublicField))
+      outFile.write(str.parseJson().toTypeString(opts.objectName,
+          opts.usePublicField))
       debug "END: Process stdin"
 
     debug "Success: nimjson"
