@@ -1,9 +1,9 @@
 # nimjson
 
-[![Build Status](https://travis-ci.org/jiro4989/nimjson.svg?branch=master)](https://travis-ci.org/jiro4989/nimjson)
-[![Build status](https://ci.appveyor.com/api/projects/status/fljtevgiqopth9sq?svg=true)](https://ci.appveyor.com/project/jiro4989/nimjson)
-[![Build Status](https://nimble.directory/ci/badges/nimjson/nimdevel/status.svg)](https://nimble.directory/ci/badges/nimjson/nimdevel/output.html)
-[![Build Status](https://nimble.directory/ci/badges/nimjson/nimdevel/docstatus.svg)](https://nimble.directory/ci/badges/nimjson/nimdevel/doc_build_output.html)
+
+[![CI Status](https://github.com/jiro4989/nimjson/workflows/build/badge.svg)](https://github.com/jiro4989/nimjson/actions)
+[![Install Status](https://nimble.directory/ci/badges/nimjson/nimdevel/status.svg)](https://nimble.directory/ci/badges/nimjson/nimdevel/output.html)
+[![Doc Status](https://nimble.directory/ci/badges/nimjson/nimdevel/docstatus.svg)](https://nimble.directory/ci/badges/nimjson/nimdevel/doc_build_output.html)
 
 nimjson generates nim object definitions from json documents.
 This was inspired by [gojson](https://github.com/ChimeraCoder/gojson).
