@@ -90,13 +90,19 @@ jobs:
           arch: 'x86_64'
           desc: 'nimjson generates nim object definitions from json documents.'
 
-      - name: Release
+      - name: Release deb
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            '*.deb'
-            '*.rpm'
+          files: '*.deb'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release rpm
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: '*.rpm'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
