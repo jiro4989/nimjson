@@ -1,0 +1,26 @@
+name: build
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  NIM_VERSION: '1.2.0'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: jiro4989/setup-nim-action@v1
+        with:
+          nim-version: ${{ env.NIM_VERSION }}
+      - run: nimble install -Y
+      - run: nimble docs
+      - run: nimble buildjs
+      - name: Deploy gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
