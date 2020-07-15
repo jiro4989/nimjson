@@ -1,4 +1,4 @@
-name: build
+name: gh-pages
 
 on:
   push:
