@@ -9,7 +9,7 @@ env:
   NIM_VERSION: '1.2.0'
 
 jobs:
-  build:
+  gh-pages:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
