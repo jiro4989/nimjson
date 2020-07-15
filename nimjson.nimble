@@ -24,6 +24,7 @@ task examples, "Run examples":
       exec "./main"
 
 task buildjs, "Generate JS lib":
+  mkdir "docs/js"
   exec "nimble js js/nimjson_js.nim -o:docs/js/nimjson.js"
 
 task format, "Format codes":
