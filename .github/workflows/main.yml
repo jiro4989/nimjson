@@ -79,7 +79,7 @@ jobs:
           arch: 'amd64'
           desc: 'nimjson generates nim object definitions from json documents.'
 
-      - uses: jiro4989/build-rpm-action@v1
+      - uses: jiro4989/build-rpm-action@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           summary: 'nimjson generates nim object definitions from json documents.'
