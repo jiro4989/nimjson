@@ -6,10 +6,10 @@ on:
       - 'v*.*.*'
 
 env:
-  APP_NAME: 'APPNAME'
+  APP_NAME: 'nimjson'
   NIM_VERSION: 'stable'
-  MAINTAINER: 'MAINTAINER'
-  DESC: 'TODO'
+  MAINTAINER: 'jiro4989'
+  DESC: 'nimjson generates nim object definitions from json documents.'
 
 jobs:
   build-artifact:
