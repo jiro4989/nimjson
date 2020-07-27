@@ -5,7 +5,7 @@ on:
   pull_request:
 
 env:
-  NIM_VERSION: 'stable'
+  NIM_VERSION: '1.2.4'
 
 jobs:
   skip:
