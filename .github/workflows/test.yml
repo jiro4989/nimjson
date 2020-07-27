@@ -1,14 +1,11 @@
-name: build
+name: test
 
 on:
   push:
   pull_request:
-  release:
-    types: [published]
 
 env:
-  APP_NAME: 'nimjson'
-  NIM_VERSION: '1.2.0'
+  NIM_VERSION: 'stable'
 
 jobs:
   skip:
@@ -36,81 +33,5 @@ jobs:
       - uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: ${{ env.NIM_VERSION }}
-      - run: nimble build -Y -d:release
+      - run: nimble build -Y
       - run: nimble test -Y
-      - name: Archive files
-        run: nimble archive
-      - name: Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
-        with:
-          files: 'dist/${{ env.APP_NAME }}_*.*'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  build-linux-packages:
-    runs-on: ubuntu-latest
-    needs: before
-    steps:
-      - uses: actions/checkout@v1
-      - uses: jiro4989/setup-nim-action@v1
-        with:
-          nim-version: ${{ env.NIM_VERSION }}
-      - run: nimble build -Y -d:release
-
-      - name: Set tag
-        if: startsWith(github.ref, 'refs/tags/')
-        id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF:10}
-      - name: create sample script
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          mkdir -p .debpkg/usr/bin
-          mkdir -p .rpmpkg/usr/bin
-          cp -p bin/* .debpkg/usr/bin/
-          cp -p bin/* .rpmpkg/usr/bin/
-      - uses: jiro4989/build-deb-action@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          package: nimjson
-          package_root: .debpkg
-          maintainer: jiro4989
-          version: ${{ steps.vars.outputs.tag }}
-          arch: 'amd64'
-          desc: 'nimjson generates nim object definitions from json documents.'
-
-      - uses: jiro4989/build-rpm-action@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          summary: 'nimjson generates nim object definitions from json documents.'
-          package: nimjson
-          package_root: .rpmpkg
-          maintainer: jiro4989
-          version: ${{ steps.vars.outputs.tag }}
-          arch: 'x86_64'
-          desc: 'nimjson generates nim object definitions from json documents.'
-
-      - name: Release deb
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
-        with:
-          files: '*.deb'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Release rpm
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
-        with:
-          files: '*.rpm'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  create-tag-draft:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
-    needs: build
-    steps:
-      - uses: release-drafter/release-drafter@v5.3.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
