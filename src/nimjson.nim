@@ -1,7 +1,9 @@
 include nimjsonpkg/util
 
 when not defined(js):
-  import os, parseopt, logging
+  import std/logging
+  import std/os
+  import std/parseopt
 
   type
     Options = ref object

@@ -19,8 +19,10 @@
 ##
 ##    echo "examples/primitive.json".parseFile().toTypeString("testObject")
 
-import json, strformat, tables
-from strutils import toUpperAscii, join, split
+import std/json
+import std/strformat
+import std/tables
+from std/strutils import toUpperAscii, join, split
 
 const
   nilType* = "NilType"
