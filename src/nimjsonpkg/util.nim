@@ -62,6 +62,42 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int,
   of JBool: "bool"
   of JNull: nilType
 
+func quote(key: string): string =
+  ## ``key`` に空白文字や特殊な文字が含まれていた時はバッククオートで囲って返却する。
+  ##
+  ## See:
+  ## * https://datatracker.ietf.org/doc/html/rfc8259#section-7
+  const needQuoteChars = [
+    # 0x22.char, # quotation mark
+      # 0x5c.char, # reverse solidus
+      # 0x2f.char, # solidus
+      # 0x62.char, # backspace
+      # 0x66.char, # form feed
+      # 0x6e.char, # line feed
+      # 0x72.char, # carriage return
+      # 0x74.char, # tab
+      #0x75.char, # 4hexdig
+    '\\',
+    '/',
+    ' ',
+  ]
+  const reservedKeyword = [
+    "type",
+    "object",
+    "enum",
+    "let",
+    "const",
+    "var",
+  ]
+  result = &"`{key}`"
+  for ch in needQuoteChars:
+    if ch in key:
+      return
+  for keyword in reservedKeyword:
+    if key == keyword:
+      return
+  return key
+
 proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[],
     index = 0, publicStr = "") =
   ## Object型のJsonNodeをObject定義の文字列に変換して`strs[index]`に追加する。
@@ -70,7 +106,7 @@ proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[],
   strs[index].add(&"  {objName.headUpper()}{publicStr} = ref object\n")
   for k, v in self.fields:
     let t = getType(k, v, strs, index, publicStr)
-    strs[index].add(&"    {k}{publicStr}: {t}\n")
+    strs[index].add(&"    {k.quote}{publicStr}: {t}\n")
 
     # Object型を処理したときは、Object型の定義が別途必要になるので追加
     if v.kind == JObject:

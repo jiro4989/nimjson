@@ -47,7 +47,8 @@ suite "proc objFormat":
   setup:
     var strs: seq[string]
   test "Object type":
-    """{"str":"s", "int":1, "float":1.1, "boo":true, "array":[1, 2]}""".parseJson().objFormat("obj", strs)
+    """{"str":"s", "int":1, "float":1.1, "boo":true, "array":[1, 2]}""".parseJson(
+      ).objFormat("obj", strs)
     check strs == @["""|  Obj = ref object
                        |    str: string
                        |    int: int64
@@ -55,9 +56,10 @@ suite "proc objFormat":
                        |    boo: bool
                        |    array: seq[int64]""".removeIndent()]
   test "Nest object type":
-    """{"object":{"o":{"s":"str", "i":1}, "array":[{"s":"str", "i":1}]}}""".parseJson().objFormat("obj", strs)
+    """{"object":{"o":{"s":"str", "i":1}, "array":[{"s":"str", "i":1}]}}""".parseJson(
+      ).objFormat("obj", strs)
     check strs.join() == @["""|  Obj = ref object
-                              |    object: Object
+                              |    `object`: Object
                               |  Object = ref object
                               |    o: O
                               |    array: seq[Array]
@@ -103,7 +105,8 @@ suite "proc toTypeString":
         "bool":true
       }""".parseJson().toTypeString() == ("""
       |type
-      |  """ & nilType & """ = ref object
+      |  """ & nilType &
+        """ = ref object
       |  Object = ref object
       |    int: int64
       |    str: string
@@ -119,7 +122,8 @@ suite "proc toTypeString":
         "falseBool":[false, true]
       }""".parseJson().toTypeString() == ("""
       |type
-      |  """ & nilType & """ = ref object
+      |  """ & nilType &
+        """ = ref object
       |  Object = ref object
       |    int: seq[int64]
       |    str: seq[string]
@@ -133,7 +137,8 @@ suite "proc toTypeString":
         "obj2":{"fal":false, "str":null}
       }""".parseJson().toTypeString() == ("""
       |type
-      |  """ & nilType & """ = ref object
+      |  """ & nilType &
+        """ = ref object
       |  Object = ref object
       |    obj1: Obj1
       |    obj2: Obj2
@@ -152,7 +157,8 @@ suite "proc toTypeString":
         "obj4":{"objX":{"i":12}}
       }""".parseJson().toTypeString() == ("""
       |type
-      |  """ & nilType & """ = ref object
+      |  """ & nilType &
+        """ = ref object
       |  Object = ref object
       |    obj1: seq[Obj1]
       |    obj2: Obj2
@@ -163,7 +169,8 @@ suite "proc toTypeString":
       |    str: string
       |  Obj2 = ref object
       |    fal: bool
-      |    str: """ & nilType & "\n" & """
+      |    str: """ & nilType & "\n" &
+        """
       |    obj: seq[Obj]
       |    v: int64
       |    v2: int64
@@ -186,9 +193,11 @@ suite "proc toTypeString":
         "obj2":{"fal":false, "str":null, "obj":[{"fal":false}, {"fal":false}], "v":1, "v2":2, "objobj":{"i":1}},
         "obj3":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}],
         "obj4":{"objX":{"i":12}}
-      }""".parseJson().toTypeString(publicField = true) == ("""
+      }""".parseJson().toTypeString(publicField = true) == (
+        """
       |type
-      |  """ & nilType & """* = ref object
+      |  """ & nilType &
+        """* = ref object
       |  Object* = ref object
       |    obj1*: seq[Obj1]
       |    obj2*: Obj2
@@ -199,7 +208,8 @@ suite "proc toTypeString":
       |    str*: string
       |  Obj2* = ref object
       |    fal*: bool
-      |    str*: """ & nilType & "\n" & """
+      |    str*: """ & nilType & "\n" &
+        """
       |    obj*: seq[Obj]
       |    v*: int64
       |    v2*: int64
@@ -215,3 +225,16 @@ suite "proc toTypeString":
       |    i*: int64
       |  ObjX* = ref object
       |    i*: int64""").removeIndent()
+
+suite "proc quote":
+  test "Whitespace":
+    check "hello world".quote == "`hello world`"
+  test "Special character":
+    check "/".quote == "`/`"
+  test "Reserved word":
+    check "type".quote == "`type`"
+    check "object".quote == "`object`"
+    check "enum".quote == "`enum`"
+    check "let".quote == "`let`"
+    check "const".quote == "`const`"
+    check "var".quote == "`var`"
