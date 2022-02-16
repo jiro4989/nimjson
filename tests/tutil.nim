@@ -1,5 +1,5 @@
-import unittest
-import sequtils, strutils
+import std/unittest
+import std/sequtils
 
 include nimjsonpkg/util
 
