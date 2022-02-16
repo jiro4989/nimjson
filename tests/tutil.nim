@@ -240,3 +240,6 @@ suite "proc quote":
     check "let".quote(false) == "`let`"
     check "const".quote(false) == "`const`"
     check "var".quote(false) == "`var`"
+  test "Force quoting":
+    check "test".quote(false) == "test"
+    check "test".quote(true) == "`test`"
