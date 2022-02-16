@@ -12,6 +12,7 @@ when not defined(js):
       outFile: string
       objectName: string
       usePublicField: bool
+      useQuoteField: bool
 
   const
     appName = "nimjson"
@@ -34,6 +35,7 @@ Options:
     -o, --out-file:FILE_PATH         Write file path
     -O, --object-name:OBJECT_NAME    Set object type name
     -p, --public-field               Public fields
+    -q, --quote-field                Quotes all fields
 """
 
   proc getCmdOpts(params: seq[string]): Options =
@@ -65,6 +67,8 @@ Options:
           result.objectName = val
         of "public-field", "p":
           result.usePublicField = true
+        of "quote-field", "q":
+          result.useQuoteField = true
       of cmdEnd:
         assert false # cannot happen
 
@@ -101,7 +105,7 @@ Options:
       # 2つ処理できるようにしてるのはオマケ機能である。
       for inFile in opts.args:
         outFile.write(inFile.parseFile().toTypeString(opts.objectName,
-            opts.usePublicField))
+            opts.usePublicField, opts.useQuoteField))
       debug "END: Process arguments"
     else:
       debug "START: Process stdin"
@@ -110,7 +114,7 @@ Options:
       while stdin.readLine(line):
         str.add(line)
       outFile.write(str.parseJson().toTypeString(opts.objectName,
-          opts.usePublicField))
+          opts.usePublicField, opts.useQuoteField))
       debug "END: Process stdin"
 
     debug "Success: nimjson"

@@ -15,22 +15,22 @@ suite "proc getType":
   setup:
     var strs: seq[string]
   test "Primitive type":
-    check getType("key", """1""".parseJson(), strs, 0) == "int64"
-    check getType("key", """"string"""".parseJson(), strs, 0) == "string"
-    check getType("key", """1.0""".parseJson(), strs, 0) == "float64"
-    check getType("key", """true""".parseJson(), strs, 0) == "bool"
-    check getType("key", """false""".parseJson(), strs, 0) == "bool"
-    check getType("key", """null""".parseJson(), strs, 0) == nilType
-    check getType("key", """[1, 2, 3]""".parseJson(), strs, 0) == "seq[int64]"
-    check getType("key", """[]""".parseJson(), strs, 0) == nilSeq
-    check getType("key", """["x", null]""".parseJson(), strs, 0) == "seq[string]"
-    check getType("key", """[null, null]""".parseJson(), strs, 0) == nilSeq
-    check getType("key", """[null, "x"]""".parseJson(), strs, 0) == nilSeq
+    check getType("key", """1""".parseJson(), strs, 0, "", false) == "int64"
+    check getType("key", """"string"""".parseJson(), strs, 0, "", false) == "string"
+    check getType("key", """1.0""".parseJson(), strs, 0, "", false) == "float64"
+    check getType("key", """true""".parseJson(), strs, 0, "", false) == "bool"
+    check getType("key", """false""".parseJson(), strs, 0, "", false) == "bool"
+    check getType("key", """null""".parseJson(), strs, 0, "", false) == nilType
+    check getType("key", """[1, 2, 3]""".parseJson(), strs, 0, "", false) == "seq[int64]"
+    check getType("key", """[]""".parseJson(), strs, 0, "", false) == nilSeq
+    check getType("key", """["x", null]""".parseJson(), strs, 0, "", false) == "seq[string]"
+    check getType("key", """[null, null]""".parseJson(), strs, 0, "", false) == nilSeq
+    check getType("key", """[null, "x"]""".parseJson(), strs, 0, "", false) == nilSeq
   test "Object type":
-    check getType("obj", """{"str":"str", "int":1}""".parseJson(), strs, 0) == "Obj"
+    check getType("obj", """{"str":"str", "int":1}""".parseJson(), strs, 0, "", false) == "Obj"
   test "Array object type":
     strs.add("")
-    check getType("obj", """[{"str":"str", "int":1}]""".parseJson(), strs, 0) == "seq[Obj]"
+    check getType("obj", """[{"str":"str", "int":1}]""".parseJson(), strs, 0, "", false) == "seq[Obj]"
     check strs == @["", "  Obj = ref object\n    str: string\n    int: int64\n"]
 
 proc removeIndent(s: string): string =
@@ -228,13 +228,13 @@ suite "proc toTypeString":
 
 suite "proc quote":
   test "Whitespace":
-    check "hello world".quote == "`hello world`"
+    check "hello world".quote(false) == "`hello world`"
   test "Special character":
-    check "/".quote == "`/`"
+    check "/".quote(false) == "`/`"
   test "Reserved word":
-    check "type".quote == "`type`"
-    check "object".quote == "`object`"
-    check "enum".quote == "`enum`"
-    check "let".quote == "`let`"
-    check "const".quote == "`const`"
-    check "var".quote == "`var`"
+    check "type".quote(false) == "`type`"
+    check "object".quote(false) == "`object`"
+    check "enum".quote(false) == "`enum`"
+    check "let".quote(false) == "`let`"
+    check "const".quote(false) == "`const`"
+    check "var".quote(false) == "`var`"

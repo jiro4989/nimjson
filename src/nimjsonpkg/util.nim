@@ -28,7 +28,7 @@ const
   nilType* = "NilType"
 
 proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[],
-    index = 0, publicStr = "")
+    index = 0, publicStr = "", quoteField = false)
 
 proc headUpper(str: string): string =
   ## 先頭の文字を大文字にして返す。
@@ -36,7 +36,7 @@ proc headUpper(str: string): string =
   $(str[0].toUpperAscii() & str[1..^1])
 
 proc getType(key: string, value: JsonNode, strs: var seq[string], index: int,
-    publicStr = ""): string =
+    publicStr: string, quoteField: bool): string =
   ## `value`の型文字列を返す。
   ## Object型や配列内の要素がObject型の場合は、`key`の文字列の先頭を大文字にした
   ## ものを型名として返す。
@@ -48,9 +48,9 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int,
     if 0 < value.elems.len():
       # 配列の最初の要素の方を取得
       let child = value.elems[0]
-      s.add(getType(uKey, child, strs, index, publicStr))
+      s.add(getType(uKey, child, strs, index, publicStr, quoteField))
       if child.kind == JObject:
-        child.objFormat(uKey, strs, index+1, publicStr)
+        child.objFormat(uKey, strs, index+1, publicStr, quoteField)
     else:
       s.add(nilType)
     s.add("]")
@@ -62,8 +62,9 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int,
   of JBool: "bool"
   of JNull: nilType
 
-func quote(key: string): string =
+func quote(key: string, force: bool): string =
   ## ``key`` に空白文字や特殊な文字が含まれていた時はバッククオートで囲って返却する。
+  ## ``force`` が有効の時は常にクオートする。
   ##
   ## See:
   ## * https://datatracker.ietf.org/doc/html/rfc8259#section-7
@@ -90,6 +91,8 @@ func quote(key: string): string =
     "var",
   ]
   result = &"`{key}`"
+  if force:
+    return
   for ch in needQuoteChars:
     if ch in key:
       return
@@ -99,21 +102,21 @@ func quote(key: string): string =
   return key
 
 proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[],
-    index = 0, publicStr = "") =
+    index = 0, publicStr = "", quoteField = false) =
   ## Object型のJsonNodeをObject定義の文字列に変換して`strs[index]`に追加する。
   ## このとき`type`は追加しない。
   strs.add("")
   strs[index].add(&"  {objName.headUpper()}{publicStr} = ref object\n")
   for k, v in self.fields:
-    let t = getType(k, v, strs, index, publicStr)
-    strs[index].add(&"    {k.quote}{publicStr}: {t}\n")
+    let t = getType(k, v, strs, index, publicStr, quoteField)
+    strs[index].add(&"    {k.quote(quoteField)}{publicStr}: {t}\n")
 
     # Object型を処理したときは、Object型の定義が別途必要になるので追加
     if v.kind == JObject:
-      v.objFormat(k, strs, index+1, publicStr)
+      v.objFormat(k, strs, index+1, publicStr, quoteField)
 
 proc toTypeString*(self: JsonNode, objName = "Object",
-    publicField = false): string =
+    publicField = false, quoteField = false): string =
   ## Generates nim object definitions string from ``JsonNode``.
   ## Returns a public field string if ``publicField`` was true.
   ##
@@ -153,7 +156,7 @@ proc toTypeString*(self: JsonNode, objName = "Object",
   case self.kind
   of JObject:
     var ret: seq[string]
-    self.objFormat(objName, ret, publicStr = publicStr)
+    self.objFormat(objName, ret, publicStr = publicStr, quoteField = quoteField)
     result.add(ret.join())
   of JArray:
     let seqObjName = &"Seq{objName.headUpper()}"
@@ -163,10 +166,10 @@ proc toTypeString*(self: JsonNode, objName = "Object",
       of JObject:
         result.add(&"  {seqObjName} = seq[{objName}]\n")
         var ret: seq[string]
-        child.objFormat(objName, ret, publicStr = publicStr)
+        child.objFormat(objName, ret, publicStr = publicStr, quoteField = quoteField)
         result.add(ret.join())
       else:
         var strs: seq[string]
-        let t = getType(objName, child, strs, 0, publicStr)
+        let t = getType(objName, child, strs, 0, publicStr, quoteField)
         result.add(&"  {objName} = seq[{t}]\n")
   else: discard
