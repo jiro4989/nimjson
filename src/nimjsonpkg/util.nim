@@ -166,7 +166,8 @@ proc toTypeString*(self: JsonNode, objName = "Object",
       of JObject:
         result.add(&"  {seqObjName} = seq[{objName}]\n")
         var ret: seq[string]
-        child.objFormat(objName, ret, publicStr = publicStr, quoteField = quoteField)
+        child.objFormat(objName, ret, publicStr = publicStr,
+            quoteField = quoteField)
         result.add(ret.join())
       else:
         var strs: seq[string]

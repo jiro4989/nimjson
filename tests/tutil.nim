@@ -27,10 +27,12 @@ suite "proc getType":
     check getType("key", """[null, null]""".parseJson(), strs, 0, "", false) == nilSeq
     check getType("key", """[null, "x"]""".parseJson(), strs, 0, "", false) == nilSeq
   test "Object type":
-    check getType("obj", """{"str":"str", "int":1}""".parseJson(), strs, 0, "", false) == "Obj"
+    check getType("obj", """{"str":"str", "int":1}""".parseJson(), strs, 0, "",
+        false) == "Obj"
   test "Array object type":
     strs.add("")
-    check getType("obj", """[{"str":"str", "int":1}]""".parseJson(), strs, 0, "", false) == "seq[Obj]"
+    check getType("obj", """[{"str":"str", "int":1}]""".parseJson(), strs, 0,
+        "", false) == "seq[Obj]"
     check strs == @["", "  Obj = ref object\n    str: string\n    int: int64\n"]
 
 proc removeIndent(s: string): string =
