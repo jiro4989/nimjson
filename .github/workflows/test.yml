@@ -1,6 +1,7 @@
+---
 name: test
 
-on:
+"on":
   push:
   pull_request:
 
