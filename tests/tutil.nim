@@ -269,9 +269,12 @@ suite "proc quote":
   test "Special character":
     check "/".quote(false) == "`/`"
     check "-".quote(false) == "`-`"
+    check "*".quote(false) == "`*`"
   test "Remove illegal characters":
     check "foo,bar".quote(false) == "foobar"
     check "foo, bar".quote(false) == "`foo bar`"
+    check "foo' bar".quote(false) == "`foo bar`"
+    check "foo,,'' bar".quote(false) == "`foo bar`"
   test "Reserved word":
     check "type".quote(false) == "`type`"
     check "object".quote(false) == "`object`"

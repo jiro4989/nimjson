@@ -84,6 +84,7 @@ func quote(key: string, force: bool): string =
     '/',
     ' ',
     '-',
+    '*',
   ]
   const reservedKeyword = [
     "type",
@@ -93,7 +94,7 @@ func quote(key: string, force: bool): string =
     "const",
     "var",
   ]
-  let key = key.replace(",")
+  let key = key.replace(",").replace("'")
   result = &"`{key}`"
   if force:
     return
