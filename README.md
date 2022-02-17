@@ -103,10 +103,15 @@ type
     disabled: bool
     open_issues_count: int64
     license: License
+    allow_forking: bool
+    is_template: bool
+    topics: seq[string]
+    visibility: string
     forks: int64
     open_issues: int64
     watchers: int64
     default_branch: string
+    temp_clone_token: NilType
     network_count: int64
     subscribers_count: int64
   Owner = ref object
@@ -126,7 +131,7 @@ type
     repos_url: string
     events_url: string
     received_events_url: string
-    type: string
+    `type`: string
     site_admin: bool
   License = ref object
     key: string
