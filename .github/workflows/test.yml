@@ -14,7 +14,7 @@ name: test
       - LICENSE
 
 jobs:
-  build:
+  test-cross-platform:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -22,6 +22,22 @@ jobs:
           - ubuntu-latest
           - windows-latest
           - macOS-latest
+        nim-version:
+          - 'stable'
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - uses: jiro4989/setup-nim-action@v1
+        with:
+          nim-version: ${{ matrix.nim-version }}
+      - run: nimble build -Y
+      - run: nimble test -Y
+
+  test-multi-version:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
         nim-version:
           - '1.0.x'
           - '1.2.x'
