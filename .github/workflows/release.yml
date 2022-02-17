@@ -8,7 +8,7 @@ name: release
 
 env:
   APP_NAME: 'nimjson'
-  NIM_VERSION: '1.2.4'
+  NIM_VERSION: '1.6.4'
   MAINTAINER: 'jiro4989'
   DESC: 'nimjson generates nim object definitions from json documents.'
 
