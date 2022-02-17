@@ -22,7 +22,7 @@
 import std/json
 import std/strformat
 import std/tables
-from std/strutils import toUpperAscii, join, split
+from std/strutils import toUpperAscii, join, split, replace
 
 const
   nilType* = "NilType"
@@ -83,6 +83,7 @@ func quote(key: string, force: bool): string =
     '\\',
     '/',
     ' ',
+    '-',
   ]
   const reservedKeyword = [
     "type",
@@ -92,6 +93,7 @@ func quote(key: string, force: bool): string =
     "const",
     "var",
   ]
+  let key = key.replace(",")
   result = &"`{key}`"
   if force:
     return
