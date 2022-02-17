@@ -1,6 +1,6 @@
 # Package
 
-version       = "1.2.8"
+version       = "1.3.1"
 author        = "jiro4989"
 description   = "nimjson generates nim object definitions from json documents."
 license       = "MIT"
