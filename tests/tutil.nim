@@ -1,5 +1,5 @@
-import unittest
-import sequtils, strutils
+import std/unittest
+import std/sequtils
 
 include nimjsonpkg/util
 
@@ -15,22 +15,24 @@ suite "proc getType":
   setup:
     var strs: seq[string]
   test "Primitive type":
-    check getType("key", """1""".parseJson(), strs, 0) == "int64"
-    check getType("key", """"string"""".parseJson(), strs, 0) == "string"
-    check getType("key", """1.0""".parseJson(), strs, 0) == "float64"
-    check getType("key", """true""".parseJson(), strs, 0) == "bool"
-    check getType("key", """false""".parseJson(), strs, 0) == "bool"
-    check getType("key", """null""".parseJson(), strs, 0) == nilType
-    check getType("key", """[1, 2, 3]""".parseJson(), strs, 0) == "seq[int64]"
-    check getType("key", """[]""".parseJson(), strs, 0) == nilSeq
-    check getType("key", """["x", null]""".parseJson(), strs, 0) == "seq[string]"
-    check getType("key", """[null, null]""".parseJson(), strs, 0) == nilSeq
-    check getType("key", """[null, "x"]""".parseJson(), strs, 0) == nilSeq
+    check getType("key", """1""".parseJson(), strs, 0, "", false) == "int64"
+    check getType("key", """"string"""".parseJson(), strs, 0, "", false) == "string"
+    check getType("key", """1.0""".parseJson(), strs, 0, "", false) == "float64"
+    check getType("key", """true""".parseJson(), strs, 0, "", false) == "bool"
+    check getType("key", """false""".parseJson(), strs, 0, "", false) == "bool"
+    check getType("key", """null""".parseJson(), strs, 0, "", false) == nilType
+    check getType("key", """[1, 2, 3]""".parseJson(), strs, 0, "", false) == "seq[int64]"
+    check getType("key", """[]""".parseJson(), strs, 0, "", false) == nilSeq
+    check getType("key", """["x", null]""".parseJson(), strs, 0, "", false) == "seq[string]"
+    check getType("key", """[null, null]""".parseJson(), strs, 0, "", false) == nilSeq
+    check getType("key", """[null, "x"]""".parseJson(), strs, 0, "", false) == nilSeq
   test "Object type":
-    check getType("obj", """{"str":"str", "int":1}""".parseJson(), strs, 0) == "Obj"
+    check getType("obj", """{"str":"str", "int":1}""".parseJson(), strs, 0, "",
+        false) == "Obj"
   test "Array object type":
     strs.add("")
-    check getType("obj", """[{"str":"str", "int":1}]""".parseJson(), strs, 0) == "seq[Obj]"
+    check getType("obj", """[{"str":"str", "int":1}]""".parseJson(), strs, 0,
+        "", false) == "seq[Obj]"
     check strs == @["", "  Obj = ref object\n    str: string\n    int: int64\n"]
 
 proc removeIndent(s: string): string =
@@ -47,7 +49,8 @@ suite "proc objFormat":
   setup:
     var strs: seq[string]
   test "Object type":
-    """{"str":"s", "int":1, "float":1.1, "boo":true, "array":[1, 2]}""".parseJson().objFormat("obj", strs)
+    """{"str":"s", "int":1, "float":1.1, "boo":true, "array":[1, 2]}""".parseJson(
+      ).objFormat("obj", strs)
     check strs == @["""|  Obj = ref object
                        |    str: string
                        |    int: int64
@@ -55,9 +58,10 @@ suite "proc objFormat":
                        |    boo: bool
                        |    array: seq[int64]""".removeIndent()]
   test "Nest object type":
-    """{"object":{"o":{"s":"str", "i":1}, "array":[{"s":"str", "i":1}]}}""".parseJson().objFormat("obj", strs)
+    """{"object":{"o":{"s":"str", "i":1}, "array":[{"s":"str", "i":1}]}}""".parseJson(
+      ).objFormat("obj", strs)
     check strs.join() == @["""|  Obj = ref object
-                              |    object: Object
+                              |    `object`: Object
                               |  Object = ref object
                               |    o: O
                               |    array: seq[Array]
@@ -103,7 +107,8 @@ suite "proc toTypeString":
         "bool":true
       }""".parseJson().toTypeString() == ("""
       |type
-      |  """ & nilType & """ = ref object
+      |  """ & nilType &
+        """ = ref object
       |  Object = ref object
       |    int: int64
       |    str: string
@@ -119,7 +124,8 @@ suite "proc toTypeString":
         "falseBool":[false, true]
       }""".parseJson().toTypeString() == ("""
       |type
-      |  """ & nilType & """ = ref object
+      |  """ & nilType &
+        """ = ref object
       |  Object = ref object
       |    int: seq[int64]
       |    str: seq[string]
@@ -133,7 +139,8 @@ suite "proc toTypeString":
         "obj2":{"fal":false, "str":null}
       }""".parseJson().toTypeString() == ("""
       |type
-      |  """ & nilType & """ = ref object
+      |  """ & nilType &
+        """ = ref object
       |  Object = ref object
       |    obj1: Obj1
       |    obj2: Obj2
@@ -152,7 +159,8 @@ suite "proc toTypeString":
         "obj4":{"objX":{"i":12}}
       }""".parseJson().toTypeString() == ("""
       |type
-      |  """ & nilType & """ = ref object
+      |  """ & nilType &
+        """ = ref object
       |  Object = ref object
       |    obj1: seq[Obj1]
       |    obj2: Obj2
@@ -163,7 +171,8 @@ suite "proc toTypeString":
       |    str: string
       |  Obj2 = ref object
       |    fal: bool
-      |    str: """ & nilType & "\n" & """
+      |    str: """ & nilType & "\n" &
+        """
       |    obj: seq[Obj]
       |    v: int64
       |    v2: int64
@@ -182,24 +191,25 @@ suite "proc toTypeString":
   test "Public fields":
     check """
       {
-        "obj1":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}],
+        "obj 1":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}],
         "obj2":{"fal":false, "str":null, "obj":[{"fal":false}, {"fal":false}], "v":1, "v2":2, "objobj":{"i":1}},
         "obj3":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}],
         "obj4":{"objX":{"i":12}}
-      }""".parseJson().toTypeString(publicField = true) == ("""
+      }""".parseJson().toTypeString(publicField = true) == (
+        """
       |type
-      |  """ & nilType & """* = ref object
+      |  NilType* = ref object
       |  Object* = ref object
-      |    obj1*: seq[Obj1]
+      |    `obj 1`*: seq[`Obj 1`]
       |    obj2*: Obj2
       |    obj3*: seq[Obj3]
       |    obj4*: Obj4
-      |  Obj1* = ref object
+      |  `Obj 1`* = ref object
       |    int*: int64
       |    str*: string
       |  Obj2* = ref object
       |    fal*: bool
-      |    str*: """ & nilType & "\n" & """
+      |    str*: NilType
       |    obj*: seq[Obj]
       |    v*: int64
       |    v2*: int64
@@ -215,3 +225,63 @@ suite "proc toTypeString":
       |    i*: int64
       |  ObjX* = ref object
       |    i*: int64""").removeIndent()
+  test "Quote fields":
+    check """
+      {
+        "obj1":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}],
+        "obj2":{"fal":false, "str":null, "obj":[{"fal":false}, {"fal":false}], "v":1, "v2":2, "objobj":{"i":1}},
+        "obj3":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}],
+        "obj4":{"objX":{"i":12}}
+      }""".parseJson().toTypeString(publicField = true, quoteField = true) == (
+        """
+      |type
+      |  NilType* = ref object
+      |  `Object`* = ref object
+      |    `obj1`*: seq[`Obj1`]
+      |    `obj2`*: `Obj2`
+      |    `obj3`*: seq[`Obj3`]
+      |    `obj4`*: `Obj4`
+      |  `Obj1`* = ref object
+      |    `int`*: int64
+      |    `str`*: string
+      |  `Obj2`* = ref object
+      |    `fal`*: bool
+      |    `str`*: NilType
+      |    `obj`*: seq[`Obj`]
+      |    `v`*: int64
+      |    `v2`*: int64
+      |    `objobj`*: `Objobj`
+      |  `Obj3`* = ref object
+      |    `int`*: int64
+      |    `str`*: string
+      |  `Obj4`* = ref object
+      |    `objX`*: `ObjX`
+      |  `Obj`* = ref object
+      |    `fal`*: bool
+      |  `Objobj`* = ref object
+      |    `i`*: int64
+      |  `ObjX`* = ref object
+      |    `i`*: int64""").removeIndent()
+
+suite "proc quote":
+  test "Whitespace":
+    check "hello world".quote(false) == "`hello world`"
+  test "Special character":
+    check "/".quote(false) == "`/`"
+    check "-".quote(false) == "`-`"
+    check "*".quote(false) == "`*`"
+  test "Remove illegal characters":
+    check "foo,bar".quote(false) == "foobar"
+    check "foo, bar".quote(false) == "`foo bar`"
+    check "foo' bar".quote(false) == "`foo bar`"
+    check "foo,,'' bar".quote(false) == "`foo bar`"
+  test "Reserved word":
+    check "type".quote(false) == "`type`"
+    check "object".quote(false) == "`object`"
+    check "enum".quote(false) == "`enum`"
+    check "let".quote(false) == "`let`"
+    check "const".quote(false) == "`const`"
+    check "var".quote(false) == "`var`"
+  test "Force quoting":
+    check "test".quote(false) == "test"
+    check "test".quote(true) == "`test`"
