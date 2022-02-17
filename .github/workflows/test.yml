@@ -1,25 +1,20 @@
+---
 name: test
 
-on:
+"on":
   push:
+    branches:
+      - master
+    paths-ignore:
+      - README*
+      - LICENSE
   pull_request:
-
-env:
-  NIM_VERSION: '1.2.4'
+    paths-ignore:
+      - README*
+      - LICENSE
 
 jobs:
-  skip:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Skip job"
-
-  before:
-    runs-on: ubuntu-latest
-    if: "! contains(github.event.head_commit.message, '[skip ci]')"
-    steps:
-      - run: echo "not contains '[skip ci]'"
-
-  build:
+  test-cross-platform:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -27,11 +22,32 @@ jobs:
           - ubuntu-latest
           - windows-latest
           - macOS-latest
-    needs: before
+        nim-version:
+          - 'stable'
     steps:
       - uses: actions/checkout@v2.4.0
       - uses: jiro4989/setup-nim-action@v1
         with:
-          nim-version: ${{ env.NIM_VERSION }}
+          nim-version: ${{ matrix.nim-version }}
+      - run: nimble build -Y
+      - run: nimble test -Y
+
+  test-multi-version:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        nim-version:
+          - '1.0.x'
+          - '1.2.x'
+          - '1.4.x'
+          - '1.6.x'
+          - 'stable'
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - uses: jiro4989/setup-nim-action@v1
+        with:
+          nim-version: ${{ matrix.nim-version }}
       - run: nimble build -Y
       - run: nimble test -Y
