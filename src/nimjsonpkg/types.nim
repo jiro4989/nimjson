@@ -20,7 +20,8 @@ func newObjectDefinition*(name: string, isNilType: bool): ObjectDefinition =
   result.isRef = true
   result.isNilType = isNilType
 
-proc addFieldDefinition*(self: var ObjectDefinition, fieldDef: FieldDefinition) =
+proc addFieldDefinition*(self: var ObjectDefinition,
+    fieldDef: FieldDefinition) =
   self.fields.add(fieldDef)
 
 func removeUnusedChars(s: string): string =
@@ -45,14 +46,14 @@ func backquote(s: string, force: bool): string =
   ## * https://datatracker.ietf.org/doc/html/rfc8259#section-7
   const needQuoteChars = [
     # 0x22.char, # quotation mark
-    # 0x5c.char, # reverse solidus
-    # 0x2f.char, # solidus
-    # 0x62.char, # backspace
-    # 0x66.char, # form feed
-    # 0x6e.char, # line feed
-    # 0x72.char, # carriage return
-    # 0x74.char, # tab
-    # 0x75.char, # 4hexdig
+      # 0x5c.char, # reverse solidus
+      # 0x2f.char, # solidus
+      # 0x62.char, # backspace
+      # 0x66.char, # form feed
+      # 0x6e.char, # line feed
+      # 0x72.char, # carriage return
+      # 0x74.char, # tab
+      # 0x75.char, # 4hexdig
     '\\',
     '/',
     ' ',
@@ -89,7 +90,8 @@ func backquote(self: FieldDefinition, force: bool): FieldDefinition =
   result.name = result.name.backquote(force)
   result.typ = result.typ.backquote(force)
 
-func newFieldDefinition*(name: string, typ: string, isPublic: bool, forceBackquote: bool): FieldDefinition =
+func newFieldDefinition*(name: string, typ: string, isPublic: bool,
+    forceBackquote: bool): FieldDefinition =
   result.name = name
   result.typ = typ
   result.isPublic = isPublic
