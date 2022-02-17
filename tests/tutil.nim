@@ -191,27 +191,25 @@ suite "proc toTypeString":
   test "Public fields":
     check """
       {
-        "obj1":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}],
+        "obj 1":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}],
         "obj2":{"fal":false, "str":null, "obj":[{"fal":false}, {"fal":false}], "v":1, "v2":2, "objobj":{"i":1}},
         "obj3":[{"int":1, "str":"strval"}, {"int":2, "str":"strval2"}],
         "obj4":{"objX":{"i":12}}
       }""".parseJson().toTypeString(publicField = true) == (
         """
       |type
-      |  """ & nilType &
-        """* = ref object
+      |  NilType* = ref object
       |  Object* = ref object
-      |    obj1*: seq[Obj1]
+      |    `obj 1`*: seq[`Obj 1`]
       |    obj2*: Obj2
       |    obj3*: seq[Obj3]
       |    obj4*: Obj4
-      |  Obj1* = ref object
+      |  `Obj 1`* = ref object
       |    int*: int64
       |    str*: string
       |  Obj2* = ref object
       |    fal*: bool
-      |    str*: """ & nilType & "\n" &
-        """
+      |    str*: NilType
       |    obj*: seq[Obj]
       |    v*: int64
       |    v2*: int64
@@ -237,34 +235,32 @@ suite "proc toTypeString":
       }""".parseJson().toTypeString(publicField = true, quoteField = true) == (
         """
       |type
-      |  """ & nilType &
-        """* = ref object
-      |  Object* = ref object
-      |    `obj1`*: seq[Obj1]
-      |    `obj2`*: Obj2
-      |    `obj3`*: seq[Obj3]
-      |    `obj4`*: Obj4
-      |  Obj1* = ref object
+      |  NilType* = ref object
+      |  `Object`* = ref object
+      |    `obj1`*: seq[`Obj1`]
+      |    `obj2`*: `Obj2`
+      |    `obj3`*: seq[`Obj3`]
+      |    `obj4`*: `Obj4`
+      |  `Obj1`* = ref object
       |    `int`*: int64
       |    `str`*: string
-      |  Obj2* = ref object
+      |  `Obj2`* = ref object
       |    `fal`*: bool
-      |    `str`*: """ & nilType & "\n" &
-        """
-      |    `obj`*: seq[Obj]
+      |    `str`*: NilType
+      |    `obj`*: seq[`Obj`]
       |    `v`*: int64
       |    `v2`*: int64
-      |    `objobj`*: Objobj
-      |  Obj3* = ref object
+      |    `objobj`*: `Objobj`
+      |  `Obj3`* = ref object
       |    `int`*: int64
       |    `str`*: string
-      |  Obj4* = ref object
-      |    `objX`*: ObjX
-      |  Obj* = ref object
+      |  `Obj4`* = ref object
+      |    `objX`*: `ObjX`
+      |  `Obj`* = ref object
       |    `fal`*: bool
-      |  Objobj* = ref object
+      |  `Objobj`* = ref object
       |    `i`*: int64
-      |  ObjX* = ref object
+      |  `ObjX`* = ref object
       |    `i`*: int64""").removeIndent()
 
 suite "proc quote":

@@ -30,6 +30,8 @@ const
 proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[],
     index = 0, publicStr = "", quoteField = false)
 
+func quote(key: string, force: bool): string
+
 proc headUpper(str: string): string =
   ## 先頭の文字を大文字にして返す。
   ## 先頭の文字だけを大文字にするので、**別にUpperCamelCeseにするわけではない**。
@@ -55,7 +57,7 @@ proc getType(key: string, value: JsonNode, strs: var seq[string], index: int,
       s.add(nilType)
     s.add("]")
     s
-  of JObject: key.headUpper()
+  of JObject: key.headUpper().quote(quoteField)
   of JString: "string"
   of JInt: "int64"
   of JFloat: "float64"
@@ -106,7 +108,7 @@ proc objFormat(self: JsonNode, objName: string, strs: var seq[string] = @[],
   ## Object型のJsonNodeをObject定義の文字列に変換して`strs[index]`に追加する。
   ## このとき`type`は追加しない。
   strs.add("")
-  strs[index].add(&"  {objName.headUpper()}{publicStr} = ref object\n")
+  strs[index].add(&"  {objName.headUpper().quote(quoteField)}{publicStr} = ref object\n")
   for k, v in self.fields:
     let t = getType(k, v, strs, index, publicStr, quoteField)
     strs[index].add(&"    {k.quote(quoteField)}{publicStr}: {t}\n")
