@@ -244,6 +244,7 @@ yum install https://github.com/jiro4989/nimjson/releases/download/v1.3.1/nimjson
         -o, --out-file:FILE_PATH         Write file path
         -O, --object-name:OBJECT_NAME    Set object type name
         -p, --public-field               Public fields
+        -q, --quote-field                Quotes all fields
 
 ## License
 
