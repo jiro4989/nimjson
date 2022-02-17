@@ -9,17 +9,6 @@ env:
   NIM_VERSION: '1.2.4'
 
 jobs:
-  skip:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Skip job"
-
-  before:
-    runs-on: ubuntu-latest
-    if: "! contains(github.event.head_commit.message, '[skip ci]')"
-    steps:
-      - run: echo "not contains '[skip ci]'"
-
   build:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -28,7 +17,6 @@ jobs:
           - ubuntu-latest
           - windows-latest
           - macOS-latest
-    needs: before
     steps:
       - uses: actions/checkout@v2.4.0
       - uses: jiro4989/setup-nim-action@v1
