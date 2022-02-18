@@ -23,7 +23,8 @@ proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
   case jsonNode.kind
   of JObject:
     let defIndex = defs.len
-    defs.add(newObjectDefinition(objectName.headUpper, false, isPublic))
+    defs.add(newObjectDefinition(objectName.headUpper, false, isPublic,
+        forceBackquote))
     for name, node in jsonNode.fields:
       case node.kind
       of JObject:
@@ -60,6 +61,8 @@ proc parseAndGetString*(jsonNode: JsonNode, objectName: string, isPublic,
 
   # NilTypeは必須
   var resultDefs: seq[ObjectDefinition]
-  resultDefs.add(newObjectDefinition("NilType", true, isPublic))
+  resultDefs.add(newObjectDefinition("NilType", true, isPublic, forceBackquote))
   resultDefs.add(defs)
-  return resultDefs.toDefinitionString
+
+  result.add("type\n")
+  result.add(resultDefs.toDefinitionString)

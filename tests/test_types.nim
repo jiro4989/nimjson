@@ -13,7 +13,7 @@ block:
   block:
     checkpoint "正常系: プリミティブなフィールドのみ"
 
-    var obj = newObjectDefinition("Object", false, true)
+    var obj = newObjectDefinition("Object", false, true, false)
     obj.addFieldDefinition(newFieldDefinition("a", "int64", true, false, false))
     obj.addFieldDefinition(newFieldDefinition("b", "bool", true, false, false))
     obj.addFieldDefinition(newFieldDefinition("c", "float64", true, false, false))
@@ -31,7 +31,7 @@ block:
   block:
     checkpoint "正常系: 特殊な文字が含まれる場合は無効化する"
 
-    var obj = newObjectDefinition("Object", false, false)
+    var obj = newObjectDefinition("Object", false, false, false)
     obj.addFieldDefinition(newFieldDefinition("hello world", "int64", false,
         false, false))
     obj.addFieldDefinition(newFieldDefinition("su, shi", "bool", false, false, false))
@@ -50,7 +50,7 @@ block:
   block:
     checkpoint "正常系: NilType"
 
-    var obj = newObjectDefinition("Object", true, true)
+    var obj = newObjectDefinition("Object", true, true, false)
     let got = obj.toDefinitionStringLines
     check got.len == 1
     check got[0] == "  NilType* = ref object"
@@ -61,10 +61,10 @@ block:
   block:
     checkpoint "正常系: プリミティブなフィールドのみ"
 
-    var obj1 = newObjectDefinition("Object", false, true)
+    var obj1 = newObjectDefinition("Object", false, true, false)
     obj1.addFieldDefinition(newFieldDefinition("sushi", "Sushi", true, false, false))
 
-    var obj2 = newObjectDefinition("Sushi", false, true)
+    var obj2 = newObjectDefinition("Sushi", false, true, false)
     obj2.addFieldDefinition(newFieldDefinition("name", "string", true, false, false))
 
     let got = @[obj1, obj2].toDefinitionString

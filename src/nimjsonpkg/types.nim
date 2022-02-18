@@ -8,6 +8,8 @@ type
     isRef: bool
     isNilType: bool
     isPublic: bool
+    isNormalized: bool
+    isBackquoted: bool
 
   FieldDefinition* = object
     name: string
@@ -17,13 +19,6 @@ type
     isBackquoted: bool
     isSeq: bool
 
-func newObjectDefinition*(name: string, isNilType: bool,
-    isPublic: bool): ObjectDefinition =
-  result.name = name
-  result.isRef = true
-  result.isNilType = isNilType
-  result.isPublic = isPublic
-
 proc addFieldDefinition*(self: var ObjectDefinition,
     fieldDef: FieldDefinition) =
   self.fields.add(fieldDef)
@@ -31,6 +26,15 @@ proc addFieldDefinition*(self: var ObjectDefinition,
 func removeUnusedChars(s: string): string =
   ## フィールド名や型名に使用不可能な文字列を削除する。
   s.replace(",").replace("'")
+
+func normalize(self: ObjectDefinition): ObjectDefinition =
+  ## フィールド名や型名に使用不可能な文字列を削除する。
+  result = self
+  if self.isNormalized:
+    return
+
+  result.isNormalized = true
+  result.name = result.name.removeUnusedChars
 
 func normalize(self: FieldDefinition): FieldDefinition =
   ## フィールド名や型名に使用不可能な文字列を削除する。
@@ -83,6 +87,14 @@ func backquote(s: string, force: bool): string =
       return
   return s
 
+func backquote(self: ObjectDefinition, force: bool): ObjectDefinition =
+  result = self
+  if self.isBackquoted:
+    return
+
+  result.isBackquoted = true
+  result.name = result.name.backquote(force)
+
 func backquote(self: FieldDefinition, force: bool): FieldDefinition =
   ## 必要であればバッククオートで括る。
   ## ``force`` を有効にすれば必ずバッククオートで括る。
@@ -93,6 +105,15 @@ func backquote(self: FieldDefinition, force: bool): FieldDefinition =
   result.isBackquoted = true
   result.name = result.name.backquote(force)
   result.typ = result.typ.backquote(force)
+
+func newObjectDefinition*(name: string, isNilType, isPublic,
+    forceBackquote: bool): ObjectDefinition =
+  result.name = name
+  result.isRef = true
+  result.isNilType = isNilType
+  result.isPublic = isPublic
+  result = result.normalize
+  result = result.backquote(forceBackquote)
 
 func newFieldDefinition*(name: string, typ: string, isPublic: bool,
     forceBackquote: bool, isSeq: bool): FieldDefinition =
