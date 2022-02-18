@@ -74,3 +74,20 @@ block:
     sushi*: Sushi
   Sushi* = ref object
     name*: string"""
+
+  block:
+    checkpoint "正常系: 強制的にクオートする"
+
+    var obj1 = newObjectDefinition("Object", false, true, true)
+    obj1.addFieldDefinition(newFieldDefinition("sushi", "Sushi", true, true, false))
+
+    var obj2 = newObjectDefinition("Sushi", false, true, true)
+    obj2.addFieldDefinition(newFieldDefinition("name", "string", true, true, false))
+
+    let got = @[obj1, obj2].toDefinitionString
+
+    check got == """
+  `Object`* = ref object
+    `sushi`*: `Sushi`
+  `Sushi`* = ref object
+    `name`*: `string`"""
