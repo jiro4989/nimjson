@@ -15,7 +15,7 @@ block:
   var defs: seq[ObjectDefinition]
   j.parse(defs, 0, "Object", false, false, false)
 
-  var want = newObjectDefinition("Object", false)
+  var want = newObjectDefinition("Object", false, false)
   want.addFieldDefinition(newFieldDefinition("a", "int64", false, false, false))
   want.addFieldDefinition(newFieldDefinition("b", "bool", false, false, false))
   want.addFieldDefinition(newFieldDefinition("c", "float64", false, false, false))
@@ -38,12 +38,12 @@ block:
   var defs: seq[ObjectDefinition]
   j.parse(defs, 0, "Object", false, false, false)
 
-  var want1 = newObjectDefinition("Object", false)
+  var want1 = newObjectDefinition("Object", false, false)
   want1.addFieldDefinition(newFieldDefinition("a", "int64", false, false, false))
   want1.addFieldDefinition(newFieldDefinition("b", "B", false, false, false))
   want1.addFieldDefinition(newFieldDefinition("c", "float64", false, false, false))
 
-  var want2 = newObjectDefinition("B", false)
+  var want2 = newObjectDefinition("B", false, false)
   want2.addFieldDefinition(newFieldDefinition("a", "bool", false, false, false))
   want2.addFieldDefinition(newFieldDefinition("b", "int64", false, false, false))
 
@@ -69,19 +69,19 @@ block:
   var defs: seq[ObjectDefinition]
   j.parse(defs, 0, "Object", false, false, false)
 
-  var want1 = newObjectDefinition("Object", false)
+  var want1 = newObjectDefinition("Object", false, false)
   want1.addFieldDefinition(newFieldDefinition("test", "Test", false, false, false))
   want1.addFieldDefinition(newFieldDefinition("b", "B", false, false, false))
   want1.addFieldDefinition(newFieldDefinition("c", "C", false, false, false))
 
-  var want2 = newObjectDefinition("Test", false)
+  var want2 = newObjectDefinition("Test", false, false)
   want2.addFieldDefinition(newFieldDefinition("a", "float64", false, false, false))
 
-  var want3 = newObjectDefinition("B", false)
+  var want3 = newObjectDefinition("B", false, false)
   want3.addFieldDefinition(newFieldDefinition("a", "bool", false, false, false))
   want3.addFieldDefinition(newFieldDefinition("b", "int64", false, false, false))
 
-  var want4 = newObjectDefinition("C", false)
+  var want4 = newObjectDefinition("C", false, false)
   want4.addFieldDefinition(newFieldDefinition("a", "string", false, false, false))
   want4.addFieldDefinition(newFieldDefinition("b", "NilType", false, false, false))
 
@@ -104,17 +104,17 @@ block:
   var defs: seq[ObjectDefinition]
   j.parse(defs, 0, "Object", false, false, false)
 
-  var want1 = newObjectDefinition("Object", false)
+  var want1 = newObjectDefinition("Object", false, false)
   want1.addFieldDefinition(newFieldDefinition("obj1", "Obj1", false, false, false))
   want1.addFieldDefinition(newFieldDefinition("obj2", "Obj2", false, false, false))
 
-  var want2 = newObjectDefinition("Obj1", false)
+  var want2 = newObjectDefinition("Obj1", false, false)
   want2.addFieldDefinition(newFieldDefinition("obj11", "Obj11", false, false, false))
 
-  var want3 = newObjectDefinition("Obj11", false)
+  var want3 = newObjectDefinition("Obj11", false, false)
   want3.addFieldDefinition(newFieldDefinition("a", "int64", false, false, false))
 
-  var want4 = newObjectDefinition("Obj2", false)
+  var want4 = newObjectDefinition("Obj2", false, false)
   want4.addFieldDefinition(newFieldDefinition("b", "float64", false, false, false))
 
   check defs == @[want1, want2, want3, want4]
@@ -148,17 +148,17 @@ block:
   var defs: seq[ObjectDefinition]
   j.parse(defs, 0, "Object", false, false, false)
 
-  var want1 = newObjectDefinition("Object", false)
+  var want1 = newObjectDefinition("Object", false, false)
   want1.addFieldDefinition(newFieldDefinition("obj1", "Obj1", false, false, false))
   want1.addFieldDefinition(newFieldDefinition("obj2", "Obj2", false, false, false))
 
-  var want2 = newObjectDefinition("Obj1", false)
+  var want2 = newObjectDefinition("Obj1", false, false)
   want2.addFieldDefinition(newFieldDefinition("obj11", "Obj11", false, false, false))
 
-  var want3 = newObjectDefinition("Obj11", false)
+  var want3 = newObjectDefinition("Obj11", false, false)
   want3.addFieldDefinition(newFieldDefinition("a", "int64", false, false, false))
 
-  var want4 = newObjectDefinition("Obj2", false)
+  var want4 = newObjectDefinition("Obj2", false, false)
   want4.addFieldDefinition(newFieldDefinition("b", "float64", false, false, false))
 
   check defs == @[want1, want2, want3, want4]
@@ -174,7 +174,7 @@ block:
   var defs: seq[ObjectDefinition]
   j.parse(defs, 0, "Object", false, false, false)
 
-  var want1 = newObjectDefinition("Object", false)
+  var want1 = newObjectDefinition("Object", false, false)
   want1.addFieldDefinition(newFieldDefinition("a", "int64", false, false, true))
   want1.addFieldDefinition(newFieldDefinition("b", "string", false, false, true))
 
@@ -212,25 +212,25 @@ block:
   var defs: seq[ObjectDefinition]
   j.parse(defs, 0, "Object", false, false, false)
 
-  var want1 = newObjectDefinition("Object", false)
+  var want1 = newObjectDefinition("Object", false, false)
   want1.addFieldDefinition(newFieldDefinition("axis", "Axis", false, false, true))
   want1.addFieldDefinition(newFieldDefinition("person", "Person", false, false, false))
   want1.addFieldDefinition(newFieldDefinition("count", "int64", false, false, false))
   want1.addFieldDefinition(newFieldDefinition("nulls", "NilType", false, false, true))
   want1.addFieldDefinition(newFieldDefinition("nulls2", "NilType", false, false, true))
 
-  var want2 = newObjectDefinition("Axis", false)
+  var want2 = newObjectDefinition("Axis", false, false)
   want2.addFieldDefinition(newFieldDefinition("x", "int64", false, false, false))
   want2.addFieldDefinition(newFieldDefinition("y", "float64", false, false, false))
 
-  var want3 = newObjectDefinition("Person", false)
+  var want3 = newObjectDefinition("Person", false, false)
   want3.addFieldDefinition(newFieldDefinition("name", "string", false, false, false))
   want3.addFieldDefinition(newFieldDefinition("age", "int64", false, false, false))
   want3.addFieldDefinition(newFieldDefinition("hobby", "string", false, false, true))
   want3.addFieldDefinition(newFieldDefinition("parent", "Parent", false, false, true))
   want3.addFieldDefinition(newFieldDefinition("admin", "bool", false, false, false))
 
-  var want4 = newObjectDefinition("Parent", false)
+  var want4 = newObjectDefinition("Parent", false, false)
   want4.addFieldDefinition(newFieldDefinition("name", "string", false, false, false))
   want4.addFieldDefinition(newFieldDefinition("age", "int64", false, false, false))
 

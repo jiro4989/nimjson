@@ -1,4 +1,4 @@
-from std/strutils import replace
+from std/strutils import replace, join
 from std/strformat import `&`
 
 type
@@ -7,6 +7,7 @@ type
     fields: seq[FieldDefinition]
     isRef: bool
     isNilType: bool
+    isPublic: bool
 
   FieldDefinition* = object
     name: string
@@ -16,10 +17,12 @@ type
     isBackquoted: bool
     isSeq: bool
 
-func newObjectDefinition*(name: string, isNilType: bool): ObjectDefinition =
+func newObjectDefinition*(name: string, isNilType: bool,
+    isPublic: bool): ObjectDefinition =
   result.name = name
   result.isRef = true
   result.isNilType = isNilType
+  result.isPublic = isPublic
 
 proc addFieldDefinition*(self: var ObjectDefinition,
     fieldDef: FieldDefinition) =
@@ -99,3 +102,36 @@ func newFieldDefinition*(name: string, typ: string, isPublic: bool,
   result.isSeq = isSeq
   result = result.normalize
   result = result.backquote(forceBackquote)
+
+func toPublicMark(enable: bool): string =
+  if enable: "*"
+  else: ""
+
+func toDefinitionStringLines(self: ObjectDefinition): seq[string] =
+  let publicMark = self.isPublic.toPublicMark
+  let refStr =
+    if self.isRef: "ref"
+    else: ""
+
+  if self.isNilType:
+    return @[&"  NilType{publicMark} = {refStr} object"]
+
+  block:
+    let objectName = self.name
+    result.add(&"  {objectName}{publicMark} = {refStr} object")
+
+  for field in self.fields:
+    let fieldName = field.name
+    let publicMark = field.isPublic.toPublicMark
+    let typeName =
+      if field.isSeq: &"seq[{field.typ}]"
+      else: field.typ
+    result.add(&"    {fieldName}{publicMark}: {typeName}")
+
+func toDefinitionString*(self: seq[ObjectDefinition]): string =
+  var lines: seq[string]
+
+  for objDef in self:
+    lines.add(objDef.toDefinitionStringLines)
+
+  return lines.join("\n")

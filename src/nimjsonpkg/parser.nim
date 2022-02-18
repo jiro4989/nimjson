@@ -23,7 +23,7 @@ proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
   case jsonNode.kind
   of JObject:
     let defIndex = defs.len
-    defs.add(newObjectDefinition(objectName.headUpper, false))
+    defs.add(newObjectDefinition(objectName.headUpper, false, isPublic))
     for name, node in jsonNode.fields:
       case node.kind
       of JObject:

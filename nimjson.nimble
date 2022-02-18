@@ -28,4 +28,4 @@ task buildjs, "Generate JS lib":
   exec "nimble js js/nimjson_js.nim -o:docs/js/nimjson.js"
 
 task tests, "Run test":
-  exec "testament p 'tests/test_parser.nim'"
+  exec "testament p 'tests/test_*.nim'"
