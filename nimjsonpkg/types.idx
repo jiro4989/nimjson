@@ -1,0 +1,6 @@
+ObjectDefinition	nimjsonpkg/types.html#ObjectDefinition	types: ObjectDefinition	
+FieldDefinition	nimjsonpkg/types.html#FieldDefinition	types: FieldDefinition	
+addFieldDefinition	nimjsonpkg/types.html#addFieldDefinition,ObjectDefinition,FieldDefinition	types: addFieldDefinition(self: var ObjectDefinition; fieldDef: FieldDefinition)	
+newObjectDefinition	nimjsonpkg/types.html#newObjectDefinition,string,bool,bool,bool	types: newObjectDefinition(name: string; isNilType, isPublic, forceBackquote: bool): ObjectDefinition	
+newFieldDefinition	nimjsonpkg/types.html#newFieldDefinition,string,string,bool,bool,bool	types: newFieldDefinition(name: string; typ: string; isPublic: bool;\n                   forceBackquote: bool; isSeq: bool): FieldDefinition	
+toDefinitionString	nimjsonpkg/types.html#toDefinitionString,seq[ObjectDefinition]	types: toDefinitionString(self: seq[ObjectDefinition]): string	

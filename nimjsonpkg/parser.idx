@@ -1,0 +1,1 @@
+parseAndGetString	nimjsonpkg/parser.html#parseAndGetString,JsonNode,string,bool,bool	parser: parseAndGetString(jsonNode: JsonNode; objectName: string;\n                  isPublic, forceBackquote: bool): string	
