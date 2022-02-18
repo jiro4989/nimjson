@@ -4,28 +4,6 @@ import std/strutils
 
 import ./types
 
-#[
-
-{
-  "a":1,
-  "b":{
-    "b1":1,
-    "b2":2
-  },
-  "c":3
-}
-
-type
-  obj = ref object
-    a: int
-    b: B
-    c: int
-  B = ref object
-    b1: int
-    b2: int
-
-]#
-
 func headUpper(str: string): string =
   ## 先頭の文字を大文字にして返す。
   ## 先頭の文字だけを大文字にするので、**別にUpperCamelCeseにするわけではない**。
