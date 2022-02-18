@@ -62,7 +62,10 @@ proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
                 forceBackquote, true)
             defs[defIndex].addFieldDefinition(fieldDef)
           of JObject:
-            discard
+            let typ = name.headUpper
+            let fieldDef = newFieldDefinition(name, typ, isPublic, forceBackquote, true)
+            defs[defIndex].addFieldDefinition(fieldDef)
+            node.parse(defs, typ, isPublic, forceBackquote)
           of JArray:
             # TODO
             discard
