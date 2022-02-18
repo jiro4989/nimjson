@@ -9,11 +9,11 @@ type
     isNilType: bool
 
   FieldDefinition* = object
-    name*: string
-    typ*: string
-    isPublic*: bool
-    isNormalized*: bool
-    isBackquoted*: bool
+    name: string
+    typ: string
+    isPublic: bool
+    isNormalized: bool
+    isBackquoted: bool
     isSeq: bool
 
 func newObjectDefinition*(name: string, isNilType: bool): ObjectDefinition =
