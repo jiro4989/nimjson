@@ -40,7 +40,8 @@ func kind2str(kind: JsonNodeKind): string =
   of JNull: "NilType"
   else: ""
 
-proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition], objectName: string, isPublic, forceBackquote: bool) =
+proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
+    objectName: string, isPublic, forceBackquote: bool) =
   case jsonNode.kind
   of JObject:
     defs.add(newObjectDefinition(objectName, false))
@@ -57,7 +58,8 @@ proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition], objectName: str
           case child.kind
           of JString, JInt, JFloat, JBool, JNull:
             let typ = child.kind.kind2str
-            let fieldDef = newFieldDefinition(name, typ, isPublic, forceBackquote, true)
+            let fieldDef = newFieldDefinition(name, typ, isPublic,
+                forceBackquote, true)
             defs[defIndex].addFieldDefinition(fieldDef)
           of JObject:
             discard
