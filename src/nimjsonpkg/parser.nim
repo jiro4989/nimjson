@@ -52,9 +52,11 @@ proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
     let fieldDef = newFieldDefinition(objectName, typ, isPublic, forceBackquote, isSeq)
     defs[defIndex].addFieldDefinition(fieldDef)
 
-proc parseAndGetString*(jsonNode: JsonNode, objectName: string, isPublic, forceBackquote: bool): string =
+proc parseAndGetString*(jsonNode: JsonNode, objectName: string, isPublic,
+    forceBackquote: bool): string =
   var defs: seq[ObjectDefinition]
-  jsonNode.parse(defs, 0, objectName, isPublic = isPublic, forceBackquote = forceBackquote, isSeq = false)
+  jsonNode.parse(defs, 0, objectName, isPublic = isPublic,
+      forceBackquote = forceBackquote, isSeq = false)
 
   # NilTypeは必須
   var resultDefs: seq[ObjectDefinition]
