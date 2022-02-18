@@ -203,7 +203,8 @@ block:
       }
     ],
     "admin": true
-  }
+  },
+  "count": 2
 }
 """.parseJson
   var defs: seq[ObjectDefinition]
@@ -212,6 +213,7 @@ block:
   var want1 = newObjectDefinition("Object", false)
   want1.addFieldDefinition(newFieldDefinition("axis", "Axis", false, false, true))
   want1.addFieldDefinition(newFieldDefinition("person", "Person", false, false, false))
+  want1.addFieldDefinition(newFieldDefinition("count", "int64", false, false, false))
 
   var want2 = newObjectDefinition("Axis", false)
   want2.addFieldDefinition(newFieldDefinition("x", "int64", false, false, false))
