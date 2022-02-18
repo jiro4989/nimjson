@@ -54,3 +54,23 @@ block:
     let got = obj.toDefinitionStringLines
     check got.len == 1
     check got[0] == "  NilType* = ref object"
+
+block:
+  checkpoint "func toDefinitionString"
+
+  block:
+    checkpoint "正常系: プリミティブなフィールドのみ"
+
+    var obj1 = newObjectDefinition("Object", false, true)
+    obj1.addFieldDefinition(newFieldDefinition("sushi", "Sushi", true, false, false))
+
+    var obj2 = newObjectDefinition("Sushi", false, true)
+    obj2.addFieldDefinition(newFieldDefinition("name", "string", true, false, false))
+
+    let got = @[obj1, obj2].toDefinitionString
+
+    check got == """
+  Object* = ref object
+    sushi*: Sushi
+  Sushi* = ref object
+    name*: string"""
