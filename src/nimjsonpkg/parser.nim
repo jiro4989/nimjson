@@ -18,7 +18,7 @@ func kind2str(kind: JsonNodeKind): string =
   of JNull: "NilType"
   else: ""
 
-proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
+proc parse(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
     defIndex: int, objectName: string, isPublic, forceBackquote, isSeq: bool) =
   case jsonNode.kind
   of JObject:

@@ -6,8 +6,7 @@ discard """
 import std/unittest
 import std/json
 
-import nimjsonpkg/parser
-import nimjsonpkg/types
+include nimjsonpkg/parser
 
 block:
   checkpoint "正常系: プリミティブなフィールドのみ"
