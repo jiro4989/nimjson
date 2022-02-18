@@ -63,7 +63,7 @@ proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
             defs[defIndex].addFieldDefinition(fieldDef)
           of JObject:
             discard
-          else:
+          of JArray:
             # TODO
             discard
         else:
