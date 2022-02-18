@@ -179,3 +179,25 @@ block:
   want1.addFieldDefinition(newFieldDefinition("b", "string", false, false, true))
 
   check defs == @[want1]
+
+block:
+  checkpoint "正常系: 配列のオブジェクト"
+  let j = """
+{
+  "axis": [
+    {"x":1, "y":2.0},
+    {"x":3, "y":4.0}
+  ],
+}
+""".parseJson
+  var defs: seq[ObjectDefinition]
+  j.parse(defs, "Object", false, false)
+
+  var want1 = newObjectDefinition("Object", false)
+  want1.addFieldDefinition(newFieldDefinition("axis", "Axis", false, false, true))
+
+  var want2 = newObjectDefinition("Axis", false)
+  want2.addFieldDefinition(newFieldDefinition("x", "int64", false, false, false))
+  want2.addFieldDefinition(newFieldDefinition("y", "float64", false, false, false))
+
+  check defs == @[want1, want2]
