@@ -29,7 +29,10 @@ jobs:
       - uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: ${{ matrix.nim-version }}
+      - run: nimble install -Y
       - run: nimble build -Y
+      - run: nimble buildjs
+      - run: nimble examples
       - run: nimble test -Y
 
   test-multi-version:
@@ -49,5 +52,8 @@ jobs:
       - uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: ${{ matrix.nim-version }}
+      - run: nimble install -Y
       - run: nimble build -Y
+      - run: nimble buildjs
+      - run: nimble examples
       - run: nimble test -Y
