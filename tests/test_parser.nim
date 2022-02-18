@@ -190,7 +190,8 @@ block:
   ],
   "person": {
     "name": "john",
-    "age": 20
+    "age": 20,
+    "hobby": ["dance", "game"]
   }
 }
 """.parseJson
@@ -208,5 +209,6 @@ block:
   var want3 = newObjectDefinition("Person", false)
   want3.addFieldDefinition(newFieldDefinition("name", "string", false, false, false))
   want3.addFieldDefinition(newFieldDefinition("age", "int64", false, false, false))
+  want3.addFieldDefinition(newFieldDefinition("hobby", "string", false, false, true))
 
   check defs == @[want1, want2, want3]
