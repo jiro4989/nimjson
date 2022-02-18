@@ -191,7 +191,17 @@ block:
   "person": {
     "name": "john",
     "age": 20,
-    "hobby": ["dance", "game"]
+    "hobby": ["dance", "game"],
+    "parent": [
+      {
+        "name": "dad",
+        "age": 50
+      },
+      {
+        "name": "mam",
+        "age": 51
+      }
+    ]
   }
 }
 """.parseJson
@@ -210,5 +220,10 @@ block:
   want3.addFieldDefinition(newFieldDefinition("name", "string", false, false, false))
   want3.addFieldDefinition(newFieldDefinition("age", "int64", false, false, false))
   want3.addFieldDefinition(newFieldDefinition("hobby", "string", false, false, true))
+  want3.addFieldDefinition(newFieldDefinition("parent", "Parent", false, false, true))
 
-  check defs == @[want1, want2, want3]
+  var want4 = newObjectDefinition("Parent", false)
+  want4.addFieldDefinition(newFieldDefinition("name", "string", false, false, false))
+  want4.addFieldDefinition(newFieldDefinition("age", "int64", false, false, false))
+
+  check defs == @[want1, want2, want3, want4]
