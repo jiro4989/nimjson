@@ -13,7 +13,7 @@ block:
   checkpoint "正常系: プリミティブなフィールドのみ"
   let j = """{"a":1, "b":true, "c":3.14, "d":null, "e":"hello"}""".parseJson
   var defs: seq[ObjectDefinition]
-  j.parse(defs, "Object", false, false)
+  j.parse(defs, 0, "Object", false, false, false)
 
   var want = newObjectDefinition("Object", false)
   want.addFieldDefinition(newFieldDefinition("a", "int64", false, false, false))
@@ -36,7 +36,7 @@ block:
 }
 """.parseJson
   var defs: seq[ObjectDefinition]
-  j.parse(defs, "Object", false, false)
+  j.parse(defs, 0, "Object", false, false, false)
 
   var want1 = newObjectDefinition("Object", false)
   want1.addFieldDefinition(newFieldDefinition("a", "int64", false, false, false))
@@ -67,7 +67,7 @@ block:
 }
 """.parseJson
   var defs: seq[ObjectDefinition]
-  j.parse(defs, "Object", false, false)
+  j.parse(defs, 0, "Object", false, false, false)
 
   var want1 = newObjectDefinition("Object", false)
   want1.addFieldDefinition(newFieldDefinition("test", "Test", false, false, false))
@@ -102,7 +102,7 @@ block:
 }
 """.parseJson
   var defs: seq[ObjectDefinition]
-  j.parse(defs, "Object", false, false)
+  j.parse(defs, 0, "Object", false, false, false)
 
   var want1 = newObjectDefinition("Object", false)
   want1.addFieldDefinition(newFieldDefinition("obj1", "Obj1", false, false, false))
@@ -146,9 +146,9 @@ block:
 ]
 """.parseJson
   var defs: seq[ObjectDefinition]
-  j.parse(defs, "Object", false, false)
+  j.parse(defs, 0, "Object", false, false, false)
 
-  var want1 = newObjectDefinition("SeqObject", false)
+  var want1 = newObjectDefinition("Object", false)
   want1.addFieldDefinition(newFieldDefinition("obj1", "Obj1", false, false, false))
   want1.addFieldDefinition(newFieldDefinition("obj2", "Obj2", false, false, false))
 
@@ -172,7 +172,7 @@ block:
 }
 """.parseJson
   var defs: seq[ObjectDefinition]
-  j.parse(defs, "Object", false, false)
+  j.parse(defs, 0, "Object", false, false, false)
 
   var want1 = newObjectDefinition("Object", false)
   want1.addFieldDefinition(newFieldDefinition("a", "int64", false, false, true))
@@ -210,7 +210,7 @@ block:
 }
 """.parseJson
   var defs: seq[ObjectDefinition]
-  j.parse(defs, "Object", false, false)
+  j.parse(defs, 0, "Object", false, false, false)
 
   var want1 = newObjectDefinition("Object", false)
   want1.addFieldDefinition(newFieldDefinition("axis", "Axis", false, false, true))
