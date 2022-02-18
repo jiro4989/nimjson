@@ -188,6 +188,10 @@ block:
     {"x":1, "y":2.0},
     {"x":3, "y":4.0}
   ],
+  "person": {
+    "name": "john",
+    "age": 20
+  }
 }
 """.parseJson
   var defs: seq[ObjectDefinition]
@@ -195,9 +199,14 @@ block:
 
   var want1 = newObjectDefinition("Object", false)
   want1.addFieldDefinition(newFieldDefinition("axis", "Axis", false, false, true))
+  want1.addFieldDefinition(newFieldDefinition("person", "Person", false, false, false))
 
   var want2 = newObjectDefinition("Axis", false)
   want2.addFieldDefinition(newFieldDefinition("x", "int64", false, false, false))
   want2.addFieldDefinition(newFieldDefinition("y", "float64", false, false, false))
 
-  check defs == @[want1, want2]
+  var want3 = newObjectDefinition("Person", false)
+  want3.addFieldDefinition(newFieldDefinition("name", "string", false, false, false))
+  want3.addFieldDefinition(newFieldDefinition("age", "int64", false, false, false))
+
+  check defs == @[want1, want2, want3]
