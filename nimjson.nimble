@@ -1,6 +1,6 @@
 # Package
 
-version       = "1.3.1"
+version       = "2.0.0"
 author        = "jiro4989"
 description   = "nimjson generates nim object definitions from json documents."
 license       = "MIT"
@@ -12,10 +12,12 @@ installExt    = @["nim"]
 # Dependencies
 
 requires "nim >= 0.20.0"
-import strformat, os
+
+import std/strformat
+import std/os
 
 task docs, "Generate documents":
-  exec "nimble doc src/nimjson.nim -o:docs/nimjson.html"
+  exec "nimble doc --index:on --project src/nimjson.nim -o:docs"
 
 task examples, "Run examples":
   for dir in ["readfile", "mapping"]:
@@ -26,3 +28,6 @@ task examples, "Run examples":
 task buildjs, "Generate JS lib":
   mkdir "docs/js"
   exec "nimble js js/nimjson_js.nim -o:docs/js/nimjson.js"
+
+task tests, "Run test":
+  exec "testament p 'tests/test_*.nim'"

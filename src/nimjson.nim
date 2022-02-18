@@ -1,9 +1,46 @@
-include nimjsonpkg/util
+import std/json
+
+import ./nimjsonpkg/parser
+
+proc toTypeString*(self: JsonNode, objName = "Object",
+    publicField = false, quoteField = false): string =
+  ## Generates nim object definitions string from ``JsonNode``.
+  ## Returns a public field string if ``publicField`` was true.
+  ##
+  ## **Japanese:**
+  ##
+  ## ``JsonNode`` をNimのObject定義の文字列に変換して返却する。
+  ## ``objName`` が定義するObjectの名前になる。
+  ## ``publicField`` を指定すると、公開フィールドとして文字列を返却する。
+  ##
+  ## **Note:**
+  ## * 値が ``null`` あるいは配列の最初の要素が ``null`` や値が空配列の場合は、
+  ##   型が `nilType <#nilType>`_ になる。
+  runnableExamples:
+    import std/json
+    from std/strutils import split
+
+    let typeStr = """{"keyStr":"str",
+                      "keyInt":1,
+                      "keyFloat":1.1,
+                      "keyBool":true}""".parseJson().toTypeString()
+    let typeLines = typeStr.split("\n")
+    doAssert typeLines[0] == "type"
+    doAssert typeLines[1] == "  NilType = ref object"
+    doAssert typeLines[2] == "  Object = ref object"
+    doAssert typeLines[3] == "    keyStr: string"
+    doAssert typeLines[4] == "    keyInt: int64"
+    doAssert typeLines[5] == "    keyFloat: float64"
+    doAssert typeLines[6] == "    keyBool: bool"
+
+  return self.parseAndGetString(objectName = objName, isPublic = publicField,
+      forceBackquote = quoteField)
 
 when not defined(js):
   import std/logging
   import std/os
   import std/parseopt
+  import std/strformat
 
   type
     Options = ref object
@@ -16,7 +53,7 @@ when not defined(js):
 
   const
     appName = "nimjson"
-    version = &"""{appName} command version 1.3.1
+    version = &"""{appName} command version 2.0.0
 Copyright (c) 2019 jiro4989
 Released under the MIT License.
 https://github.com/jiro4989/nimjson"""

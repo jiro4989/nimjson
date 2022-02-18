@@ -2,3 +2,5 @@
 tests/*
 !tests/*.*
 main
+testresults/
+nimcache/
