@@ -1,12 +1,13 @@
+---
 name: gh-pages
 
-on:
+"on":
   push:
     tags:
       - 'v*.*.*'
 
 env:
-  NIM_VERSION: '1.2.4'
+  NIM_VERSION: 'stable'
 
 jobs:
   gh-pages:

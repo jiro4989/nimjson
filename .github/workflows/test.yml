@@ -57,3 +57,19 @@ jobs:
       - run: nimble buildjs
       - run: nimble examples
       - run: nimble test -Y
+
+  test-docs:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        nim-version:
+          - 'stable'
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - uses: jiro4989/setup-nim-action@v1
+        with:
+          nim-version: ${{ matrix.nim-version }}
+      - run: nimble install -Y
+      - run: nimble docs
