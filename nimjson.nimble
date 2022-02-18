@@ -15,7 +15,7 @@ requires "nim >= 0.20.0"
 import strformat, os
 
 task docs, "Generate documents":
-  exec "nimble doc src/nimjson.nim -o:docs/nimjson.html"
+  exec "nimble doc --index:on --project src/nimjson.nim -o:docs"
 
 task examples, "Run examples":
   for dir in ["readfile", "mapping"]:
