@@ -14,6 +14,7 @@ type
     isPublic*: bool
     isNormalized*: bool
     isBackquoted*: bool
+    isSeq: bool
 
 func newObjectDefinition*(name: string, isNilType: bool): ObjectDefinition =
   result.name = name
@@ -91,9 +92,10 @@ func backquote(self: FieldDefinition, force: bool): FieldDefinition =
   result.typ = result.typ.backquote(force)
 
 func newFieldDefinition*(name: string, typ: string, isPublic: bool,
-    forceBackquote: bool): FieldDefinition =
+    forceBackquote: bool, isSeq: bool): FieldDefinition =
   result.name = name
   result.typ = typ
   result.isPublic = isPublic
+  result.isSeq = isSeq
   result = result.normalize
   result = result.backquote(forceBackquote)
