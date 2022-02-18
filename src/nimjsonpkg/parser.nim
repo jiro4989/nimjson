@@ -41,6 +41,16 @@ func kind2str(kind: JsonNodeKind): string =
   else: ""
 
 proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
+    objectName: string, isPublic, forceBackquote: bool)
+
+proc parseJObject(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
+    defIndex: int, name: string, isPublic, forceBackquote, isSeq: bool) =
+  let typ = name.headUpper
+  let fieldDef = newFieldDefinition(name, typ, isPublic, forceBackquote, isSeq)
+  defs[defIndex].addFieldDefinition(fieldDef)
+  jsonNode.parse(defs, typ, isPublic, forceBackquote)
+
+proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
     objectName: string, isPublic, forceBackquote: bool) =
   case jsonNode.kind
   of JObject:
@@ -62,11 +72,7 @@ proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
                 forceBackquote, true)
             defs[defIndex].addFieldDefinition(fieldDef)
           of JObject:
-            let typ = name.headUpper
-            let fieldDef = newFieldDefinition(name, typ, isPublic,
-                forceBackquote, true)
-            defs[defIndex].addFieldDefinition(fieldDef)
-            node.parse(defs, typ, isPublic, forceBackquote)
+            node.parseJObject(defs, defIndex, name, isPublic, forceBackquote, true)
           of JArray:
             # TODO
             discard
@@ -75,10 +81,7 @@ proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
           let fieldDef = newFieldDefinition(name, typ, isPublic, forceBackquote, true)
           defs[defIndex].addFieldDefinition(fieldDef)
       of JObject:
-        let typ = name.headUpper
-        let fieldDef = newFieldDefinition(name, typ, isPublic, forceBackquote, false)
-        defs[defIndex].addFieldDefinition(fieldDef)
-        node.parse(defs, typ, isPublic, forceBackquote)
+        node.parseJObject(defs, defIndex, name, isPublic, forceBackquote, false)
   of JArray:
     if 0 < jsonNode.elems.len:
       let child = jsonNode.elems[0]
