@@ -43,13 +43,13 @@ func kind2str(kind: JsonNodeKind): string =
 proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
     objectName: string, isPublic, forceBackquote: bool)
 
-proc parseAtom(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
+proc addAtom(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
     defIndex: int, name: string, isPublic, forceBackquote, isSeq: bool) =
   let typ = jsonNode.kind.kind2str
   let fieldDef = newFieldDefinition(name, typ, isPublic, forceBackquote, isSeq)
   defs[defIndex].addFieldDefinition(fieldDef)
 
-proc parseJObject(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
+proc addJObject(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
     defIndex: int, name: string, isPublic, forceBackquote, isSeq: bool) =
   let typ = name.headUpper
   let fieldDef = newFieldDefinition(name, typ, isPublic, forceBackquote, isSeq)
@@ -65,15 +65,15 @@ proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
     for name, node in jsonNode.fields:
       case node.kind
       of JString, JInt, JFloat, JBool, JNull:
-        node.parseAtom(defs, defIndex, name, isPublic, forceBackquote, false)
+        node.addAtom(defs, defIndex, name, isPublic, forceBackquote, false)
       of JArray:
         if 0 < node.elems.len:
           let child = node.elems[0]
           case child.kind
           of JString, JInt, JFloat, JBool, JNull:
-            child.parseAtom(defs, defIndex, name, isPublic, forceBackquote, true)
+            child.addAtom(defs, defIndex, name, isPublic, forceBackquote, true)
           of JObject:
-            child.parseJObject(defs, defIndex, name, isPublic, forceBackquote, true)
+            child.addJObject(defs, defIndex, name, isPublic, forceBackquote, true)
           of JArray:
             # TODO
             discard
@@ -82,7 +82,7 @@ proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
           let fieldDef = newFieldDefinition(name, typ, isPublic, forceBackquote, true)
           defs[defIndex].addFieldDefinition(fieldDef)
       of JObject:
-        node.parseJObject(defs, defIndex, name, isPublic, forceBackquote, false)
+        node.addJObject(defs, defIndex, name, isPublic, forceBackquote, false)
   of JArray:
     if 0 < jsonNode.elems.len:
       let child = jsonNode.elems[0]
