@@ -204,7 +204,9 @@ block:
     ],
     "admin": true
   },
-  "count": 2
+  "count": 2,
+  "nulls": [null, null, null],
+  "nulls2": []
 }
 """.parseJson
   var defs: seq[ObjectDefinition]
@@ -214,6 +216,8 @@ block:
   want1.addFieldDefinition(newFieldDefinition("axis", "Axis", false, false, true))
   want1.addFieldDefinition(newFieldDefinition("person", "Person", false, false, false))
   want1.addFieldDefinition(newFieldDefinition("count", "int64", false, false, false))
+  want1.addFieldDefinition(newFieldDefinition("nulls", "NilType", false, false, true))
+  want1.addFieldDefinition(newFieldDefinition("nulls2", "NilType", false, false, true))
 
   var want2 = newObjectDefinition("Axis", false)
   want2.addFieldDefinition(newFieldDefinition("x", "int64", false, false, false))
