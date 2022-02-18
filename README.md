@@ -10,17 +10,7 @@ This was inspired by [gojson](https://github.com/ChimeraCoder/gojson).
 
 ## Development
 
-    % nim -v
-    Nim Compiler Version 0.20.0 [Linux: amd64]
-    Compiled at 2019-06-06
-    Copyright (c) 2006-2019 by Andreas Rumpf
-
-    git hash: e7471cebae2a404f3e4239f199f5a0c422484aac
-    active boot switches: -d:release
-
-    % nimble -v
-    nimble v0.10.2 compiled at 2019-06-15 22:10:02
-    git hash: couldn't determine git hash
+* Nim (stable version)
 
 ## Usage examples
 
@@ -185,8 +175,9 @@ type
 ### API usage
 
 ```nim
+import std/json
+
 import nimjson
-import json
 
 echo """{"keyStr":"str", "keyInt":1}""".parseJson().toTypeString()
 
