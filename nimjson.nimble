@@ -12,7 +12,9 @@ installExt    = @["nim"]
 # Dependencies
 
 requires "nim >= 0.20.0"
-import strformat, os
+
+import std/strformat
+import std/os
 
 task docs, "Generate documents":
   exec "nimble doc --index:on --project src/nimjson.nim -o:docs"
