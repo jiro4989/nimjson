@@ -73,7 +73,7 @@ proc parse*(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
           of JString, JInt, JFloat, JBool, JNull:
             child.parseAtom(defs, defIndex, name, isPublic, forceBackquote, true)
           of JObject:
-            node.parseJObject(defs, defIndex, name, isPublic, forceBackquote, true)
+            child.parseJObject(defs, defIndex, name, isPublic, forceBackquote, true)
           of JArray:
             # TODO
             discard
