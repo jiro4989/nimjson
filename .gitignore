@@ -4,4 +4,3 @@ tests/*
 main
 testresults/
 nimcache/
-src/nimjsonpkg/parser.nim
