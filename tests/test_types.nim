@@ -31,7 +31,7 @@ block:
   block:
     checkpoint "正常系: 特殊な文字が含まれる場合は無効化する"
 
-    var obj = newObjectDefinition("Object", false, false, false)
+    var obj = newObjectDefinition("Ob ject", false, false, false)
     obj.addFieldDefinition(newFieldDefinition("hello world", "int64", false,
         false, false))
     obj.addFieldDefinition(newFieldDefinition("su, shi", "bool", false, false, false))
@@ -40,7 +40,7 @@ block:
     obj.addFieldDefinition(newFieldDefinition("type", "string", false, false, false))
     let got = obj.toDefinitionStringLines
     check got.len == 6
-    check got[0] == "  Object = ref object"
+    check got[0] == "  `Ob ject` = ref object"
     check got[1] == "    `hello world`: int64"
     check got[2] == "    `su shi`: bool"
     check got[3] == "    `abc*`: float64"
