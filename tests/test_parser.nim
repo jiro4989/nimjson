@@ -234,3 +234,38 @@ block:
   want4.addFieldDefinition(newFieldDefinition("age", "int64", false, false, false))
 
   check defs == @[want1, want2, want3, want4]
+
+block:
+  checkpoint "正常系: 同じフィールド名のサブタイプが複数存在したとき、名前が衝突しない"
+  let j = """
+{
+  "obj1": {
+    "subtype": {"a": 1}
+  },
+  "obj2": {
+    "subtype": {"b": 1}
+  }
+}
+""".parseJson
+  var defs: seq[ObjectDefinition]
+  j.parse(defs, 0, "Object", false, false, false)
+
+  var want1 = newObjectDefinition("Object", false, false, false)
+  want1.addFieldDefinition(newFieldDefinition("obj1", "Obj1", false, false, false))
+  want1.addFieldDefinition(newFieldDefinition("obj2", "Obj2", false, false, false))
+
+  var want2 = newObjectDefinition("Obj1", false, false, false)
+  want2.addFieldDefinition(newFieldDefinition("subtype", "Subtype", false,
+      false, false))
+
+  var want3 = newObjectDefinition("Subtype", false, false, false)
+  want3.addFieldDefinition(newFieldDefinition("a", "int", false, false, false))
+
+  var want4 = newObjectDefinition("Obj2", false, false, false)
+  want4.addFieldDefinition(newFieldDefinition("subtype", "Subtype2", false,
+      false, false))
+
+  var want5 = newObjectDefinition("Subtype2", false, false, false)
+  want5.addFieldDefinition(newFieldDefinition("b", "int", false, false, false))
+
+  check defs == @[want1, want2, want3, want4, want5]
