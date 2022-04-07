@@ -9,6 +9,36 @@ import std/json
 include nimjsonpkg/parser
 
 block:
+  checkpoint "normal: [originalOrNumberedTypeName] no duplicated type name"
+  var buf = initTable[string, bool]()
+  let name = "Sushi"
+  let got = originalOrNumberedTypeName(buf, name)
+  check got == "Sushi"
+  check buf.hasKey("Sushi")
+
+block:
+  checkpoint "normal: [originalOrNumberedTypeName] duplicated type name exists"
+  var buf = initTable[string, bool]()
+  buf["Sushi"] = true
+  let name = "Sushi"
+  let got = originalOrNumberedTypeName(buf, name)
+  check got == "Sushi2"
+  check buf.hasKey("Sushi")
+  check buf.hasKey("Sushi2")
+
+block:
+  checkpoint "normal: [originalOrNumberedTypeName] duplicated type name exists 2"
+  var buf = initTable[string, bool]()
+  buf["Sushi"] = true
+  buf["Sushi2"] = true
+  let name = "Sushi"
+  let got = originalOrNumberedTypeName(buf, name)
+  check got == "Sushi3"
+  check buf.hasKey("Sushi")
+  check buf.hasKey("Sushi2")
+  check buf.hasKey("Sushi3")
+
+block:
   checkpoint "正常系: プリミティブなフィールドのみ"
   let j = """{"a":1, "b":true, "c":3.14, "d":null, "e":"hello"}""".parseJson
   var defs: seq[ObjectDefinition]
@@ -259,13 +289,13 @@ block:
       false, false))
 
   var want3 = newObjectDefinition("Subtype", false, false, false)
-  want3.addFieldDefinition(newFieldDefinition("a", "int", false, false, false))
+  want3.addFieldDefinition(newFieldDefinition("a", "int64", false, false, false))
 
   var want4 = newObjectDefinition("Obj2", false, false, false)
   want4.addFieldDefinition(newFieldDefinition("subtype", "Subtype2", false,
       false, false))
 
   var want5 = newObjectDefinition("Subtype2", false, false, false)
-  want5.addFieldDefinition(newFieldDefinition("b", "int", false, false, false))
+  want5.addFieldDefinition(newFieldDefinition("b", "int64", false, false, false))
 
   check defs == @[want1, want2, want3, want4, want5]
