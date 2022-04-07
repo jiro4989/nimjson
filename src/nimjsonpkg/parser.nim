@@ -18,7 +18,8 @@ func kind2str(kind: JsonNodeKind): string =
   of JNull: "NilType"
   else: ""
 
-func originalOrNumberedTypeName(typeNamebuffer: var Table[string,bool], typeName: string): string =
+func originalOrNumberedTypeName(typeNamebuffer: var Table[string, bool],
+    typeName: string): string =
   ## This procedure adds a number to suffix if type names are duplicated.
   if not typeNamebuffer.hasKey(typeName):
     typeNamebuffer[typeName] = true
@@ -38,7 +39,8 @@ proc parse(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
   case jsonNode.kind
   of JObject:
     let defIndex = defs.len
-    defs.add(newObjectDefinition(objectName.headUpper, false, isPublic, forceBackquote))
+    defs.add(newObjectDefinition(objectName.headUpper, false, isPublic,
+        forceBackquote))
     for name, node in jsonNode.fields:
       var name = name
       case node.kind
@@ -46,7 +48,8 @@ proc parse(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
         let srcName = name
         name = originalOrNumberedTypeName(typeNameBuffer, name)
         let typ = name.headUpper
-        let fieldDef = newFieldDefinition(srcName, typ, isPublic, forceBackquote, false)
+        let fieldDef = newFieldDefinition(srcName, typ, isPublic,
+            forceBackquote, false)
         defs[defIndex].addFieldDefinition(fieldDef)
       of JArray:
         if 0 < node.elems.len and node.elems[0].kind == JObject:
