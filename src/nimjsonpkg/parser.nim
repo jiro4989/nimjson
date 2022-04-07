@@ -56,7 +56,8 @@ proc parse(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
           let srcName = name
           name = originalOrNumberedTypeName(typeNameBuffer, name)
           let typ = name.headUpper
-          let fieldDef = newFieldDefinition(srcName, typ, isPublic, forceBackquote, true)
+          let fieldDef = newFieldDefinition(srcName, typ, isPublic,
+              forceBackquote, true)
           defs[defIndex].addFieldDefinition(fieldDef)
       else: discard
 
