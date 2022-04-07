@@ -53,8 +53,10 @@ proc parse(jsonNode: JsonNode, defs: var seq[ObjectDefinition],
         defs[defIndex].addFieldDefinition(fieldDef)
       of JArray:
         if 0 < node.elems.len and node.elems[0].kind == JObject:
+          let srcName = name
+          name = originalOrNumberedTypeName(typeNameBuffer, name)
           let typ = name.headUpper
-          let fieldDef = newFieldDefinition(name, typ, isPublic, forceBackquote, true)
+          let fieldDef = newFieldDefinition(srcName, typ, isPublic, forceBackquote, true)
           defs[defIndex].addFieldDefinition(fieldDef)
       else: discard
 
