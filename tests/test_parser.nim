@@ -9,6 +9,36 @@ import std/json
 include nimjsonpkg/parser
 
 block:
+  checkpoint "normal: [originalOrNumberedTypeName] no duplicated type name"
+  var buf = initTable[string, bool]()
+  let name = "Sushi"
+  let got = originalOrNumberedTypeName(buf, name)
+  check got == "Sushi"
+  check buf.hasKey("Sushi")
+
+block:
+  checkpoint "normal: [originalOrNumberedTypeName] duplicated type name exists"
+  var buf = initTable[string, bool]()
+  buf["Sushi"] = true
+  let name = "Sushi"
+  let got = originalOrNumberedTypeName(buf, name)
+  check got == "Sushi2"
+  check buf.hasKey("Sushi")
+  check buf.hasKey("Sushi2")
+
+block:
+  checkpoint "normal: [originalOrNumberedTypeName] duplicated type name exists 2"
+  var buf = initTable[string, bool]()
+  buf["Sushi"] = true
+  buf["Sushi2"] = true
+  let name = "Sushi"
+  let got = originalOrNumberedTypeName(buf, name)
+  check got == "Sushi3"
+  check buf.hasKey("Sushi")
+  check buf.hasKey("Sushi2")
+  check buf.hasKey("Sushi3")
+
+block:
   checkpoint "正常系: プリミティブなフィールドのみ"
   let j = """{"a":1, "b":true, "c":3.14, "d":null, "e":"hello"}""".parseJson
   var defs: seq[ObjectDefinition]
@@ -234,3 +264,130 @@ block:
   want4.addFieldDefinition(newFieldDefinition("age", "int64", false, false, false))
 
   check defs == @[want1, want2, want3, want4]
+
+block:
+  checkpoint "正常系: 同じフィールド名のサブタイプが複数存在したとき、名前が衝突しない"
+  let j = """
+{
+  "obj1": {
+    "subtype": {"a": 1}
+  },
+  "obj2": {
+    "subtype": {"b": 1}
+  }
+}
+""".parseJson
+  var defs: seq[ObjectDefinition]
+  j.parse(defs, 0, "Object", false, false, false)
+
+  var want1 = newObjectDefinition("Object", false, false, false)
+  want1.addFieldDefinition(newFieldDefinition("obj1", "Obj1", false, false, false))
+  want1.addFieldDefinition(newFieldDefinition("obj2", "Obj2", false, false, false))
+
+  var want2 = newObjectDefinition("Obj1", false, false, false)
+  want2.addFieldDefinition(newFieldDefinition("subtype", "Subtype", false,
+      false, false))
+
+  var want3 = newObjectDefinition("Subtype", false, false, false)
+  want3.addFieldDefinition(newFieldDefinition("a", "int64", false, false, false))
+
+  var want4 = newObjectDefinition("Obj2", false, false, false)
+  want4.addFieldDefinition(newFieldDefinition("subtype", "Subtype2", false,
+      false, false))
+
+  var want5 = newObjectDefinition("Subtype2", false, false, false)
+  want5.addFieldDefinition(newFieldDefinition("b", "int64", false, false, false))
+
+  check defs == @[want1, want2, want3, want4, want5]
+
+block:
+  checkpoint "正常系: 配列の名前が衝突した場合ずらす"
+  let j = """
+{
+  "obj1": {
+    "subtype": [{"a": 1}]
+  },
+  "obj2": {
+    "subtype": [{"b": 1}]
+  }
+}
+""".parseJson
+  var defs: seq[ObjectDefinition]
+  j.parse(defs, 0, "Object", false, false, false)
+
+  var want1 = newObjectDefinition("Object", false, false, false)
+  want1.addFieldDefinition(newFieldDefinition("obj1", "Obj1", false, false, false))
+  want1.addFieldDefinition(newFieldDefinition("obj2", "Obj2", false, false, false))
+
+  var want2 = newObjectDefinition("Obj1", false, false, false)
+  want2.addFieldDefinition(newFieldDefinition("subtype", "Subtype", false,
+      false, true))
+
+  var want3 = newObjectDefinition("Subtype", false, false, false)
+  want3.addFieldDefinition(newFieldDefinition("a", "int64", false, false, false))
+
+  var want4 = newObjectDefinition("Obj2", false, false, false)
+  want4.addFieldDefinition(newFieldDefinition("subtype", "Subtype2", false,
+      false, true))
+
+  var want5 = newObjectDefinition("Subtype2", false, false, false)
+  want5.addFieldDefinition(newFieldDefinition("b", "int64", false, false, false))
+
+  check defs == @[want1, want2, want3, want4, want5]
+
+block:
+  checkpoint "正常系: 配列の名前が衝突した場合ずらす"
+  let j = """
+{
+  "obj1": {
+    "subtype": {"a": 1}
+  },
+  "obj2": {
+    "subtype": [{"b": 1}]
+  },
+  "obj3": {
+    "subtype": {"a": 1}
+  },
+  "obj4": {
+    "subtype": [{"a": 1}]
+  },
+}
+""".parseJson
+  var defs: seq[ObjectDefinition]
+  j.parse(defs, 0, "Object", false, false, false)
+
+  var want1 = newObjectDefinition("Object", false, false, false)
+  want1.addFieldDefinition(newFieldDefinition("obj1", "Obj1", false, false, false))
+  want1.addFieldDefinition(newFieldDefinition("obj2", "Obj2", false, false, false))
+  want1.addFieldDefinition(newFieldDefinition("obj3", "Obj3", false, false, false))
+  want1.addFieldDefinition(newFieldDefinition("obj4", "Obj4", false, false, false))
+
+  var want2 = newObjectDefinition("Obj1", false, false, false)
+  want2.addFieldDefinition(newFieldDefinition("subtype", "Subtype", false,
+      false, false))
+
+  var want3 = newObjectDefinition("Subtype", false, false, false)
+  want3.addFieldDefinition(newFieldDefinition("a", "int64", false, false, false))
+
+  var want4 = newObjectDefinition("Obj2", false, false, false)
+  want4.addFieldDefinition(newFieldDefinition("subtype", "Subtype2", false,
+      false, true))
+
+  var want5 = newObjectDefinition("Subtype2", false, false, false)
+  want5.addFieldDefinition(newFieldDefinition("b", "int64", false, false, false))
+
+  var want6 = newObjectDefinition("Obj3", false, false, false)
+  want6.addFieldDefinition(newFieldDefinition("subtype", "Subtype3", false,
+      false, false))
+
+  var want7 = newObjectDefinition("Subtype3", false, false, false)
+  want7.addFieldDefinition(newFieldDefinition("a", "int64", false, false, false))
+
+  var want8 = newObjectDefinition("Obj4", false, false, false)
+  want8.addFieldDefinition(newFieldDefinition("subtype", "Subtype4", false,
+      false, true))
+
+  var want9 = newObjectDefinition("Subtype4", false, false, false)
+  want9.addFieldDefinition(newFieldDefinition("a", "int64", false, false, false))
+
+  check defs == @[want1, want2, want3, want4, want5, want6, want7, want8, want9]
