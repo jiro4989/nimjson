@@ -12,6 +12,7 @@ installExt    = @["nim"]
 # Dependencies
 
 requires "nim >= 0.20.0"
+requires "jsony == 1.1.3"
 
 import std/strformat
 import std/os
