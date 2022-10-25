@@ -172,6 +172,12 @@ type
     height: int64
 ```
 
+### JSON Schema example
+
+```bash
+$ nimjson -j examples/json_schema.json
+```
+
 ### API usage
 
 ```nim
