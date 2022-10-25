@@ -3,7 +3,7 @@ import std/json
 import ./nimjsonpkg/parser
 
 proc toTypeString*(self: JsonNode, objName = "Object",
-    publicField = false, quoteField = false): string =
+    publicField = false, quoteField = false, jsonSchema = false): string =
   ## Generates nim object definitions string from ``JsonNode``.
   ## Returns a public field string if ``publicField`` was true.
   ##
@@ -33,6 +33,10 @@ proc toTypeString*(self: JsonNode, objName = "Object",
     doAssert typeLines[5] == "    keyFloat: float64"
     doAssert typeLines[6] == "    keyBool: bool"
 
+  if jsonSchema:
+    # TODO
+    discard
+
   return self.parseAndGetString(objectName = objName, isPublic = publicField,
       forceBackquote = quoteField)
 
@@ -50,6 +54,7 @@ when not defined(js):
       objectName: string
       usePublicField: bool
       useQuoteField: bool
+      useJsonSchema: bool
 
   const
     appName = "nimjson"
@@ -106,6 +111,8 @@ Options:
           result.usePublicField = true
         of "quote-field", "q":
           result.useQuoteField = true
+        of "json-schema", "j":
+          result.useJsonSchema = true
       of cmdEnd:
         assert false # cannot happen
 
@@ -142,7 +149,7 @@ Options:
       # 2つ処理できるようにしてるのはオマケ機能である。
       for inFile in opts.args:
         outFile.write(inFile.parseFile().toTypeString(opts.objectName,
-            opts.usePublicField, opts.useQuoteField))
+            opts.usePublicField, opts.useQuoteField, opts.useJsonSchema))
       debug "END: Process arguments"
     else:
       debug "START: Process stdin"
