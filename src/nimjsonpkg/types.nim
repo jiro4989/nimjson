@@ -18,6 +18,7 @@ type
     isNormalized: bool
     isBackquoted: bool
     isSeq: bool
+    isOption: bool
 
 proc addFieldDefinition*(self: var ObjectDefinition,
     fieldDef: FieldDefinition) =
@@ -116,11 +117,12 @@ func newObjectDefinition*(name: string, isNilType, isPublic,
   result = result.backquote(forceBackquote)
 
 func newFieldDefinition*(name: string, typ: string, isPublic: bool,
-    forceBackquote: bool, isSeq: bool): FieldDefinition =
+    forceBackquote: bool, isSeq: bool, isOption = false): FieldDefinition =
   result.name = name
   result.typ = typ
   result.isPublic = isPublic
   result.isSeq = isSeq
+  result.isOption = isOption
   result = result.normalize
   result = result.backquote(forceBackquote)
 
@@ -144,9 +146,11 @@ func toDefinitionStringLines(self: ObjectDefinition): seq[string] =
   for field in self.fields:
     let fieldName = field.name
     let publicMark = field.isPublic.toPublicMark
-    let typeName =
+    var typeName =
       if field.isSeq: &"seq[{field.typ}]"
       else: field.typ
+    if field.isOption:
+      typeName = &"Option[{typeName}]"
     result.add(&"    {fieldName}{publicMark}: {typeName}")
 
 func toDefinitionString*(self: seq[ObjectDefinition]): string =
