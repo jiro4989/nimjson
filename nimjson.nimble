@@ -11,7 +11,7 @@ installExt    = @["nim"]
 
 # Dependencies
 
-requires "nim >= 0.20.0"
+requires "nim >= 1.4.0"
 
 import std/strformat
 import std/os
