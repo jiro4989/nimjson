@@ -69,4 +69,16 @@ block:
       "description": "The domain of the JetStreamServer"
     }
   }
-}""".parseJson
+}"""
+  let got = j.parseAndGetString("Repository", false, false)
+  check got == """type
+  Repository = ref object
+    `type`: string
+    id: string
+    timestamp: string
+    stream: string
+    consumer: string
+    consumer_seq: string
+    stream_seq: string
+    deliveries: int64
+    domain: Option[string]"""

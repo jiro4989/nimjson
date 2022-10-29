@@ -11,13 +11,13 @@ type
     `type`: string
     required: seq[string]
     additionalProperties: bool
-    properties: Table[string, Property]
+    properties: OrderedTable[string, Property]
 
   Property = ref object
     description: string
     `type`: string
     required: seq[string]
-    properties: Table[string, Property]
+    properties: OrderedTable[string, Property]
 
 func typeStr(typ: string): string =
   case typ
@@ -31,15 +31,17 @@ func typeStr(typ: string): string =
 proc toObjectDefinitions(schema: JsonSchema, objectName: string, isPublic: bool,
     forceBackquote: bool): seq[ObjectDefinition] =
   var objDef = newObjectDefinition(objectName, false, isPublic, forceBackquote)
-  for k, prop in schema.properties:
+  for propName, prop in schema.properties:
     let typ = prop.`type`
-    let isOption = typ notin schema.required
-    let fDef = newFieldDefinition(typ.typeStr, typ, isPublic, forceBackquote,
+    let isOption = propName notin schema.required
+    let fDef = newFieldDefinition(propName, typ.typeStr, isPublic, forceBackquote,
         false, isOption)
     objDef.addFieldDefinition(fDef)
   result.add(objDef)
 
-proc parse(s: string, objectName: string, isPublic: bool,
-    forceBackquote: bool) =
+proc parseAndGetString*(s: string, objectName: string, isPublic: bool,
+    forceBackquote: bool): string =
   let schema = s.fromJson(JsonSchema)
   let defs = schema.toObjectDefinitions(objectName, isPublic, forceBackquote)
+  result.add("type\n")
+  result.add(defs.toDefinitionString())
