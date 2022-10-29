@@ -4,12 +4,11 @@ discard """
 """
 
 import std/unittest
-import std/json
 
 include nimjsonpkg/json_schema_parser
 
 block:
-  checkpoint "ok: sample json schema"
+  checkpoint "proc parseAndGetString"
   let j = """{
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://nats.io/schemas/jetstream/advisory/v1/nak.json",
@@ -70,8 +69,10 @@ block:
     }
   }
 }"""
-  let got = j.parseAndGetString("Repository", false, false)
-  check got == """type
+  block:
+    checkpoint "ok: sample json schema"
+    let got = j.parseAndGetString("Repository", false, false, false)
+    check got == """type
   Repository = ref object
     `type`: string
     id: string
@@ -82,3 +83,18 @@ block:
     stream_seq: string
     deliveries: int64
     domain: Option[string]"""
+
+  block:
+    checkpoint "ok: no Option field when `disableOption` is true"
+    let got = j.parseAndGetString("Repository", false, false, true)
+    check got == """type
+  Repository = ref object
+    `type`: string
+    id: string
+    timestamp: string
+    stream: string
+    consumer: string
+    consumer_seq: string
+    stream_seq: string
+    deliveries: int64
+    domain: string"""

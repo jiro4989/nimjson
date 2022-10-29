@@ -29,19 +29,19 @@ func typeStr(typ: string): string =
   else: ""
 
 proc toObjectDefinitions(schema: JsonSchema, objectName: string, isPublic: bool,
-    forceBackquote: bool): seq[ObjectDefinition] =
+    forceBackquote: bool, disableOption: bool): seq[ObjectDefinition] =
   var objDef = newObjectDefinition(objectName, false, isPublic, forceBackquote)
   for propName, prop in schema.properties:
     let typ = prop.`type`
-    let isOption = propName notin schema.required
+    let isOption = (not disableOption) and propName notin schema.required
     let fDef = newFieldDefinition(propName, typ.typeStr, isPublic,
         forceBackquote, false, isOption)
     objDef.addFieldDefinition(fDef)
   result.add(objDef)
 
 proc parseAndGetString*(s: string, objectName: string, isPublic: bool,
-    forceBackquote: bool): string =
+    forceBackquote: bool, disableOption: bool): string =
   let schema = s.fromJson(JsonSchema)
-  let defs = schema.toObjectDefinitions(objectName, isPublic, forceBackquote)
+  let defs = schema.toObjectDefinitions(objectName, isPublic, forceBackquote, disableOption)
   result.add("type\n")
   result.add(defs.toDefinitionString())
