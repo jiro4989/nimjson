@@ -34,8 +34,8 @@ proc toObjectDefinitions(schema: JsonSchema, objectName: string, isPublic: bool,
   for propName, prop in schema.properties:
     let typ = prop.`type`
     let isOption = propName notin schema.required
-    let fDef = newFieldDefinition(propName, typ.typeStr, isPublic, forceBackquote,
-        false, isOption)
+    let fDef = newFieldDefinition(propName, typ.typeStr, isPublic,
+        forceBackquote, false, isOption)
     objDef.addFieldDefinition(fDef)
   result.add(objDef)
 
