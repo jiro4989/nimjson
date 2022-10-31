@@ -152,7 +152,6 @@ block:
 """
     let got = j2.parseAndGetString("Repository", false, false, true)
 #[
-
     check got == """type
   Repository = ref object
     productId: int64
