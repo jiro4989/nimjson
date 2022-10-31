@@ -39,7 +39,8 @@ func typeToNimTypeName(typ: string): string =
   of "number": "float64"
   of "boolean": "bool"
   of "null": "NilType"
-  else: raise newException(UnsupportedTypeError, &"{typ} is not supported type. type must be string, integer, number, boolean, or null.")
+  else: raise newException(UnsupportedTypeError,
+      &"{typ} is not supported type. type must be string, integer, number, boolean, or null.")
 
 func getPropertyType(prop: Property, propName: string): string =
   if prop.isTypeObject: propName.headUpper
