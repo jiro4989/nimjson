@@ -116,7 +116,8 @@ func newObjectDefinition*(name: string, isNilType, isPublic,
   result = result.normalize
   result = result.backquote(forceBackquote)
 
-func newNilTypeObjectDefinition*(isPublic, forceBackquote: bool): ObjectDefinition =
+func newNilTypeObjectDefinition*(isPublic,
+    forceBackquote: bool): ObjectDefinition =
   result = newObjectDefinition("NilType", true, isPublic, forceBackquote)
 
 func newFieldDefinition*(name: string, typ: string, isPublic: bool,
