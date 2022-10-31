@@ -42,7 +42,9 @@ proc toObjectDefinitions(schema: JsonSchema, objectName: string, isPublic: bool,
 
 proc parseAndGetString*(s: string, objectName: string, isPublic: bool,
     forceBackquote: bool, disableOption: bool): string =
+  var resultDefs: seq[ObjectDefinition]
   let schema = s.fromJson(JsonSchema)
-  let defs = schema.toObjectDefinitions(objectName, isPublic, forceBackquote, disableOption)
+  resultDefs.add(schema.toObjectDefinitions(objectName, isPublic, forceBackquote, disableOption))
+
   result.add("type\n")
-  result.add(defs.toDefinitionString())
+  result.add(resultDefs.toDefinitionString())
