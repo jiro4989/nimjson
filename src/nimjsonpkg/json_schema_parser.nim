@@ -32,8 +32,10 @@ func typeStr(typ: string): string =
   of "null": "NilType"
   else: ""
 
-proc setObjectDefinitions(defs: var seq[ObjectDefinition], schema: JsonSchema, objectName: string, isPublic: bool,
-    forceBackquote: bool, disableOption: bool) =
+proc setObjectDefinitions(defs: var seq[ObjectDefinition], schema: JsonSchema,
+    objectName: string, isPublic: bool,
+
+forceBackquote: bool, disableOption: bool) =
   var objDef = newObjectDefinition(objectName.headUpper, false, isPublic, forceBackquote)
   for propName, prop in schema.properties:
     if prop.isTypeObject:
