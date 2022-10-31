@@ -151,16 +151,14 @@ block:
 }
 """
     let got = j2.parseAndGetString("Repository", false, false, true)
-#[
     check got == """type
+  Dimensions = ref object
+    length: float64
+    width: float64
+    height: float64
   Repository = ref object
     productId: int64
     productName: string
     price: float64
     tags: seq[string]
-    dimensions: Dimensions
-  Dimensions = ref object
-    length: float64
-    width: float64
-    height: float64"""
-]#
+    dimensions: Dimensions"""
