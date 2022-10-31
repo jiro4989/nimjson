@@ -3,6 +3,7 @@ import std/tables
 import jsony
 
 import ./types
+import ./utils
 
 type
   JsonSchema = object
@@ -30,7 +31,7 @@ func typeStr(typ: string): string =
 
 proc toObjectDefinitions(schema: JsonSchema, objectName: string, isPublic: bool,
     forceBackquote: bool, disableOption: bool): seq[ObjectDefinition] =
-  var objDef = newObjectDefinition(objectName, false, isPublic, forceBackquote)
+  var objDef = newObjectDefinition(objectName.headUpper, false, isPublic, forceBackquote)
   for propName, prop in schema.properties:
     let typ = prop.`type`
     let isOption = (not disableOption) and propName notin schema.required
