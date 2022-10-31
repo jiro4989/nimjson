@@ -1,4 +1,5 @@
 import std/tables
+from std/strformat import `&`
 
 import jsony
 
@@ -31,13 +32,14 @@ func isTypeArray(prop: Property): bool =
   prop.`type` == "array"
 
 func typeToNimTypeName(typ: string): string =
+  ## https://json-schema.org/understanding-json-schema/reference/type.html
   case typ
   of "string": "string"
   of "integer": "int64"
   of "number": "float64"
-  of "bool": "bool"
+  of "boolean": "bool"
   of "null": "NilType"
-  else: ""
+  else: raise newException(UnsupportedTypeError, &"{typ} is not supported type. type must be string, integer, number, boolean, or null.")
 
 func getPropertyType(prop: Property, propName: string): string =
   if prop.isTypeObject: propName.headUpper

@@ -20,6 +20,8 @@ type
     isSeq: bool
     isOption: bool
 
+  UnsupportedTypeError* = object of CatchableError
+
 proc addFieldDefinition*(self: var ObjectDefinition,
     fieldDef: FieldDefinition) =
   self.fields.add(fieldDef)

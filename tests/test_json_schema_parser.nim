@@ -162,3 +162,24 @@ block:
     price: float64
     tags: seq[string]
     dimensions: Dimensions"""
+
+block:
+  checkpoint "proc typeToNimTypeName"
+  block:
+    checkpoint "ok: supported type"
+    check "string".typeToNimTypeName == "string"
+    check "integer".typeToNimTypeName == "int64"
+    check "number".typeToNimTypeName == "float64"
+    check "boolean".typeToNimTypeName == "bool"
+    check "null".typeToNimTypeName == "NilType"
+
+  block:
+    checkpoint "ng: unsupported type"
+    expect UnsupportedTypeError:
+      discard "object".typeToNimTypeName
+    expect UnsupportedTypeError:
+      discard "array".typeToNimTypeName
+    expect UnsupportedTypeError:
+      discard "sushi".typeToNimTypeName
+    expect UnsupportedTypeError:
+      discard "".typeToNimTypeName
