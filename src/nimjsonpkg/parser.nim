@@ -87,7 +87,7 @@ proc parseAndGetString*(jsonNode: JsonNode, objectName: string, isPublic,
 
   # NilTypeは必須
   var resultDefs: seq[ObjectDefinition]
-  resultDefs.add(newObjectDefinition("NilType", true, isPublic, forceBackquote))
+  resultDefs.add(newNilTypeObjectDefinition(isPublic, forceBackquote))
   resultDefs.add(defs)
 
   result.add("type\n")
