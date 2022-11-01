@@ -183,3 +183,14 @@ block:
       discard "sushi".typeToNimTypeName
     expect UnsupportedTypeError:
       discard "".typeToNimTypeName
+
+block:
+  checkpoint "proc validateRef"
+  block:
+    checkpoint "ok: supported $ref"
+    Property(`$ref`: "#/$defs/name").validateRef()
+    Property(`$ref`: "#").validateRef()
+  block:
+    checkpoint "ng: unsupported $ref"
+    expect UnsupportedRefError:
+      Property(`$ref`: "https://example.com/schemas/address").validateRef()

@@ -21,6 +21,7 @@ type
     isOption: bool
 
   UnsupportedTypeError* = object of CatchableError
+  UnsupportedRefError* = object of CatchableError
 
 proc addFieldDefinition*(self: var ObjectDefinition,
     fieldDef: FieldDefinition) =

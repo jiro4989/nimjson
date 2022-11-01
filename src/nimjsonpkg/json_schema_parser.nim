@@ -1,4 +1,5 @@
 import std/tables
+import std/strutils
 from std/strformat import `&`
 
 import jsony
@@ -14,6 +15,7 @@ type
     required: seq[string]
     additionalProperties: bool
     properties: OrderedTable[string, Property]
+    `$defs`: OrderedTable[string, Property]
 
   Property = ref object
     description: string
@@ -21,6 +23,7 @@ type
     items: JsonSchemaItem
     required: seq[string]
     properties: OrderedTable[string, Property]
+    `$ref`: string
 
   JsonSchemaItem = ref object
     `type`: string
@@ -31,11 +34,29 @@ type
     forceBackquote: bool
     disableOption: bool
 
+func validateRef(prop: Property)
+
+func newProperty(description: string, typ: string, required: seq[string], properties: OrderedTable[string, Property], re: string): Property =
+  result = Property(
+    description: description,
+    `type`: typ,
+    required: required,
+    properties: properties,
+    `$ref`: re,
+    )
+  result.validateRef()
+
 func isTypeObject(prop: Property): bool =
   prop.`type` == "object"
 
 func isTypeArray(prop: Property): bool =
   prop.`type` == "array"
+
+func validateRef(prop: Property) =
+  let s = prop.`$ref`
+  if s == "" or s.startsWith("#"):
+    return
+  raise newException(UnsupportedRefError, &"nimjson supports only local ref '#/$defs/<name>'. $ref = {s}")
 
 func typeToNimTypeName(typ: string): string =
   ## https://json-schema.org/understanding-json-schema/reference/type.html
@@ -65,11 +86,12 @@ proc parse(parser: var JsonSchemaParser, property: Property,
         parser.forceBackquote, prop.isTypeArray, isOption)
     objDef.addFieldDefinition(fDef)
     if prop.isTypeObject:
-      let p = Property(
-        description: prop.description,
-        `type`: prop.`type`,
-        required: prop.required,
-        properties: prop.properties,
+      let p = newProperty(
+        prop.description,
+        prop.`type`,
+        prop.required,
+        prop.properties,
+        prop.`$ref`,
         )
       parser.parse(p, typ)
   parser.defs.add(objDef)
@@ -82,11 +104,12 @@ proc parseAndGetString*(s: string, objectName: string, isPublic: bool,
     disableOption: disableOption,
   )
   let schema = s.fromJson(JsonSchema)
-  let property = Property(
-    description: schema.description,
-    `type`: schema.`type`,
-    required: schema.required,
-    properties: schema.properties,
+  let property = newProperty(
+    schema.description,
+    schema.`type`,
+    schema.required,
+    schema.properties,
+    "",
     )
   parser.parse(property, objectName)
 
