@@ -82,7 +82,8 @@ func getRefTypeName(prop: Property, propName: string): string =
   result =
     if s == "#": propName.headUpper
     elif s.startsWith("#/$defs/"): s[8 .. ^1]
-    else: raise newException(UnsupportedRefError, &"nimjson supports only local ref '#/$defs/<name>'. $ref = {s}")
+    else: raise newException(UnsupportedRefError,
+        &"nimjson supports only local ref '#/$defs/<name>'. $ref = {s}")
   result = result.headUpper()
 
 proc parse(parser: var JsonSchemaParser, property: Property,
