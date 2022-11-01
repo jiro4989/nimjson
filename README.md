@@ -245,11 +245,9 @@ This is NOT supported:
 ## Usage examples (API)
 
 ```nim
-import std/json
-
 import nimjson
 
-echo """{"keyStr":"str", "keyInt":1}""".parseJson().toTypeString()
+echo """{"keyStr":"str", "keyInt":1}""".toTypeString()
 
 # Output:
 # type
@@ -258,7 +256,7 @@ echo """{"keyStr":"str", "keyInt":1}""".parseJson().toTypeString()
 #     keyStr: string
 #     keyInt: int64
 
-echo "examples/primitive.json".parseFile().toTypeString("testObject")
+echo "examples/primitive.json".readFile().toTypeString("testObject")
 
 # Output:
 # type
@@ -269,6 +267,25 @@ echo "examples/primitive.json".parseFile().toTypeString("testObject")
 #     floatField: float64
 #     boolField: bool
 #     nullField: NilType
+```
+
+JSON Schema:
+
+```nim
+import nimjson
+
+echo "examples/json_schema.json".readFile().toTypeString("testObject", jsonSchema = true)
+type
+  TestObject = ref object
+    `type`: string
+    id: string
+    timestamp: string
+    stream: string
+    consumer: string
+    consumer_seq: string
+    stream_seq: string
+    deliveries: int64
+    domain: Option[string]
 ```
 
 ## Installation
