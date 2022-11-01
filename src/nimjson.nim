@@ -1,9 +1,10 @@
 import std/json
 
 import ./nimjsonpkg/parser
+import ./nimjsonpkg/json_schema_parser
 
 proc toTypeString*(self: JsonNode, objName = "Object",
-    publicField = false, quoteField = false, jsonSchema = false): string =
+    publicField = false, quoteField = false): string =
   ## Generates nim object definitions string from ``JsonNode``.
   ## Returns a public field string if ``publicField`` was true.
   ##
@@ -33,12 +34,14 @@ proc toTypeString*(self: JsonNode, objName = "Object",
     doAssert typeLines[5] == "    keyFloat: float64"
     doAssert typeLines[6] == "    keyBool: bool"
 
-  if jsonSchema:
-    # TODO
-    discard
-
   return self.parseAndGetString(objectName = objName, isPublic = publicField,
       forceBackquote = quoteField)
+
+proc toTypeString*(jsonString: string, objName = "Object", publicField = false, quoteField = false, jsonSchema = false, disableOption = false): string =
+  if jsonSchema:
+    return jsonString.parseAndGetString(objName, publicField, quoteField, disableOption)
+
+  return jsonString.parseJson.toTypeString(objName, publicField, quoteField)
 
 when not defined(js):
   import std/logging
@@ -55,6 +58,7 @@ when not defined(js):
       usePublicField: bool
       useQuoteField: bool
       useJsonSchema: bool
+      disableOption: bool
 
   const
     appName = "nimjson"
@@ -113,6 +117,8 @@ Options:
           result.useQuoteField = true
         of "json-schema", "j":
           result.useJsonSchema = true
+        of "disable-option":
+          result.disableOption = true
       of cmdEnd:
         assert false # cannot happen
 
@@ -148,8 +154,8 @@ Options:
       # もともと入力ファイルは1つの想定であり、
       # 2つ処理できるようにしてるのはオマケ機能である。
       for inFile in opts.args:
-        outFile.write(inFile.parseFile().toTypeString(opts.objectName,
-            opts.usePublicField, opts.useQuoteField, opts.useJsonSchema))
+        let typeString = inFile.readFile.toTypeString(opts.objectName, opts.usePublicField, opts.useQuoteField, opts.useJsonSchema, opts.disableOption)
+        outFile.write(typeString)
       debug "END: Process arguments"
     else:
       debug "START: Process stdin"
@@ -157,8 +163,8 @@ Options:
       var line: string
       while stdin.readLine(line):
         str.add(line)
-      outFile.write(str.parseJson().toTypeString(opts.objectName,
-          opts.usePublicField, opts.useQuoteField))
+      let typeString = str.toTypeString(opts.objectName, opts.usePublicField, opts.useQuoteField, opts.useJsonSchema, opts.disableOption)
+      outFile.write(typeString)
       debug "END: Process stdin"
 
     debug "Success: nimjson"
