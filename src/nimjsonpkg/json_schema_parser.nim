@@ -25,6 +25,12 @@ type
   JsonSchemaItem = ref object
     `type`: string
 
+  JsonSchemaParser = object
+    defs: seq[ObjectDefinition]
+    isPublic: bool
+    forceBackquote: bool
+    disableOption: bool
+
 func isTypeObject(prop: Property): bool =
   prop.`type` == "object"
 
@@ -47,14 +53,12 @@ func getPropertyType(prop: Property, propName: string): string =
   elif prop.isTypeArray: prop.items.`type`
   else: prop.`type`.typeToNimTypeName
 
-proc setObjectDefinitions(defs: var seq[ObjectDefinition], property: Property,
-    objectName: string, isPublic: bool, forceBackquote: bool,
-        disableOption: bool) =
-  var objDef = newObjectDefinition(objectName.headUpper, false, isPublic, forceBackquote)
+proc parse(parser: var JsonSchemaParser, property: Property, objectName: string) =
+  var objDef = newObjectDefinition(objectName.headUpper, false, parser.isPublic, parser.forceBackquote)
   for propName, prop in property.properties:
-    let isOption = (not disableOption) and propName notin property.required
+    let isOption = (not parser.disableOption) and propName notin property.required
     let typ = prop.getPropertyType(propName)
-    let fDef = newFieldDefinition(propName, typ, isPublic, forceBackquote,
+    let fDef = newFieldDefinition(propName, typ, parser.isPublic, parser.forceBackquote,
         prop.isTypeArray, isOption)
     objDef.addFieldDefinition(fDef)
     if prop.isTypeObject:
@@ -64,12 +68,16 @@ proc setObjectDefinitions(defs: var seq[ObjectDefinition], property: Property,
         required: prop.required,
         properties: prop.properties,
         )
-      defs.setObjectDefinitions(p, typ, isPublic, forceBackquote, disableOption)
-  defs.add(objDef)
+      parser.parse(p, typ)
+  parser.defs.add(objDef)
 
 proc parseAndGetString*(s: string, objectName: string, isPublic: bool,
     forceBackquote: bool, disableOption: bool): string =
-  var resultDefs: seq[ObjectDefinition]
+  var parser = JsonSchemaParser(
+    isPublic: isPublic,
+    forceBackquote: forceBackquote,
+    disableOption: disableOption,
+  )
   let schema = s.fromJson(JsonSchema)
   let property = Property(
     description: schema.description,
@@ -77,8 +85,7 @@ proc parseAndGetString*(s: string, objectName: string, isPublic: bool,
     required: schema.required,
     properties: schema.properties,
     )
-  resultDefs.setObjectDefinitions(property, objectName, isPublic,
-      forceBackquote, disableOption)
+  parser.parse(property, objectName)
 
   result.add("type\n")
-  result.add(resultDefs.toDefinitionString())
+  result.add(parser.defs.toDefinitionString())
