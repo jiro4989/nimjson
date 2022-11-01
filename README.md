@@ -174,7 +174,7 @@ type
 
 ### JSON Schema
 
-`nimjson` supports [JSON Schema](https://json-schema.org/understanding-json-schema/index.html).
+`nimjson` supports partially [JSON Schema](https://json-schema.org/understanding-json-schema/index.html).
 `nimjson` generates Nim type definition with JSON Schema when you enable `-j` option.
 
 ```bash
