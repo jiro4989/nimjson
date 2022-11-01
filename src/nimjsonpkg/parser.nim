@@ -1,6 +1,5 @@
 import std/json
 import std/tables
-import std/strutils
 
 import ./types
 import ./utils
