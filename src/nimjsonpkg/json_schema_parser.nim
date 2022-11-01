@@ -92,8 +92,8 @@ proc parse(parser: var JsonSchemaParser, property: Property,
     let typ =
       if property.isTypeArray: property.items.`type`
       else: property.`type`
-    let objDef = newObjectDefinition(objectName.headUpper, false, parser.isPublic,
-        parser.forceBackquote, typ, property.isTypeArray)
+    let objDef = newObjectDefinition(objectName.headUpper, false,
+        parser.isPublic, parser.forceBackquote, typ, property.isTypeArray)
     parser.defs.add(objDef)
     return
 
