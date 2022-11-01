@@ -193,10 +193,10 @@ type
 ```
 
 It is wrapped by default in the `Option` type that properties not included in the `required` parameter of JSON Schema.
-If you don't want to use `Option` type, you can use `--disable-option` option.
+If you don't want to use `Option` type, you can use `--disable-option-type` option.
 
 ```bash
-$ nimjson -j --disable-option examples/json_schema.json
+$ nimjson -j --disable-option-type examples/json_schema.json
 type
   Object = ref object
     `type`: string

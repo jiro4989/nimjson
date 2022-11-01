@@ -41,13 +41,13 @@ proc toTypeString*(self: JsonNode, objName = "Object",
       forceBackquote = quoteField)
 
 proc toTypeString*(jsonString: string, objName = "Object", publicField = false,
-    quoteField = false, jsonSchema = false, disableOption = false): string =
+    quoteField = false, jsonSchema = false, disableOptionType = false): string =
   ## Generates nim object definitions string from ``string``.
   ## Returns a public field string if ``publicField`` was true.
   ## Handles ``jsonString`` as JSON Schema format when ``jsonSchema`` is ``true``.
-  ## ``disableOption`` is available only when ``jsonSchema`` is ``true``.
+  ## ``disableOptionType`` is available only when ``jsonSchema`` is ``true``.
   if jsonSchema:
-    return jsonString.parseAndGetString(objName, publicField, quoteField, disableOption)
+    return jsonString.parseAndGetString(objName, publicField, quoteField, disableOptionType)
 
   return jsonString.parseJson.toTypeString(objName, publicField, quoteField)
 
@@ -66,7 +66,7 @@ when not defined(js):
       usePublicField: bool
       useQuoteField: bool
       useJsonSchema: bool
-      disableOption: bool
+      disableOptionType: bool
 
   const
     appName = "nimjson"
@@ -91,7 +91,7 @@ Options:
     -p, --public-field               Public fields
     -q, --quote-field                Quotes all fields
     -j, --json-schema                Read JSON as JSON Schema format
-        --disable-option             (Only JSON Schema) Disable using Option type
+        --disable-option-type        (Only JSON Schema) Disable using Option type
 """
 
   proc getCmdOpts(params: seq[string]): Options =
@@ -127,8 +127,8 @@ Options:
           result.useQuoteField = true
         of "json-schema", "j":
           result.useJsonSchema = true
-        of "disable-option":
-          result.disableOption = true
+        of "disable-option-type":
+          result.disableOptionType = true
       of cmdEnd:
         assert false # cannot happen
 
@@ -166,7 +166,7 @@ Options:
       for inFile in opts.args:
         let typeString = inFile.readFile.toTypeString(opts.objectName,
             opts.usePublicField, opts.useQuoteField, opts.useJsonSchema,
-            opts.disableOption)
+            opts.disableOptionType)
         outFile.write(typeString)
       debug "END: Process arguments"
     else:
@@ -176,7 +176,7 @@ Options:
       while stdin.readLine(line):
         str.add(line)
       let typeString = str.toTypeString(opts.objectName, opts.usePublicField,
-          opts.useQuoteField, opts.useJsonSchema, opts.disableOption)
+          opts.useQuoteField, opts.useJsonSchema, opts.disableOptionType)
       outFile.write(typeString)
       debug "END: Process stdin"
 

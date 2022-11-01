@@ -32,7 +32,7 @@ type
     defs: seq[ObjectDefinition]
     isPublic: bool
     forceBackquote: bool
-    disableOption: bool
+    disableOptionType: bool
 
 func validateRef(prop: Property) =
   let s = prop.`$ref`
@@ -100,7 +100,7 @@ proc parse(parser: var JsonSchemaParser, property: Property,
   var objDef = newObjectDefinition(objectName.headUpper, false, parser.isPublic,
       parser.forceBackquote)
   for propName, prop in property.properties:
-    let isOption = (not parser.disableOption) and propName notin
+    let isOption = (not parser.disableOptionType) and propName notin
         property.required
     let typ =
       if prop.hasRef: prop.getRefTypeName(propName)
@@ -120,11 +120,11 @@ proc parse(parser: var JsonSchemaParser, property: Property,
   parser.defs.add(objDef)
 
 proc parseAndGetString*(s: string, objectName: string, isPublic: bool,
-    forceBackquote: bool, disableOption: bool): string =
+    forceBackquote: bool, disableOptionType: bool): string =
   var parser = JsonSchemaParser(
     isPublic: isPublic,
     forceBackquote: forceBackquote,
-    disableOption: disableOption,
+    disableOptionType: disableOptionType,
   )
 
   let schema = s.fromJson(JsonSchema)
