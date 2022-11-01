@@ -174,8 +174,72 @@ type
 
 ### JSON Schema example
 
+`nimjson` supports [JSON Schema](https://json-schema.org/understanding-json-schema/index.html).
+`nimjson` generates Nim type definition with JSON Schema when you enable `-j` option.
+
 ```bash
 $ nimjson -j examples/json_schema.json
+type
+  Object = ref object
+    `type`: string
+    id: string
+    timestamp: string
+    stream: string
+    consumer: string
+    consumer_seq: string
+    stream_seq: string
+    deliveries: int64
+    domain: Option[string]
+```
+
+It is wrapped by default in the `Option` type that properties not included in the `required` parameter of JSON Schema.
+If you don't want to use `Option` type, you can use `--disable-option` option.
+
+```bash
+$ nimjson -j --disable-option examples/json_schema.json
+type
+  Object = ref object
+    `type`: string
+    id: string
+    timestamp: string
+    stream: string
+    consumer: string
+    consumer_seq: string
+    stream_seq: string
+    deliveries: int64
+    domain: string
+```
+
+`nimjson` supports `$ref` and `$defs` keywords.
+But it doesn't support URL of `$ref`.
+
+This is supported:
+
+```json
+{
+  "$id": "https://example.com/product.schema.json",
+  "type": "object",
+  "properties": {
+    "product": { "$ref": "#/$defs/product" },
+    "product2": { "$ref": "#/$defs/product2" }
+  },
+  "$defs": {
+    "product": { "type": "string" },
+    "product2": { "type": "array", "items": { "type": "string" } }
+  }
+}
+```
+
+This is NOT supported:
+
+```json
+{
+  "$id": "https://example.com/product.schema.json",
+  "type": "object",
+  "properties": {
+    "product": { "$ref": "https://example.com/schemas/address" }
+  }
+}
 ```
 
 ### API usage
