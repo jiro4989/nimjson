@@ -1,0 +1,12 @@
+{
+  "$id": "https://example.com/product.schema.json",
+  "type": "object",
+  "properties": {
+    "product": { "$ref": "#/$defs/product" },
+    "product2": { "$ref": "#/$defs/product2" }
+  },
+  "$defs": {
+    "product": { "type": "string" },
+    "product2": { "type": "array", "items": { "type": "string" } }
+  }
+}
