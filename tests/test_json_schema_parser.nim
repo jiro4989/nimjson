@@ -163,6 +163,36 @@ block:
     tags: seq[string]
     dimensions: Dimensions"""
 
+  block:
+    checkpoint "ok: $ref and $defs"
+    let j2 = """
+{
+  "$id": "https://example.com/product.schema.json",
+  "type": "object",
+  "properties": {
+    "product": { "$ref": "#/$defs/product" },
+    "product2": { "$ref": "#/$defs/product" }
+  },
+  "$defs": {
+    "product": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" }
+      }
+    }
+  }
+}
+"""
+    let got = j2.parseAndGetString("Repository", false, false, true)
+    check got == """type
+  Repository = ref object
+    product: Product
+    product2: Product
+  Product = ref object
+    id: int64
+    name: string"""
+
 block:
   checkpoint "proc typeToNimTypeName"
   block:
@@ -194,3 +224,14 @@ block:
     checkpoint "ng: unsupported $ref"
     expect UnsupportedRefError:
       Property(`$ref`: "https://example.com/schemas/address").validateRef()
+
+block:
+  checkpoint "proc getRefTypeName"
+  block:
+    checkpoint "ok: supported $ref"
+    check Property(`$ref`: "#/$defs/name").getRefTypeName("name") == "Name"
+    check Property(`$ref`: "#").getRefTypeName("name") == "Name"
+  block:
+    checkpoint "ng: unsupported $ref"
+    expect UnsupportedRefError:
+      discard Property(`$ref`: "https://example.com/schemas/address").getRefTypeName("address")

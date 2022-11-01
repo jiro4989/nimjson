@@ -34,7 +34,12 @@ type
     forceBackquote: bool
     disableOption: bool
 
-func validateRef(prop: Property)
+func validateRef(prop: Property) =
+  let s = prop.`$ref`
+  if s == "" or s == "#" or s.startsWith("#/$defs/"):
+    return
+  raise newException(UnsupportedRefError,
+      &"nimjson supports only local ref '#/$defs/<name>'. $ref = {s}")
 
 func newProperty(description: string, typ: string, required: seq[string],
     properties: OrderedTable[string, Property], re: string): Property =
@@ -44,7 +49,7 @@ func newProperty(description: string, typ: string, required: seq[string],
     required: required,
     properties: properties,
     `$ref`: re,
-    )
+  )
   result.validateRef()
 
 func isTypeObject(prop: Property): bool =
@@ -53,12 +58,8 @@ func isTypeObject(prop: Property): bool =
 func isTypeArray(prop: Property): bool =
   prop.`type` == "array"
 
-func validateRef(prop: Property) =
-  let s = prop.`$ref`
-  if s == "" or s.startsWith("#"):
-    return
-  raise newException(UnsupportedRefError,
-      &"nimjson supports only local ref '#/$defs/<name>'. $ref = {s}")
+func hasRef(prop: Property): bool =
+  prop.`$ref` != ""
 
 func typeToNimTypeName(typ: string): string =
   ## https://json-schema.org/understanding-json-schema/reference/type.html
@@ -76,6 +77,14 @@ func getPropertyType(prop: Property, propName: string): string =
   elif prop.isTypeArray: prop.items.`type`
   else: prop.`type`.typeToNimTypeName
 
+func getRefTypeName(prop: Property, propName: string): string =
+  let s = prop.`$ref`
+  result =
+    if s == "#": propName.headUpper
+    elif s.startsWith("#/$defs/"): s[8 .. ^1]
+    else: raise newException(UnsupportedRefError, &"nimjson supports only local ref '#/$defs/<name>'. $ref = {s}")
+  result = result.headUpper()
+
 proc parse(parser: var JsonSchemaParser, property: Property,
     objectName: string) =
   var objDef = newObjectDefinition(objectName.headUpper, false, parser.isPublic,
@@ -83,7 +92,9 @@ proc parse(parser: var JsonSchemaParser, property: Property,
   for propName, prop in property.properties:
     let isOption = (not parser.disableOption) and propName notin
         property.required
-    let typ = prop.getPropertyType(propName)
+    let typ =
+      if prop.hasRef: prop.getRefTypeName(propName)
+      else: prop.getPropertyType(propName)
     let fDef = newFieldDefinition(propName, typ, parser.isPublic,
         parser.forceBackquote, prop.isTypeArray, isOption)
     objDef.addFieldDefinition(fDef)
@@ -94,7 +105,7 @@ proc parse(parser: var JsonSchemaParser, property: Property,
         prop.required,
         prop.properties,
         prop.`$ref`,
-        )
+      )
       parser.parse(p, typ)
   parser.defs.add(objDef)
 
@@ -105,6 +116,7 @@ proc parseAndGetString*(s: string, objectName: string, isPublic: bool,
     forceBackquote: forceBackquote,
     disableOption: disableOption,
   )
+
   let schema = s.fromJson(JsonSchema)
   let property = newProperty(
     schema.description,
@@ -112,8 +124,11 @@ proc parseAndGetString*(s: string, objectName: string, isPublic: bool,
     schema.required,
     schema.properties,
     "",
-    )
+  )
   parser.parse(property, objectName)
+
+  for propName, prop in schema.`$defs`:
+    parser.parse(prop, propName)
 
   result.add("type\n")
   result.add(parser.defs.toDefinitionString())
