@@ -36,7 +36,8 @@ type
 
 func validateRef(prop: Property)
 
-func newProperty(description: string, typ: string, required: seq[string], properties: OrderedTable[string, Property], re: string): Property =
+func newProperty(description: string, typ: string, required: seq[string],
+    properties: OrderedTable[string, Property], re: string): Property =
   result = Property(
     description: description,
     `type`: typ,
@@ -56,7 +57,8 @@ func validateRef(prop: Property) =
   let s = prop.`$ref`
   if s == "" or s.startsWith("#"):
     return
-  raise newException(UnsupportedRefError, &"nimjson supports only local ref '#/$defs/<name>'. $ref = {s}")
+  raise newException(UnsupportedRefError,
+      &"nimjson supports only local ref '#/$defs/<name>'. $ref = {s}")
 
 func typeToNimTypeName(typ: string): string =
   ## https://json-schema.org/understanding-json-schema/reference/type.html
