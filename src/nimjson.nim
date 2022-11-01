@@ -37,7 +37,8 @@ proc toTypeString*(self: JsonNode, objName = "Object",
   return self.parseAndGetString(objectName = objName, isPublic = publicField,
       forceBackquote = quoteField)
 
-proc toTypeString*(jsonString: string, objName = "Object", publicField = false, quoteField = false, jsonSchema = false, disableOption = false): string =
+proc toTypeString*(jsonString: string, objName = "Object", publicField = false,
+    quoteField = false, jsonSchema = false, disableOption = false): string =
   if jsonSchema:
     return jsonString.parseAndGetString(objName, publicField, quoteField, disableOption)
 
@@ -154,7 +155,9 @@ Options:
       # もともと入力ファイルは1つの想定であり、
       # 2つ処理できるようにしてるのはオマケ機能である。
       for inFile in opts.args:
-        let typeString = inFile.readFile.toTypeString(opts.objectName, opts.usePublicField, opts.useQuoteField, opts.useJsonSchema, opts.disableOption)
+        let typeString = inFile.readFile.toTypeString(opts.objectName,
+            opts.usePublicField, opts.useQuoteField, opts.useJsonSchema,
+            opts.disableOption)
         outFile.write(typeString)
       debug "END: Process arguments"
     else:
@@ -163,7 +166,8 @@ Options:
       var line: string
       while stdin.readLine(line):
         str.add(line)
-      let typeString = str.toTypeString(opts.objectName, opts.usePublicField, opts.useQuoteField, opts.useJsonSchema, opts.disableOption)
+      let typeString = str.toTypeString(opts.objectName, opts.usePublicField,
+          opts.useQuoteField, opts.useJsonSchema, opts.disableOption)
       outFile.write(typeString)
       debug "END: Process stdin"
 
