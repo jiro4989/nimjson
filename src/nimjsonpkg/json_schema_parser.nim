@@ -53,13 +53,16 @@ func getPropertyType(prop: Property, propName: string): string =
   elif prop.isTypeArray: prop.items.`type`
   else: prop.`type`.typeToNimTypeName
 
-proc parse(parser: var JsonSchemaParser, property: Property, objectName: string) =
-  var objDef = newObjectDefinition(objectName.headUpper, false, parser.isPublic, parser.forceBackquote)
+proc parse(parser: var JsonSchemaParser, property: Property,
+    objectName: string) =
+  var objDef = newObjectDefinition(objectName.headUpper, false, parser.isPublic,
+      parser.forceBackquote)
   for propName, prop in property.properties:
-    let isOption = (not parser.disableOption) and propName notin property.required
+    let isOption = (not parser.disableOption) and propName notin
+        property.required
     let typ = prop.getPropertyType(propName)
-    let fDef = newFieldDefinition(propName, typ, parser.isPublic, parser.forceBackquote,
-        prop.isTypeArray, isOption)
+    let fDef = newFieldDefinition(propName, typ, parser.isPublic,
+        parser.forceBackquote, prop.isTypeArray, isOption)
     objDef.addFieldDefinition(fDef)
     if prop.isTypeObject:
       let p = Property(
