@@ -10,6 +10,8 @@ type
     isPublic: bool
     isNormalized: bool
     isBackquoted: bool
+    primitiveType: string
+    isSeq: bool
 
   FieldDefinition* = object
     name: string
@@ -111,11 +113,13 @@ func backquote(self: FieldDefinition, force: bool): FieldDefinition =
   result.typ = result.typ.backquote(force)
 
 func newObjectDefinition*(name: string, isNilType, isPublic,
-    forceBackquote: bool): ObjectDefinition =
+    forceBackquote: bool, primitiveType = "", isSeq = false): ObjectDefinition =
   result.name = name
   result.isRef = true
   result.isNilType = isNilType
   result.isPublic = isPublic
+  result.primitiveType = primitiveType
+  result.isSeq = isSeq
   result = result.normalize
   result = result.backquote(forceBackquote)
 
@@ -145,6 +149,13 @@ func toDefinitionStringLines(self: ObjectDefinition): seq[string] =
 
   if self.isNilType:
     return @[&"  NilType{publicMark} = {refStr} object"]
+
+  if self.primitiveType != "":
+    let objectName = self.name
+    var typ = self.primitiveType
+    if self.isSeq:
+      typ = &"seq[{typ}]"
+    return @[&"  {objectName}{publicMark} = {typ}"]
 
   block:
     let objectName = self.name

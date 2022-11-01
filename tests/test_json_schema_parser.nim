@@ -193,6 +193,30 @@ block:
     id: int64
     name: string"""
 
+  block:
+    checkpoint "ok: $ref and $defs. primitive types"
+    let j2 = """
+{
+  "$id": "https://example.com/product.schema.json",
+  "type": "object",
+  "properties": {
+    "product": { "$ref": "#/$defs/product" },
+    "product2": { "$ref": "#/$defs/product2" }
+  },
+  "$defs": {
+    "product": { "type": "string" },
+    "product2": { "type": "array", "items": { "type": "string" } }
+  }
+}
+"""
+    let got = j2.parseAndGetString("Repository", false, false, true)
+    check got == """type
+  Repository = ref object
+    product: Product
+    product2: Product2
+  Product = string
+  Product2 = seq[string]"""
+
 block:
   checkpoint "proc typeToNimTypeName"
   block:

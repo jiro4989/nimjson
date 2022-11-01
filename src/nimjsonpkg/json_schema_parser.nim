@@ -88,6 +88,15 @@ func getRefTypeName(prop: Property, propName: string): string =
 
 proc parse(parser: var JsonSchemaParser, property: Property,
     objectName: string) =
+  if not property.isTypeObject:
+    let typ =
+      if property.isTypeArray: property.items.`type`
+      else: property.`type`
+    let objDef = newObjectDefinition(objectName.headUpper, false, parser.isPublic,
+        parser.forceBackquote, typ, property.isTypeArray)
+    parser.defs.add(objDef)
+    return
+
   var objDef = newObjectDefinition(objectName.headUpper, false, parser.isPublic,
       parser.forceBackquote)
   for propName, prop in property.properties:
