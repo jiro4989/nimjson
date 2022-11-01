@@ -8,6 +8,9 @@ proc toTypeString*(self: JsonNode, objName = "Object",
   ## Generates nim object definitions string from ``JsonNode``.
   ## Returns a public field string if ``publicField`` was true.
   ##
+  ## This procedure is left for backward compatibility.
+  ## Please use `toTypeString proc <#toTypeString,string,string,bool,bool,bool,bool>`_.
+  ##
   ## **Japanese:**
   ##
   ## ``JsonNode`` をNimのObject定義の文字列に変換して返却する。
@@ -39,6 +42,10 @@ proc toTypeString*(self: JsonNode, objName = "Object",
 
 proc toTypeString*(jsonString: string, objName = "Object", publicField = false,
     quoteField = false, jsonSchema = false, disableOption = false): string =
+  ## Generates nim object definitions string from ``string``.
+  ## Returns a public field string if ``publicField`` was true.
+  ## Handles ``jsonString`` as JSON Schema format when ``jsonSchema`` is ``true``.
+  ## ``disableOption`` is available only when ``jsonSchema`` is ``true``.
   if jsonSchema:
     return jsonString.parseAndGetString(objName, publicField, quoteField, disableOption)
 
