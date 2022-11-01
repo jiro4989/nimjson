@@ -12,12 +12,12 @@ This was inspired by [gojson](https://github.com/ChimeraCoder/gojson).
 
 * Nim (stable version)
 
-## Usage examples
+## Usage examples (CLI)
 
 `nimjson` writes `NilType` type if a value or a first value of an array is null.
 Please fix `NilType` type yourself.
 
-### Large JSON example
+### Large JSON
 
 ```bash
 % curl -s https://api.github.com/repos/jiro4989/nimjson | nimjson -O:Repository
@@ -131,7 +131,7 @@ type
     node_id: string
 ```
 
-### Simple JSON example
+### Simple JSON
 
 ```bash
 % nimjson examples/primitive.json
@@ -172,7 +172,7 @@ type
     height: int64
 ```
 
-### JSON Schema example
+### JSON Schema
 
 `nimjson` supports [JSON Schema](https://json-schema.org/understanding-json-schema/index.html).
 `nimjson` generates Nim type definition with JSON Schema when you enable `-j` option.
@@ -242,7 +242,7 @@ This is NOT supported:
 }
 ```
 
-### API usage
+## Usage examples (API)
 
 ```nim
 import std/json
