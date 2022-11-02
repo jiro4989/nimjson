@@ -328,6 +328,8 @@ yum install https://github.com/jiro4989/nimjson/releases/download/v2.0.0/nimjson
         -O, --object-name:OBJECT_NAME    Set object type name
         -p, --public-field               Public fields
         -q, --quote-field                Quotes all fields
+        -j, --json-schema                Read JSON as JSON Schema format
+            --disable-option-type        (Only JSON Schema) Disable using Option type
 
 ## License
 
