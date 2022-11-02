@@ -108,7 +108,8 @@ window.addEventListener('DOMContentLoaded', main);
   isPublic: bool
   isNormalized: bool
   isBackquoted: bool
-  isSeq: bool">FieldDefinition</a></li>
+  isSeq: bool
+  isOption: bool">FieldDefinition</a></li>
   <li><a class="reference" href="#ObjectDefinition"
     title="ObjectDefinition = object
   name: string
@@ -117,7 +118,13 @@ window.addEventListener('DOMContentLoaded', main);
   isNilType: bool
   isPublic: bool
   isNormalized: bool
-  isBackquoted: bool">ObjectDefinition</a></li>
+  isBackquoted: bool
+  primitiveType: string
+  isSeq: bool">ObjectDefinition</a></li>
+  <li><a class="reference" href="#UnsupportedRefError"
+    title="UnsupportedRefError = object of CatchableError">UnsupportedRefError</a></li>
+  <li><a class="reference" href="#UnsupportedTypeError"
+    title="UnsupportedTypeError = object of CatchableError">UnsupportedTypeError</a></li>
 
   </ul>
 </li>
@@ -132,13 +139,20 @@ window.addEventListener('DOMContentLoaded', main);
   <ul class="simple nested-toc-section">newFieldDefinition
       <li><a class="reference" href="#newFieldDefinition%2Cstring%2Cstring%2Cbool%2Cbool%2Cbool"
     title="newFieldDefinition(name: string; typ: string; isPublic: bool;
-                   forceBackquote: bool; isSeq: bool): FieldDefinition">newFieldDefinition(name: string; typ: string; isPublic: bool;
-                   forceBackquote: bool; isSeq: bool): FieldDefinition</a></li>
+                   forceBackquote: bool; isSeq: bool; isOption = false): FieldDefinition">newFieldDefinition(name: string; typ: string; isPublic: bool;
+                   forceBackquote: bool; isSeq: bool; isOption = false): FieldDefinition</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">newNilTypeObjectDefinition
+      <li><a class="reference" href="#newNilTypeObjectDefinition%2Cbool%2Cbool"
+    title="newNilTypeObjectDefinition(isPublic, forceBackquote: bool): ObjectDefinition">newNilTypeObjectDefinition(isPublic, forceBackquote: bool): ObjectDefinition</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">newObjectDefinition
-      <li><a class="reference" href="#newObjectDefinition%2Cstring%2Cbool%2Cbool%2Cbool"
-    title="newObjectDefinition(name: string; isNilType, isPublic, forceBackquote: bool): ObjectDefinition">newObjectDefinition(name: string; isNilType, isPublic, forceBackquote: bool): ObjectDefinition</a></li>
+      <li><a class="reference" href="#newObjectDefinition%2Cstring%2Cbool%2Cbool%2Cbool%2Cstring"
+    title="newObjectDefinition(name: string; isNilType, isPublic, forceBackquote: bool;
+                    primitiveType = &quot;&quot;; isSeq = false): ObjectDefinition">newObjectDefinition(name: string; isNilType, isPublic, forceBackquote: bool;
+                    primitiveType = &quot;&quot;; isSeq = false): ObjectDefinition</a></li>
 
   </ul>
   <ul class="simple nested-toc-section">toDefinitionString
@@ -169,6 +183,7 @@ window.addEventListener('DOMContentLoaded', main);
   <span class="Identifier">isNormalized</span><span class="Other">:</span> <span class="Identifier">bool</span>
   <span class="Identifier">isBackquoted</span><span class="Other">:</span> <span class="Identifier">bool</span>
   <span class="Identifier">isSeq</span><span class="Other">:</span> <span class="Identifier">bool</span>
+  <span class="Identifier">isOption</span><span class="Other">:</span> <span class="Identifier">bool</span>
 </pre></dt>
 <dd>
 
@@ -185,7 +200,25 @@ window.addEventListener('DOMContentLoaded', main);
   <span class="Identifier">isPublic</span><span class="Other">:</span> <span class="Identifier">bool</span>
   <span class="Identifier">isNormalized</span><span class="Other">:</span> <span class="Identifier">bool</span>
   <span class="Identifier">isBackquoted</span><span class="Other">:</span> <span class="Identifier">bool</span>
+  <span class="Identifier">primitiveType</span><span class="Other">:</span> <span class="Identifier">string</span>
+  <span class="Identifier">isSeq</span><span class="Other">:</span> <span class="Identifier">bool</span>
 </pre></dt>
+<dd>
+
+
+
+</dd>
+</div>
+<div id="UnsupportedRefError">
+<dt><pre><a href="types.html#UnsupportedRefError"><span class="Identifier">UnsupportedRefError</span></a> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">CatchableError</span></pre></dt>
+<dd>
+
+
+
+</dd>
+</div>
+<div id="UnsupportedTypeError">
+<dt><pre><a href="types.html#UnsupportedTypeError"><span class="Identifier">UnsupportedTypeError</span></a> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">CatchableError</span></pre></dt>
 <dd>
 
 
@@ -208,7 +241,7 @@ window.addEventListener('DOMContentLoaded', main);
 </div>
 <div id="newFieldDefinition,string,string,bool,bool,bool">
 <dt><pre><span class="Keyword">func</span> <a href="#newFieldDefinition%2Cstring%2Cstring%2Cbool%2Cbool%2Cbool"><span class="Identifier">newFieldDefinition</span></a><span class="Other">(</span><span class="Identifier">name</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">typ</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">isPublic</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">;</span>
-                        <span class="Identifier">forceBackquote</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">;</span> <span class="Identifier">isSeq</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <a href="types.html#FieldDefinition"><span class="Identifier">FieldDefinition</span></a> {.
+                        <span class="Identifier">forceBackquote</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">;</span> <span class="Identifier">isSeq</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">;</span> <span class="Identifier">isOption</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span><span class="Other">:</span> <a href="types.html#FieldDefinition"><span class="Identifier">FieldDefinition</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
@@ -216,8 +249,19 @@ window.addEventListener('DOMContentLoaded', main);
 
 </dd>
 </div>
-<div id="newObjectDefinition,string,bool,bool,bool">
-<dt><pre><span class="Keyword">func</span> <a href="#newObjectDefinition%2Cstring%2Cbool%2Cbool%2Cbool"><span class="Identifier">newObjectDefinition</span></a><span class="Other">(</span><span class="Identifier">name</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">isNilType</span><span class="Other">,</span> <span class="Identifier">isPublic</span><span class="Other">,</span> <span class="Identifier">forceBackquote</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <a href="types.html#ObjectDefinition"><span class="Identifier">ObjectDefinition</span></a> {.
+<div id="newNilTypeObjectDefinition,bool,bool">
+<dt><pre><span class="Keyword">func</span> <a href="#newNilTypeObjectDefinition%2Cbool%2Cbool"><span class="Identifier">newNilTypeObjectDefinition</span></a><span class="Other">(</span><span class="Identifier">isPublic</span><span class="Other">,</span> <span class="Identifier">forceBackquote</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <a href="types.html#ObjectDefinition"><span class="Identifier">ObjectDefinition</span></a> {.
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+<dd>
+
+
+
+</dd>
+</div>
+<div id="newObjectDefinition,string,bool,bool,bool,string">
+<dt><pre><span class="Keyword">func</span> <a href="#newObjectDefinition%2Cstring%2Cbool%2Cbool%2Cbool%2Cstring"><span class="Identifier">newObjectDefinition</span></a><span class="Other">(</span><span class="Identifier">name</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
+                         <span class="Identifier">isNilType</span><span class="Other">,</span> <span class="Identifier">isPublic</span><span class="Other">,</span> <span class="Identifier">forceBackquote</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">;</span>
+                         <span class="Identifier">primitiveType</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">;</span> <span class="Identifier">isSeq</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span><span class="Other">:</span> <a href="types.html#ObjectDefinition"><span class="Identifier">ObjectDefinition</span></a> {.
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
 <dd>
 
@@ -244,7 +288,7 @@ window.addEventListener('DOMContentLoaded', main);
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2022-04-08 00:07:36 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2022-11-02 13:41:47 UTC</small>
       </div>
     </div>
   </div>

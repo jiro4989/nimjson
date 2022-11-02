@@ -70,7 +70,7 @@ window.addEventListener('DOMContentLoaded', main);
 <div class="document" id="documentId">
   <div class="container">
     <h1 class="title">Index</h1>
-    Modules: <a href="nimjson.html">nimjson</a>, <a href="nimjsonpkg/parser.html">nimjsonpkg/parser</a>, <a href="nimjsonpkg/types.html">nimjsonpkg/types</a>.<br/><p /><h2>API symbols</h2>
+    Modules: <a href="nimjson.html">nimjson</a>, <a href="nimjsonpkg/json_schema_parser.html">nimjsonpkg/json_schema_parser</a>, <a href="nimjsonpkg/parser.html">nimjsonpkg/parser</a>, <a href="nimjsonpkg/types.html">nimjsonpkg/types</a>, <a href="nimjsonpkg/utils.html">nimjsonpkg/utils</a>.<br/><p /><h2>API symbols</h2>
 <dl><dt><a name="addFieldDefinition" href="#addFieldDefinition"><span>addFieldDefinition:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="types: addFieldDefinition(self: var ObjectDefinition; fieldDef: FieldDefinition)" href="nimjsonpkg/types.html#addFieldDefinition%2CObjectDefinition%2CFieldDefinition">types: addFieldDefinition(self: var ObjectDefinition; fieldDef: FieldDefinition)</a></li>
@@ -79,15 +79,25 @@ window.addEventListener('DOMContentLoaded', main);
 <li><a class="reference external"
           data-doc-search-tag="types: FieldDefinition" href="nimjsonpkg/types.html#FieldDefinition">types: FieldDefinition</a></li>
           </ul></dd>
+<dt><a name="headUpper" href="#headUpper"><span>headUpper:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="utils: headUpper(str: string): string" href="nimjsonpkg/utils.html#headUpper%2Cstring">utils: headUpper(str: string): string</a></li>
+          </ul></dd>
 <dt><a name="newFieldDefinition" href="#newFieldDefinition"><span>newFieldDefinition:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="types: newFieldDefinition(name: string; typ: string; isPublic: bool;
-                   forceBackquote: bool; isSeq: bool): FieldDefinition" href="nimjsonpkg/types.html#newFieldDefinition%2Cstring%2Cstring%2Cbool%2Cbool%2Cbool">types: newFieldDefinition(name: string; typ: string; isPublic: bool;
-                   forceBackquote: bool; isSeq: bool): FieldDefinition</a></li>
+                   forceBackquote: bool; isSeq: bool; isOption = false): FieldDefinition" href="nimjsonpkg/types.html#newFieldDefinition%2Cstring%2Cstring%2Cbool%2Cbool%2Cbool">types: newFieldDefinition(name: string; typ: string; isPublic: bool;
+                   forceBackquote: bool; isSeq: bool; isOption = false): FieldDefinition</a></li>
+          </ul></dd>
+<dt><a name="newNilTypeObjectDefinition" href="#newNilTypeObjectDefinition"><span>newNilTypeObjectDefinition:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="types: newNilTypeObjectDefinition(isPublic, forceBackquote: bool): ObjectDefinition" href="nimjsonpkg/types.html#newNilTypeObjectDefinition%2Cbool%2Cbool">types: newNilTypeObjectDefinition(isPublic, forceBackquote: bool): ObjectDefinition</a></li>
           </ul></dd>
 <dt><a name="newObjectDefinition" href="#newObjectDefinition"><span>newObjectDefinition:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="types: newObjectDefinition(name: string; isNilType, isPublic, forceBackquote: bool): ObjectDefinition" href="nimjsonpkg/types.html#newObjectDefinition%2Cstring%2Cbool%2Cbool%2Cbool">types: newObjectDefinition(name: string; isNilType, isPublic, forceBackquote: bool): ObjectDefinition</a></li>
+          data-doc-search-tag="types: newObjectDefinition(name: string; isNilType, isPublic, forceBackquote: bool;
+                    primitiveType = &quot;&quot;; isSeq = false): ObjectDefinition" href="nimjsonpkg/types.html#newObjectDefinition%2Cstring%2Cbool%2Cbool%2Cbool%2Cstring">types: newObjectDefinition(name: string; isNilType, isPublic, forceBackquote: bool;
+                    primitiveType = &quot;&quot;; isSeq = false): ObjectDefinition</a></li>
           </ul></dd>
 <dt><a name="ObjectDefinition" href="#ObjectDefinition"><span>ObjectDefinition:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -95,6 +105,10 @@ window.addEventListener('DOMContentLoaded', main);
           </ul></dd>
 <dt><a name="parseAndGetString" href="#parseAndGetString"><span>parseAndGetString:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="json_schema_parser: parseAndGetString(s: string; objectName: string; isPublic: bool;
+                  forceBackquote: bool; disableOptionType: bool): string" href="nimjsonpkg/json_schema_parser.html#parseAndGetString%2Cstring%2Cstring%2Cbool%2Cbool%2Cbool">json_schema_parser: parseAndGetString(s: string; objectName: string; isPublic: bool;
+                  forceBackquote: bool; disableOptionType: bool): string</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="parser: parseAndGetString(jsonNode: JsonNode; objectName: string;
                   isPublic, forceBackquote: bool): string" href="nimjsonpkg/parser.html#parseAndGetString%2CJsonNode%2Cstring%2Cbool%2Cbool">parser: parseAndGetString(jsonNode: JsonNode; objectName: string;
                   isPublic, forceBackquote: bool): string</a></li>
@@ -108,13 +122,25 @@ window.addEventListener('DOMContentLoaded', main);
           data-doc-search-tag="nimjson: toTypeString(self: JsonNode; objName = &quot;Object&quot;; publicField = false;
              quoteField = false): string" href="nimjson.html#toTypeString%2CJsonNode%2Cstring">nimjson: toTypeString(self: JsonNode; objName = &quot;Object&quot;; publicField = false;
              quoteField = false): string</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="nimjson: toTypeString(jsonString: string; objName = &quot;Object&quot;; publicField = false;
+             quoteField = false; jsonSchema = false; disableOptionType = false): string" href="nimjson.html#toTypeString%2Cstring%2Cstring">nimjson: toTypeString(jsonString: string; objName = &quot;Object&quot;; publicField = false;
+             quoteField = false; jsonSchema = false; disableOptionType = false): string</a></li>
+          </ul></dd>
+<dt><a name="UnsupportedRefError" href="#UnsupportedRefError"><span>UnsupportedRefError:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="types: UnsupportedRefError" href="nimjsonpkg/types.html#UnsupportedRefError">types: UnsupportedRefError</a></li>
+          </ul></dd>
+<dt><a name="UnsupportedTypeError" href="#UnsupportedTypeError"><span>UnsupportedTypeError:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="types: UnsupportedTypeError" href="nimjsonpkg/types.html#UnsupportedTypeError">types: UnsupportedTypeError</a></li>
           </ul></dd>
 </dl>
     <div class="row">
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2022-04-08 00:07:38 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2022-11-02 13:41:50 UTC</small>
       </div>
     </div>
   </div>

@@ -1,1 +1,2 @@
 toTypeString	nimjson.html#toTypeString,JsonNode,string	nimjson: toTypeString(self: JsonNode; objName = &quot;Object&quot;; publicField = false;\n             quoteField = false): string	
+toTypeString	nimjson.html#toTypeString,string,string	nimjson: toTypeString(jsonString: string; objName = &quot;Object&quot;; publicField = false;\n             quoteField = false; jsonSchema = false; disableOptionType = false): string	

@@ -1,6 +1,9 @@
 ObjectDefinition	nimjsonpkg/types.html#ObjectDefinition	types: ObjectDefinition	
 FieldDefinition	nimjsonpkg/types.html#FieldDefinition	types: FieldDefinition	
+UnsupportedTypeError	nimjsonpkg/types.html#UnsupportedTypeError	types: UnsupportedTypeError	
+UnsupportedRefError	nimjsonpkg/types.html#UnsupportedRefError	types: UnsupportedRefError	
 addFieldDefinition	nimjsonpkg/types.html#addFieldDefinition,ObjectDefinition,FieldDefinition	types: addFieldDefinition(self: var ObjectDefinition; fieldDef: FieldDefinition)	
-newObjectDefinition	nimjsonpkg/types.html#newObjectDefinition,string,bool,bool,bool	types: newObjectDefinition(name: string; isNilType, isPublic, forceBackquote: bool): ObjectDefinition	
-newFieldDefinition	nimjsonpkg/types.html#newFieldDefinition,string,string,bool,bool,bool	types: newFieldDefinition(name: string; typ: string; isPublic: bool;\n                   forceBackquote: bool; isSeq: bool): FieldDefinition	
+newObjectDefinition	nimjsonpkg/types.html#newObjectDefinition,string,bool,bool,bool,string	types: newObjectDefinition(name: string; isNilType, isPublic, forceBackquote: bool;\n                    primitiveType = &quot;&quot;; isSeq = false): ObjectDefinition	
+newNilTypeObjectDefinition	nimjsonpkg/types.html#newNilTypeObjectDefinition,bool,bool	types: newNilTypeObjectDefinition(isPublic, forceBackquote: bool): ObjectDefinition	
+newFieldDefinition	nimjsonpkg/types.html#newFieldDefinition,string,string,bool,bool,bool	types: newFieldDefinition(name: string; typ: string; isPublic: bool;\n                   forceBackquote: bool; isSeq: bool; isOption = false): FieldDefinition	
 toDefinitionString	nimjsonpkg/types.html#toDefinitionString,seq[ObjectDefinition]	types: toDefinitionString(self: seq[ObjectDefinition]): string	
