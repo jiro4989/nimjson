@@ -46,6 +46,77 @@ proc toTypeString*(jsonString: string, objName = "Object", publicField = false,
   ## Returns a public field string if ``publicField`` was true.
   ## Handles ``jsonString`` as JSON Schema format when ``jsonSchema`` is ``true``.
   ## ``disableOptionType`` is available only when ``jsonSchema`` is ``true``.
+  runnableExamples:
+    let typeStr = """
+{
+  "type": "object",
+  "required": [
+    "type",
+    "id",
+    "timestamp",
+    "stream",
+    "consumer",
+    "consumer_seq",
+    "stream_seq",
+    "deliveries"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "io.nats.jetstream.advisory.v1.nak"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique correlation ID for this event"
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "The time this event was created in RFC3339 format"
+    },
+    "stream": {
+      "type": "string",
+      "description": "The name of the stream where the message is stored"
+    },
+    "consumer": {
+      "type": "string",
+      "description": "The name of the consumer where the message was naked"
+    },
+    "consumer_seq": {
+      "type": "string",
+      "minimum": 1,
+      "description": "The sequence of the message in the consumer that was naked"
+    },
+    "stream_seq": {
+      "type": "string",
+      "minimum": 1,
+      "description": "The sequence of the message in the stream that was naked"
+    },
+    "deliveries": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The number of deliveries that were attempted"
+    },
+    "domain": {
+      "type": "string",
+      "minimum": 1,
+      "description": "The domain of the JetStreamServer"
+    }
+  }
+}
+""".toTypeString(jsonSchema = true)
+    doAssert typeStr == """type
+  Object = ref object
+    `type`: string
+    id: string
+    timestamp: string
+    stream: string
+    consumer: string
+    consumer_seq: string
+    stream_seq: string
+    deliveries: int64
+    domain: Option[string]"""
+
   if jsonSchema:
     return jsonString.parseAndGetString(objName, publicField, quoteField, disableOptionType)
 
