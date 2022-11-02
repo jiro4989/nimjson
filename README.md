@@ -12,12 +12,12 @@ This was inspired by [gojson](https://github.com/ChimeraCoder/gojson).
 
 * Nim (stable version)
 
-## Usage examples
+## Usage examples (CLI)
 
 `nimjson` writes `NilType` type if a value or a first value of an array is null.
 Please fix `NilType` type yourself.
 
-### Large JSON example
+### Large JSON
 
 ```bash
 % curl -s https://api.github.com/repos/jiro4989/nimjson | nimjson -O:Repository
@@ -131,7 +131,7 @@ type
     node_id: string
 ```
 
-### Simple JSON example
+### Simple JSON
 
 ```bash
 % nimjson examples/primitive.json
@@ -172,14 +172,82 @@ type
     height: int64
 ```
 
-### API usage
+### JSON Schema
+
+`nimjson` supports partially [JSON Schema](https://json-schema.org/understanding-json-schema/index.html).
+`nimjson` generates Nim type definition with JSON Schema when you enable `-j` option.
+
+```bash
+$ nimjson -j examples/json_schema.json
+type
+  Object = ref object
+    `type`: string
+    id: string
+    timestamp: string
+    stream: string
+    consumer: string
+    consumer_seq: string
+    stream_seq: string
+    deliveries: int64
+    domain: Option[string]
+```
+
+It is wrapped by default in the `Option` type that properties not included in the `required` parameter of JSON Schema.
+If you don't want to use `Option` type, you can use `--disable-option-type` option.
+
+```bash
+$ nimjson -j --disable-option-type examples/json_schema.json
+type
+  Object = ref object
+    `type`: string
+    id: string
+    timestamp: string
+    stream: string
+    consumer: string
+    consumer_seq: string
+    stream_seq: string
+    deliveries: int64
+    domain: string
+```
+
+`nimjson` supports `$ref` and `$defs` keywords.
+But it doesn't support URL of `$ref`.
+
+This is supported:
+
+```json
+{
+  "$id": "https://example.com/product.schema.json",
+  "type": "object",
+  "properties": {
+    "product": { "$ref": "#/$defs/product" },
+    "product2": { "$ref": "#/$defs/product2" }
+  },
+  "$defs": {
+    "product": { "type": "string" },
+    "product2": { "type": "array", "items": { "type": "string" } }
+  }
+}
+```
+
+This is NOT supported:
+
+```json
+{
+  "$id": "https://example.com/product.schema.json",
+  "type": "object",
+  "properties": {
+    "product": { "$ref": "https://example.com/schemas/address" }
+  }
+}
+```
+
+## Usage examples (API)
 
 ```nim
-import std/json
-
 import nimjson
 
-echo """{"keyStr":"str", "keyInt":1}""".parseJson().toTypeString()
+echo """{"keyStr":"str", "keyInt":1}""".toTypeString()
 
 # Output:
 # type
@@ -188,7 +256,7 @@ echo """{"keyStr":"str", "keyInt":1}""".parseJson().toTypeString()
 #     keyStr: string
 #     keyInt: int64
 
-echo "examples/primitive.json".parseFile().toTypeString("testObject")
+echo "examples/primitive.json".readFile().toTypeString("testObject")
 
 # Output:
 # type
@@ -199,6 +267,25 @@ echo "examples/primitive.json".parseFile().toTypeString("testObject")
 #     floatField: float64
 #     boolField: bool
 #     nullField: NilType
+```
+
+JSON Schema:
+
+```nim
+import nimjson
+
+echo "examples/json_schema.json".readFile().toTypeString("testObject", jsonSchema = true)
+type
+  TestObject = ref object
+    `type`: string
+    id: string
+    timestamp: string
+    stream: string
+    consumer: string
+    consumer_seq: string
+    stream_seq: string
+    deliveries: int64
+    domain: Option[string]
 ```
 
 ## Installation
@@ -212,14 +299,14 @@ nimble install nimjson
 ### Linux users (Debian base distros)
 
 ```bash
-wget https://github.com/jiro4989/nimjson/releases/download/v2.0.0/nimjson_2.0.0_amd64.deb
+wget https://github.com/jiro4989/nimjson/releases/download/v3.0.0/nimjson_3.0.0_amd64.deb
 sudo dpkg -i ./nimjson*.deb
 ```
 
 ### Linux users (RHEL compatible distros)
 
 ```bash
-yum install https://github.com/jiro4989/nimjson/releases/download/v2.0.0/nimjson-2.0.0-1.el7.x86_64.rpm
+yum install https://github.com/jiro4989/nimjson/releases/download/v3.0.0/nimjson-3.0.0-1.el7.x86_64.rpm
 ```
 
 ## Help
@@ -241,6 +328,8 @@ yum install https://github.com/jiro4989/nimjson/releases/download/v2.0.0/nimjson
         -O, --object-name:OBJECT_NAME    Set object type name
         -p, --public-field               Public fields
         -q, --quote-field                Quotes all fields
+        -j, --json-schema                Read JSON as JSON Schema format
+            --disable-option-type        (Only JSON Schema) Disable using Option type
 
 ## License
 

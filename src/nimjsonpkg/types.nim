@@ -10,6 +10,8 @@ type
     isPublic: bool
     isNormalized: bool
     isBackquoted: bool
+    primitiveType: string
+    isSeq: bool
 
   FieldDefinition* = object
     name: string
@@ -18,6 +20,10 @@ type
     isNormalized: bool
     isBackquoted: bool
     isSeq: bool
+    isOption: bool
+
+  UnsupportedTypeError* = object of CatchableError
+  UnsupportedRefError* = object of CatchableError
 
 proc addFieldDefinition*(self: var ObjectDefinition,
     fieldDef: FieldDefinition) =
@@ -107,20 +113,27 @@ func backquote(self: FieldDefinition, force: bool): FieldDefinition =
   result.typ = result.typ.backquote(force)
 
 func newObjectDefinition*(name: string, isNilType, isPublic,
-    forceBackquote: bool): ObjectDefinition =
+    forceBackquote: bool, primitiveType = "", isSeq = false): ObjectDefinition =
   result.name = name
   result.isRef = true
   result.isNilType = isNilType
   result.isPublic = isPublic
+  result.primitiveType = primitiveType
+  result.isSeq = isSeq
   result = result.normalize
   result = result.backquote(forceBackquote)
 
+func newNilTypeObjectDefinition*(isPublic,
+    forceBackquote: bool): ObjectDefinition =
+  result = newObjectDefinition("NilType", true, isPublic, forceBackquote)
+
 func newFieldDefinition*(name: string, typ: string, isPublic: bool,
-    forceBackquote: bool, isSeq: bool): FieldDefinition =
+    forceBackquote: bool, isSeq: bool, isOption = false): FieldDefinition =
   result.name = name
   result.typ = typ
   result.isPublic = isPublic
   result.isSeq = isSeq
+  result.isOption = isOption
   result = result.normalize
   result = result.backquote(forceBackquote)
 
@@ -137,6 +150,13 @@ func toDefinitionStringLines(self: ObjectDefinition): seq[string] =
   if self.isNilType:
     return @[&"  NilType{publicMark} = {refStr} object"]
 
+  if self.primitiveType != "":
+    let objectName = self.name
+    var typ = self.primitiveType
+    if self.isSeq:
+      typ = &"seq[{typ}]"
+    return @[&"  {objectName}{publicMark} = {typ}"]
+
   block:
     let objectName = self.name
     result.add(&"  {objectName}{publicMark} = {refStr} object")
@@ -144,9 +164,11 @@ func toDefinitionStringLines(self: ObjectDefinition): seq[string] =
   for field in self.fields:
     let fieldName = field.name
     let publicMark = field.isPublic.toPublicMark
-    let typeName =
+    var typeName =
       if field.isSeq: &"seq[{field.typ}]"
       else: field.typ
+    if field.isOption:
+      typeName = &"Option[{typeName}]"
     result.add(&"    {fieldName}{publicMark}: {typeName}")
 
 func toDefinitionString*(self: seq[ObjectDefinition]): string =

@@ -1,6 +1,6 @@
 # Package
 
-version       = "2.0.1"
+version       = "3.0.0"
 author        = "jiro4989"
 description   = "nimjson generates nim object definitions from json documents."
 license       = "MIT"
@@ -11,7 +11,8 @@ installExt    = @["nim"]
 
 # Dependencies
 
-requires "nim >= 0.20.0"
+requires "nim >= 1.4.0"
+requires "jsony == 1.1.3"
 
 import std/strformat
 import std/os

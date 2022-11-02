@@ -1,13 +1,8 @@
 import std/json
 import std/tables
-import std/strutils
 
 import ./types
-
-func headUpper(str: string): string =
-  ## 先頭の文字を大文字にして返す。
-  ## 先頭の文字だけを大文字にするので、**別にUpperCamelCeseにするわけではない**。
-  $(str[0].toUpperAscii() & str[1..^1])
+import ./utils
 
 func kind2str(kind: JsonNodeKind): string =
   case kind
@@ -91,7 +86,7 @@ proc parseAndGetString*(jsonNode: JsonNode, objectName: string, isPublic,
 
   # NilTypeは必須
   var resultDefs: seq[ObjectDefinition]
-  resultDefs.add(newObjectDefinition("NilType", true, isPublic, forceBackquote))
+  resultDefs.add(newNilTypeObjectDefinition(isPublic, forceBackquote))
   resultDefs.add(defs)
 
   result.add("type\n")

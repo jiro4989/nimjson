@@ -1,11 +1,15 @@
 import std/json
 
 import ./nimjsonpkg/parser
+import ./nimjsonpkg/json_schema_parser
 
 proc toTypeString*(self: JsonNode, objName = "Object",
     publicField = false, quoteField = false): string =
   ## Generates nim object definitions string from ``JsonNode``.
   ## Returns a public field string if ``publicField`` was true.
+  ##
+  ## This procedure is left for backward compatibility.
+  ## Please use `toTypeString proc <#toTypeString,string,string,bool,bool,bool,bool>`_.
   ##
   ## **Japanese:**
   ##
@@ -36,6 +40,88 @@ proc toTypeString*(self: JsonNode, objName = "Object",
   return self.parseAndGetString(objectName = objName, isPublic = publicField,
       forceBackquote = quoteField)
 
+proc toTypeString*(jsonString: string, objName = "Object", publicField = false,
+    quoteField = false, jsonSchema = false, disableOptionType = false): string =
+  ## Generates nim object definitions string from ``string``.
+  ## Returns a public field string if ``publicField`` was true.
+  ## Handles ``jsonString`` as JSON Schema format when ``jsonSchema`` is ``true``.
+  ## ``disableOptionType`` is available only when ``jsonSchema`` is ``true``.
+  runnableExamples:
+    let typeStr = """
+{
+  "type": "object",
+  "required": [
+    "type",
+    "id",
+    "timestamp",
+    "stream",
+    "consumer",
+    "consumer_seq",
+    "stream_seq",
+    "deliveries"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "io.nats.jetstream.advisory.v1.nak"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique correlation ID for this event"
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "The time this event was created in RFC3339 format"
+    },
+    "stream": {
+      "type": "string",
+      "description": "The name of the stream where the message is stored"
+    },
+    "consumer": {
+      "type": "string",
+      "description": "The name of the consumer where the message was naked"
+    },
+    "consumer_seq": {
+      "type": "string",
+      "minimum": 1,
+      "description": "The sequence of the message in the consumer that was naked"
+    },
+    "stream_seq": {
+      "type": "string",
+      "minimum": 1,
+      "description": "The sequence of the message in the stream that was naked"
+    },
+    "deliveries": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The number of deliveries that were attempted"
+    },
+    "domain": {
+      "type": "string",
+      "minimum": 1,
+      "description": "The domain of the JetStreamServer"
+    }
+  }
+}
+""".toTypeString(jsonSchema = true)
+    doAssert typeStr == """type
+  Object = ref object
+    `type`: string
+    id: string
+    timestamp: string
+    stream: string
+    consumer: string
+    consumer_seq: string
+    stream_seq: string
+    deliveries: int64
+    domain: Option[string]"""
+
+  if jsonSchema:
+    return jsonString.parseAndGetString(objName, publicField, quoteField, disableOptionType)
+
+  return jsonString.parseJson.toTypeString(objName, publicField, quoteField)
+
 when not defined(js):
   import std/logging
   import std/os
@@ -50,10 +136,12 @@ when not defined(js):
       objectName: string
       usePublicField: bool
       useQuoteField: bool
+      useJsonSchema: bool
+      disableOptionType: bool
 
   const
     appName = "nimjson"
-    version = &"""{appName} command version 2.0.1
+    version = &"""{appName} command version 3.0.0
 Copyright (c) 2019 jiro4989
 Released under the MIT License.
 https://github.com/jiro4989/nimjson"""
@@ -73,6 +161,8 @@ Options:
     -O, --object-name:OBJECT_NAME    Set object type name
     -p, --public-field               Public fields
     -q, --quote-field                Quotes all fields
+    -j, --json-schema                Read JSON as JSON Schema format
+        --disable-option-type        (Only JSON Schema) Disable using Option type
 """
 
   proc getCmdOpts(params: seq[string]): Options =
@@ -106,6 +196,10 @@ Options:
           result.usePublicField = true
         of "quote-field", "q":
           result.useQuoteField = true
+        of "json-schema", "j":
+          result.useJsonSchema = true
+        of "disable-option-type":
+          result.disableOptionType = true
       of cmdEnd:
         assert false # cannot happen
 
@@ -141,8 +235,10 @@ Options:
       # もともと入力ファイルは1つの想定であり、
       # 2つ処理できるようにしてるのはオマケ機能である。
       for inFile in opts.args:
-        outFile.write(inFile.parseFile().toTypeString(opts.objectName,
-            opts.usePublicField, opts.useQuoteField))
+        let typeString = inFile.readFile.toTypeString(opts.objectName,
+            opts.usePublicField, opts.useQuoteField, opts.useJsonSchema,
+            opts.disableOptionType)
+        outFile.write(typeString)
       debug "END: Process arguments"
     else:
       debug "START: Process stdin"
@@ -150,8 +246,9 @@ Options:
       var line: string
       while stdin.readLine(line):
         str.add(line)
-      outFile.write(str.parseJson().toTypeString(opts.objectName,
-          opts.usePublicField, opts.useQuoteField))
+      let typeString = str.toTypeString(opts.objectName, opts.usePublicField,
+          opts.useQuoteField, opts.useJsonSchema, opts.disableOptionType)
+      outFile.write(typeString)
       debug "END: Process stdin"
 
     debug "Success: nimjson"
