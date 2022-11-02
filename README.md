@@ -299,14 +299,14 @@ nimble install nimjson
 ### Linux users (Debian base distros)
 
 ```bash
-wget https://github.com/jiro4989/nimjson/releases/download/v2.0.0/nimjson_2.0.0_amd64.deb
+wget https://github.com/jiro4989/nimjson/releases/download/v3.0.0/nimjson_3.0.0_amd64.deb
 sudo dpkg -i ./nimjson*.deb
 ```
 
 ### Linux users (RHEL compatible distros)
 
 ```bash
-yum install https://github.com/jiro4989/nimjson/releases/download/v2.0.0/nimjson-2.0.0-1.el7.x86_64.rpm
+yum install https://github.com/jiro4989/nimjson/releases/download/v3.0.0/nimjson-3.0.0-1.el7.x86_64.rpm
 ```
 
 ## Help
