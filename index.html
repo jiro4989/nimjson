@@ -11,7 +11,8 @@
         function execute() {
             const text = document.getElementById("jsonInputTextArea").value;
             const publicField = document.getElementById("publicFieldCheckbox").checked;
-            const nimDef = generateNimDefinitions(text, publicField);
+            const jsonSchema = document.getElementById("jsonSchemaCheckbox").checked;
+            const nimDef = generateNimDefinitions(text, publicField, jsonSchema);
             document.getElementById("nimDefOutputTextArea").value = nimDef;
         }
     </script>
@@ -87,6 +88,12 @@
                     <label for="publicFieldCheckbox">
                         <input id="publicFieldCheckbox" type="checkbox" name="public-field" value="true" />
                         Public field
+                    </label>
+                </span>
+                <span>
+                    <label for="jsonSchemaCheckbox">
+                        <input id="jsonSchemaCheckbox" type="checkbox" name="public-field" value="false" />
+                        JSON Schema
                     </label>
                 </span>
             </div>
