@@ -1,5 +1,4 @@
 import nimjson
-import json
 
-proc generateNimDefinitions(str: cstring, publicField: bool): cstring {.exportc.} =
-  return str.`$`.parseJson().toTypeString(publicField = publicField)
+proc generateNimDefinitions(str: cstring, publicField: bool, jsonSchema: bool): cstring {.exportc.} =
+  return str.`$`.toTypeString(publicField = publicField, jsonSchema = jsonSchema)
