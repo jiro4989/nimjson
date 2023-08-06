@@ -141,7 +141,7 @@ when not defined(js):
 
   const
     appName = "nimjson"
-    version = &"""{appName} command version 3.0.0
+    version = &"""{appName} command version 3.2.0
 Copyright (c) 2019 jiro4989
 Released under the MIT License.
 https://github.com/jiro4989/nimjson"""
