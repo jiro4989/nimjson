@@ -1,1 +1,2 @@
-parseAndGetString	nimjsonpkg/json_schema_parser.html#parseAndGetString,string,string,bool,bool,bool	json_schema_parser: parseAndGetString(s: string; objectName: string; isPublic: bool;\n                  forceBackquote: bool; disableOptionType: bool): string	
+nimTitle	json_schema_parser	nimjsonpkg/json_schema_parser.html	module src/nimjsonpkg/json_schema_parser		0
+nim	parseAndGetString	nimjsonpkg/json_schema_parser.html#parseAndGetString,string,string,bool,bool,bool	proc parseAndGetString(s: string; objectName: string; isPublic: bool;\n                  forceBackquote: bool; disableOptionType: bool): string		122

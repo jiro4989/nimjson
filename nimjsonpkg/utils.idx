@@ -1,1 +1,2 @@
-headUpper	nimjsonpkg/utils.html#headUpper,string	utils: headUpper(str: string): string	
+nimTitle	utils	nimjsonpkg/utils.html	module src/nimjsonpkg/utils		0
+nim	headUpper	nimjsonpkg/utils.html#headUpper,string	proc headUpper(str: string): string		3

@@ -1,1 +1,2 @@
-parseAndGetString	nimjsonpkg/parser.html#parseAndGetString,JsonNode,string,bool,bool	parser: parseAndGetString(jsonNode: JsonNode; objectName: string;\n                  isPublic, forceBackquote: bool): string	
+nimTitle	parser	nimjsonpkg/parser.html	module src/nimjsonpkg/parser		0
+nim	parseAndGetString	nimjsonpkg/parser.html#parseAndGetString,JsonNode,string,bool,bool	proc parseAndGetString(jsonNode: JsonNode; objectName: string;\n                  isPublic, forceBackquote: bool): string		81

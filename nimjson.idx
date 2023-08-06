@@ -1,2 +1,4 @@
-toTypeString	nimjson.html#toTypeString,JsonNode,string	nimjson: toTypeString(self: JsonNode; objName = &quot;Object&quot;; publicField = false;\n             quoteField = false): string	
-toTypeString	nimjson.html#toTypeString,string,string	nimjson: toTypeString(jsonString: string; objName = &quot;Object&quot;; publicField = false;\n             quoteField = false; jsonSchema = false; disableOptionType = false): string	
+nimTitle	nimjson	nimjson.html	module src/nimjson		0
+nim	toTypeString	nimjson.html#toTypeString,JsonNode,string	proc toTypeString(self: JsonNode; objName = "Object"; publicField = false;\n             quoteField = false): string		6
+nim	toTypeString	nimjson.html#toTypeString,string,string	proc toTypeString(jsonString: string; objName = "Object"; publicField = false;\n             quoteField = false; jsonSchema = false; disableOptionType = false): string		43
+nimgrp	totypestring	nimjson.html#toTypeString-procs-all	proc		6
