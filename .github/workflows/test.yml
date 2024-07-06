@@ -30,7 +30,7 @@ jobs:
             nim-version: devel
     steps:
       - uses: actions/checkout@v4
-      - uses: jiro4989/setup-nim-action@v2-beta
+      - uses: jiro4989/setup-nim-action@v2
         with:
           nim-version: ${{ matrix.nim-version }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -53,7 +53,7 @@ jobs:
           - 'stable'
     steps:
       - uses: actions/checkout@v4
-      - uses: jiro4989/setup-nim-action@v2-beta
+      - uses: jiro4989/setup-nim-action@v2
         with:
           nim-version: ${{ matrix.nim-version }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -73,7 +73,7 @@ jobs:
           - 'stable'
     steps:
       - uses: actions/checkout@v4
-      - uses: jiro4989/setup-nim-action@v2-beta
+      - uses: jiro4989/setup-nim-action@v2
         with:
           nim-version: ${{ matrix.nim-version }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
