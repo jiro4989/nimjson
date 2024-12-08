@@ -15,7 +15,8 @@ type
     required: seq[string]
     additionalProperties: bool
     properties: OrderedTable[string, Property]
-    `$defs`: OrderedTable[string, Property]
+    `definitions`: OrderedTable[string, Property]
+    `$defs`: OrderedTable[string, Property] # same as `definitions`
 
   Property = ref object
     description: string
@@ -34,12 +35,34 @@ type
     forceBackquote: bool
     disableOptionType: bool
 
+func isValidJsonPointer(s: string): bool =
+  # if it is syntatically valid, not if it evaluates
+  var offset = 0
+  if s.startsWith('#'):
+    offset = 1
+  if s[offset..^1] == "":
+    return true
+  if not s[offset..^1].startsWith("/"):
+    return false
+  let components = s[offset..^1].split('/')[1..^1]
+  for c in components:
+    var i = 0
+    while i < c.len:
+      if c[i] == '~':
+        if i+1 >= c.len or not(c[i+1] in "01"):
+          return false
+        inc i
+      inc i
+  return true
+
 func validateRef(prop: Property) =
+  # A ref may be URI, URI reference, URI template, or JSON pointer
   let s = prop.`$ref`
-  if s == "" or s == "#" or s.startsWith("#/$defs/"):
+  # Only supports pointer (RFC6901)
+  if isValidJsonPointer(s):
     return
   raise newException(UnsupportedRefError,
-      &"nimjson supports only local ref '#/$defs/<name>'. $ref = {s}")
+      &"nimjson supports only JSON Pointer ref, e.g: '#/$defs/<name>'. $ref = {s}")
 
 func newProperty(description: string, typ: string, required: seq[string],
     properties: OrderedTable[string, Property], re: string): Property =
@@ -78,12 +101,15 @@ func getPropertyType(prop: Property, propName: string): string =
   else: prop.`type`.typeToNimTypeName
 
 func getRefTypeName(prop: Property, propName: string): string =
-  let s = prop.`$ref`
+  prop.validateRef()
+  var s = prop.`$ref`
+  if s.startsWith('#'):
+    s = s[1..^1]
   result =
-    if s == "#": propName.headUpper
-    elif s.startsWith("#/$defs/"): s[8 .. ^1]
-    else: raise newException(UnsupportedRefError,
-        &"nimjson supports only local ref '#/$defs/<name>'. $ref = {s}")
+    if s == "": propName.headUpper
+    elif s.startsWith("/definitions/"): s[13..^1]
+    elif s.startsWith("/$defs/"): s[7..^1]
+    else: s[1..^1]
   result = result.headUpper()
 
 proc parse(parser: var JsonSchemaParser, property: Property,
@@ -138,6 +164,8 @@ proc parseAndGetString*(s: string, objectName: string, isPublic: bool,
   parser.parse(property, objectName)
 
   for propName, prop in schema.`$defs`:
+    parser.parse(prop, propName)
+  for propName, prop in schema.`definitions`:
     parser.parse(prop, propName)
 
   result.add("type\n")
