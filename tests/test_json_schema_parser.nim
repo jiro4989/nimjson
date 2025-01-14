@@ -217,6 +217,30 @@ block:
   Product = string
   Product2 = seq[string]"""
 
+  block:
+    checkpoint "ok: $ref and definitions. primitive types"
+    let j2 = """
+{
+  "$id": "https://example.com/product.schema.json",
+  "type": "object",
+  "properties": {
+    "product": { "$ref": "#/definitions/product" },
+    "product2": { "$ref": "#/definitions/product2" }
+  },
+  "definitions": {
+    "product": { "type": "string" },
+    "product2": { "type": "array", "items": { "type": "string" } }
+  }
+}
+"""
+    let got = j2.parseAndGetString("Repository", false, false, true)
+    check got == """type
+  Repository = ref object
+    product: Product
+    product2: Product2
+  Product = string
+  Product2 = seq[string]"""
+
 block:
   checkpoint "proc typeToNimTypeName"
   block:
@@ -243,6 +267,7 @@ block:
   block:
     checkpoint "ok: supported $ref"
     Property(`$ref`: "#/$defs/name").validateRef()
+    Property(`$ref`: "#/definitions/name").validateRef()
     Property(`$ref`: "#").validateRef()
   block:
     checkpoint "ng: unsupported $ref"
@@ -254,6 +279,7 @@ block:
   block:
     checkpoint "ok: supported $ref"
     check Property(`$ref`: "#/$defs/name").getRefTypeName("name") == "Name"
+    check Property(`$ref`: "#/definitions/name").getRefTypeName("name") == "Name"
     check Property(`$ref`: "#").getRefTypeName("name") == "Name"
   block:
     checkpoint "ng: unsupported $ref"
