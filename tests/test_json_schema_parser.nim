@@ -269,10 +269,19 @@ block:
     Property(`$ref`: "#/$defs/name").validateRef()
     Property(`$ref`: "#/definitions/name").validateRef()
     Property(`$ref`: "#").validateRef()
+    Property(`$ref`: "#/").validateRef()
+    Property(`$ref`: "#/a~0b").validateRef()
+    Property(`$ref`: "#/a~1b").validateRef()
   block:
     checkpoint "ng: unsupported $ref"
     expect UnsupportedRefError:
       Property(`$ref`: "https://example.com/schemas/address").validateRef()
+    expect UnsupportedRefError:
+      Property(`$ref`: "#test").validateRef()
+    expect UnsupportedRefError:
+      Property(`$ref`: "#/a~2b").validateRef()
+    expect UnsupportedRefError:
+      Property(`$ref`: "#/a~").validateRef()
 
 block:
   checkpoint "proc getRefTypeName"
