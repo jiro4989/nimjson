@@ -150,11 +150,11 @@ jobs:
             asset_name_suffix: macos.tar.gz
             asset_content_type: application/gzip
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: artifact-${{ matrix.os }}
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: create-release
 
@@ -184,11 +184,11 @@ jobs:
           - pkg: rpm
             asset_content_type: application/x-rpm
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: artifact-${{ matrix.pkg }}
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: create-release
 
