@@ -44,7 +44,7 @@ jobs:
             ls -lah *.*
           )
         shell: bash
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: artifact-${{ matrix.os }}
           path: |
@@ -85,13 +85,13 @@ jobs:
           arch: 'x86_64'
           desc: '${{ env.DESC }}'
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: artifact-deb
           path: |
             ./*.deb
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: artifact-rpm
           path: |
@@ -129,7 +129,7 @@ jobs:
       - name: Write upload_url to file
         run: echo '${{ steps.create-release.outputs.upload_url }}' > upload_url.txt
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: create-release
           path: upload_url.txt
