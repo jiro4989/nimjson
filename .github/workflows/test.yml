@@ -29,7 +29,7 @@ jobs:
           - os: windows-latest
             nim-version: devel
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: jiro4989/setup-nim-action@v2
         with:
           nim-version: ${{ matrix.nim-version }}
@@ -52,7 +52,7 @@ jobs:
           - '2.0.x'
           - 'stable'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: jiro4989/setup-nim-action@v2
         with:
           nim-version: ${{ matrix.nim-version }}
@@ -72,7 +72,7 @@ jobs:
         nim-version:
           - 'stable'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: jiro4989/setup-nim-action@v2
         with:
           nim-version: ${{ matrix.nim-version }}
